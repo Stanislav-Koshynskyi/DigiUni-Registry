@@ -5,25 +5,32 @@ import java.util.Optional;
 
 public class Faculty {
     private Long id;
-    private Long uniqueCode;
+    private String uniqueCode;
     private String name;
     private String shortName;
     private Long deanId;
     private Teacher dean;
     private Contact contact;
+    private University university;
+    private Long universityId ;
 
     public Faculty() {
     }
 
-    public Faculty(Long uniqueCode, String name, String shortName, Teacher dean, Contact contact) {
+    public Faculty(String uniqueCode, String name, String shortName, Teacher dean, Contact contact, University university) {
         setUniqueCode(uniqueCode);
         setName(name);
         setShortName(shortName);
         setDean(dean);
         setContact(contact);
+        setUniversity(university);
     }
-    public Faculty(Long id,Long uniqueCode, String name, String shortName, Teacher dean, Contact contact) {
-        this(uniqueCode, name, shortName, dean, contact);
+
+
+
+
+    public Faculty(Long id,String uniqueCode, String name, String shortName, Teacher dean, Contact contact, University university) {
+        this(uniqueCode, name, shortName, dean, contact,  university);
         setId(id);
     }
 
@@ -32,17 +39,26 @@ public class Faculty {
         return id;
     }
 
+    public void setUniversity(University university) {
+        if (university == null)throw new NullPointerException("university can not be null");
+        this.university = university;
+        this.universityId = university.getId();
+    }
+    public University getUniversity() {
+        return university;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
 
-    public Long getUniqueCode() {
+    public String getUniqueCode() {
         return uniqueCode;
     }
 
-    public void setUniqueCode(Long uniqueCode) {
-        if (uniqueCode == null ||  uniqueCode <= 0) {
-            throw new IllegalArgumentException("Invalid unique code");
+    public void setUniqueCode(String uniqueCode) {
+        if (uniqueCode == null) {
+            throw new IllegalArgumentException("uniqueCode cannot be null");
         }
         this.uniqueCode = uniqueCode;
     }
@@ -113,7 +129,7 @@ public class Faculty {
     }
 
     public String toString() {
-        String deanInfo = dean !=null ? dean.toString() : "vacant";
+        String deanInfo = dean !=null ? dean.getFullName().toString() : "vacant";
         return "Faculty[ unique code - " + getUniqueCode() + ", name - " + getName() +", contact - "+ getContact()+ ", dean -" + deanInfo +  "]";
     }
 }
