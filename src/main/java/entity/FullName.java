@@ -1,10 +1,11 @@
-package entity.enums;
+package entity;
 
-import entity.Faculty;
-
-public record FullName(String name, String surname, String Patronymic) {
-    public FullName{
-        if (name == null || name.isBlank()) throw new NullPointerException("name cannot be empty");
-        if (surname == null || surname.isBlank()) throw new NullPointerException("surname cannot be empty");
+public record FullName(String name, String surname, String patronymic) {
+    public FullName {
+        if (name == null || name.isBlank()) throw new IllegalArgumentException("name cannot be empty");
+        if (surname == null || surname.isBlank()) throw new IllegalArgumentException("surname cannot be empty");
+        if (patronymic == null || patronymic.isBlank()) {
+            patronymic = "";
+        }
     }
 }
