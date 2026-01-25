@@ -82,5 +82,10 @@ public class University {
         University other = (University) obj;
         return Objects.equals(id, other.id);
     }
+
+    @Override
+    public String toString() {
+        return "university[fullName: " + fullName + ", shortName: " + shortName + ", address: " + address + "]";
+    }
 }
 
