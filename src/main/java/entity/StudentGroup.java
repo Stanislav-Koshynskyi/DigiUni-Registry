@@ -1,7 +1,7 @@
 package entity;
 import java.util.*;
 
-public class StudentGroup {
+public class StudentGroup implements Entity{
     private Long id;
     private String name;
     private Teacher headOfGroup;

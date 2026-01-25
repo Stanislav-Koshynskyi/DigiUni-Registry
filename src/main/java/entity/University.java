@@ -2,7 +2,7 @@ package entity;
 
 import java.util.Objects;
 
-public class University {
+public class University implements Entity{
     private Long id;
     private String fullName;
     private String shortName;

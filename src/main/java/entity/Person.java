@@ -5,7 +5,7 @@ import java.time.Period;
 import java.util.Date;
 import java.util.Objects;
 
-public abstract class Person {
+public abstract class Person implements Entity{
     private Long id;
     private String uniqueCode;
     private FullName fullName;

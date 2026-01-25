@@ -3,7 +3,7 @@ package entity;
 import java.util.Objects;
 import java.util.Optional;
 
-public class Department {
+public class Department implements Entity {
     private Long id;
     private String uniqueCode;
     private String name;
