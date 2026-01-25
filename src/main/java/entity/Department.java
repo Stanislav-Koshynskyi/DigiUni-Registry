@@ -144,7 +144,7 @@ public class Department {
     @Override
     public String toString() {
         String facultyInfo = faculty == null ? "lost, id =" + facultyId  : faculty.getShortName();
-        String headOfDepartmentInfo = headOfDepartment == null ? "vacant" : headOfDepartment.toString();
+        String headOfDepartmentInfo = headOfDepartment == null ? "vacant" : headOfDepartment.getFullName().toString();
         return "Department [uniqueCode=" + uniqueCode + ", name=" + name + ", shortName=" + shortName+
                 ", faculty=" + facultyInfo + ", head of department=" + headOfDepartmentInfo +
                 ", cabinet=" + cabinet + "]";
