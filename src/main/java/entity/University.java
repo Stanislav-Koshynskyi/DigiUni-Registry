@@ -37,7 +37,7 @@ public class University {
     }
 
     public void setFullName(String fullName) {
-        if (fullName == null || fullName.isEmpty()) {
+        if (fullName == null || fullName.isBlank()) {
             throw new IllegalArgumentException("universityFullName cannot be empty");
         }
         this.fullName = fullName;
@@ -49,7 +49,7 @@ public class University {
 
     public void setShortName(String shortName) {
 
-        if (shortName == null || shortName.isEmpty()) {
+        if (shortName == null || shortName.isBlank()) {
             throw new IllegalArgumentException("universityShortName cannot be empty");
         }
         if (shortName.length() > 15) {
