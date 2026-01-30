@@ -6,6 +6,7 @@ import java.util.Objects;
 
 public class Student extends Person{
     private FormOfEducation formOfEducation;
+    private String recordBookNumber;
     private StudentStatus studentStatus;
     private Year yearOfAdmission;
     private int course;
@@ -13,21 +14,23 @@ public class Student extends Person{
     private Long groupId;
 
     public Student() {}
-    public Student(String uniqueCode, FullName fullName, LocalDate birthDate, Contact contact, FormOfEducation formOfEducation, StudentStatus studentStatus, Year yearOfAdmission, int course, StudentGroup group) {
+    public Student(String uniqueCode,String recordBookNumber, FullName fullName, LocalDate birthDate, Contact contact, FormOfEducation formOfEducation, StudentStatus studentStatus, Year yearOfAdmission, int course, StudentGroup group) {
         super(uniqueCode, fullName, birthDate, contact);
         setFormOfEducation(formOfEducation);
         setStudentStatus(studentStatus);
         setYearOfAdmission(yearOfAdmission);
         setCourse(course);
         setGroup(group);
+        setRecordBookNumber(recordBookNumber);
     }
-    public Student(Long id, String uniqueCode, FullName fullName, LocalDate birthDate, Contact contact, FormOfEducation formOfEducation, StudentStatus studentStatus, Year yearOfAdmission, int course, StudentGroup group) {
+    public Student(Long id, String recordBookNumber, String uniqueCode, FullName fullName, LocalDate birthDate, Contact contact, FormOfEducation formOfEducation, StudentStatus studentStatus, Year yearOfAdmission, int course, StudentGroup group) {
         super(id, uniqueCode, fullName, birthDate, contact);
         setFormOfEducation(formOfEducation);
         setStudentStatus(studentStatus);
         setYearOfAdmission(yearOfAdmission);
         setCourse(course);
         setGroup(group);
+        setRecordBookNumber(recordBookNumber);
     }
 
 
@@ -82,6 +85,13 @@ public class Student extends Person{
         if (formOfEducation == null) throw new IllegalArgumentException("formOfEducation cannot be null");
         this.formOfEducation = formOfEducation;
     }
+    public String getRecordBookNumber() {
+        return recordBookNumber;
+    }
+    public void setRecordBookNumber(String recordBookNumber) {
+        if (recordBookNumber == null || recordBookNumber.isBlank()) throw new IllegalArgumentException("recordBookNumber can not be null or blank");
+        this.recordBookNumber = recordBookNumber;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -97,7 +107,8 @@ public class Student extends Person{
     @Override
     public String toString() {
         String groupInfo = group == null ? "lost" : group.getName();
-        return "Student[unique code - "+ getUniqueCode()+", name - " + getFullName() +", course - "+ course
+        return "Student[unique code - "+ getUniqueCode()+", record book number - " + recordBookNumber
+                + ", name - " + getFullName() +", course - "+ course
                 + ", form of education - " + formOfEducation + ", student status - " + studentStatus + ", contact - " + getContact()
                 + ", group - " + groupInfo +", year of admission - " + yearOfAdmission + ", birthday - "+getBirthDate() +"]";
     }
