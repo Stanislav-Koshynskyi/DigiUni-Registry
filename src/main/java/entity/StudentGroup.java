@@ -7,23 +7,43 @@ public class StudentGroup implements Entity{
     private Teacher headOfGroup;
     private Student groupLeader;
     private final HashSet<Student> students;
+    private Department department;
+    private Long departmentId;
 
-    public StudentGroup(Long id, String name, Teacher headOfGroup, Student groupLeader, HashSet<Student> students) {
+    public StudentGroup(Long id, String name,Department department, Teacher headOfGroup, Student groupLeader, HashSet<Student> students) {
         this.students = students != null ? new HashSet<>(students) : new HashSet<>();
         setId(id);
         setName(name);
         setHeadOfGroup(headOfGroup);
         setGroupLeader(groupLeader);
+        setDepartment(department);
 
 
     }
 
 
-    public StudentGroup(String name) {
+    public StudentGroup(String name, Department department) {
         setName(name);
+        setDepartment(department);
         students = new HashSet<>();
+
+    }
+    public Department getDepartment() {
+        return department;
+    }
+    public void setDepartment(Department department) {
+        if (department == null) throw new IllegalArgumentException("Department cannot be null");
+        this.department = department;
+        setDepartmentId(department.getId());
     }
 
+    public Long getDepartmentId() {
+        return departmentId;
+    }
+    public void setDepartmentId(Long departmentId) {
+        if  (departmentId == null) throw new IllegalArgumentException("Department cannot be null");
+        this.departmentId = departmentId;
+    }
     public Long getId() {
         return id;
     }
@@ -98,8 +118,10 @@ public class StudentGroup implements Entity{
                 .map(Person::getFullName)
                 .toList();
         String  headOfGroupInfo = headOfGroup == null ? "vacant" : headOfGroup.getFullName().toString();
+        String departmentInfo = department == null ? "lost, id = "+ departmentId : department.getName();
         String groupLeaderInfo = groupLeader == null ? "vacant" : groupLeader.getFullName().toString();
-        return "Group[name - " +name + ", head - " +  headOfGroupInfo + ", group leader - " + groupLeaderInfo +
+        return "Group[name - " +name + ", head - " +  headOfGroupInfo +
+                ",department - "+ departmentInfo + ", group leader - " + groupLeaderInfo +
                 ", students - " + studentsName +"]";
     }
 }
