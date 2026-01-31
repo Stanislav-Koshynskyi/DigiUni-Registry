@@ -1,4 +1,54 @@
 package repository;
 
-public abstract class AbstractRepository <T, ID> implements Repository{
+import entity.Entity;
+import util.IdGenerator;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
+
+public abstract class AbstractRepositoryByLong<T extends Entity> implements Repository<T, Long>{
+    private final IdGenerator idGenerator = new IdGenerator();
+    private final HashMap<Long, T> data = new HashMap<>();
+    public AbstractRepositoryByLong(){}
+
+    public AbstractRepositoryByLong(long id){
+        idGenerator.setCurrentId(id);
+    }
+    @Override
+    public Optional<T> findById(Long id){
+        return Optional.ofNullable(data.get(id));
+    }
+
+    @Override
+    public List<T> findAll(){
+        return new ArrayList<>(data.values());
+    }
+
+    @Override
+    public T save(T entity){
+        if (entity.getId() == null) {
+            entity.setId(idGenerator.nextId());
+        }
+        data.put(entity.getId(), entity);
+        return entity;
+    }
+    @Override
+    public void delete(T entity){
+        data.remove(entity.getId());
+    }
+    @Override
+    public void deleteById(Long id){
+        data.remove(id);
+    }
+    @Override
+    public boolean existsById(Long id){
+        return data.containsKey(id);
+    }
+
+    protected HashMap<Long, T> getData(){
+        return data;
+    }
+
 }
