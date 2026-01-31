@@ -41,7 +41,7 @@ public class StudentGroup implements Entity{
         return departmentId;
     }
     public void setDepartmentId(Long departmentId) {
-        if  (department == null) throw new IllegalArgumentException("Department cannot be null");
+        if  (departmentId == null) throw new IllegalArgumentException("Department cannot be null");
         this.departmentId = departmentId;
     }
     public Long getId() {
