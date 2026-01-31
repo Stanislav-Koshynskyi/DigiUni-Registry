@@ -27,17 +27,17 @@ public abstract class AbstractPersonRepository <P extends Person> extends Abstra
 
     public List<P> findByName(String name) {
         Map<Long, P> data = getData();
-        return data.values().stream().filter(p -> p.getFullName().name().equals(name)).toList();
+        return data.values().stream().filter(p -> p.getFullName().name().equalsIgnoreCase(name)).toList();
     }
 
     public List<P> findBySurname(String surname) {
         Map<Long, P> data = getData();
-        return data.values().stream().filter(p -> p.getFullName().surname().equals(surname)).toList();
+        return data.values().stream().filter(p -> p.getFullName().surname().equalsIgnoreCase(surname)).toList();
     }
 
     public List<P> findByPatronymic(String patronymic) {
         Map<Long, P> data = getData();
-        return data.values().stream().filter(p -> p.getFullName().patronymic().equals(patronymic)).toList();
+        return data.values().stream().filter(p -> p.getFullName().patronymic().equalsIgnoreCase(patronymic)).toList();
     }
 
     public Optional<P> findByEmail(String email) {

@@ -1,25 +1,38 @@
 package repository;
 
 import entity.Department;
+import entity.Student;
 import entity.StudentGroup;
+import entity.Teacher;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class StudentGroupRepository extends AbstractRepositoryByLong<StudentGroup> {
     public StudentGroupRepository() {}
 
     public List<StudentGroup> findByDepartment(Department department) {
         Map<Long, StudentGroup> data = getData();
-        return data.values().stream().filter(sg -> sg.getDepartment.equals(department)).toList();
+        return data.values().stream().filter(sg -> sg.getDepartment().equals(department)).toList();
     }
-    /*
-        private Long id;
-    private String name;
-    private Teacher headOfGroup;
-    private Student groupLeader;
-    private final HashSet<Student> students;
-    private Department department
-     */
+    public List<StudentGroup> findByName(String name) {
+        Map<Long, StudentGroup> data = getData();
+        return data.values().stream().filter(sg -> sg.getName().equalsIgnoreCase(name)).toList();
+    }
+
+    public Optional<StudentGroup>findByNameAndDepartment(String name, Department department) {
+        Map<Long, StudentGroup> data = getData();
+        return data.values().stream().filter(sg -> sg.getName().equalsIgnoreCase(name)
+                && sg.getDepartment().equals(department)).findFirst();
+    }
+    public Optional<StudentGroup> findByHeadOfGroup(Teacher headOfDepartment) {
+        Map<Long, StudentGroup> data = getData();
+        return data.values().stream().filter(sg ->
+                Objects.equals(sg.getHeadOfGroup().orElse(null), headOfDepartment)).findFirst();
+    }
+
+    public Optional<StudentGroup> findByGroupLeader(Student groupLeader) {
+        Map<Long, StudentGroup> data = getData();
+        return data.values().stream().filter(sg ->
+                Objects.equals(sg.getGroupLeader().orElse(null), groupLeader)).findFirst();
+    }
 }

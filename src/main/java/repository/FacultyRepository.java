@@ -7,6 +7,7 @@ import entity.University;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -36,12 +37,12 @@ public class FacultyRepository extends AbstractRepositoryByLong<Faculty> {
 
     public Optional<Faculty> findByDean(Teacher dean) {
         Map<Long, Faculty> data = getData();
-        return data.values().stream().filter(f -> f.getDean().orElse(null).equals(dean)).findFirst();
+        return data.values().stream().filter(f -> Objects.equals(f.getDean().orElse(null), dean)).findFirst();
     }
     public boolean existsByDean(Teacher dean) {
         Map<Long, Faculty> data = getData();
         return data.values().stream().anyMatch(f ->
-                f.getDean().orElse(null).equals(dean));
+                Objects.equals(f.getDean().orElse(null), dean));
     }
 
     public Optional<Faculty> findByPhone(String phone) {

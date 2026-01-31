@@ -31,11 +31,4 @@ public class TeacherRepository extends AbstractPersonRepository<Teacher> {
         Map<Long, Teacher> data = getData();
         return data.values().stream().filter(p -> p.getSalary().equals(salary)).toList();
     }
-
-    /*
-        private AcademicRank academicRank;
-    private AcademicDegree academicDegree;
-    LocalDate dateOfEmployment;
-    BigDecimal salary;
-     */
 }

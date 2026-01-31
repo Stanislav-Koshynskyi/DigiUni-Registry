@@ -6,6 +6,7 @@ import entity.Teacher;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 public class DepartmentRepository extends AbstractRepositoryByLong<Department> {
@@ -23,13 +24,13 @@ public class DepartmentRepository extends AbstractRepositoryByLong<Department> {
 
     public List<Department> findByName(String name){
         Map<Long, Department> data = getData();
-        return data.values().stream().filter(d -> d.getName().equals(name)).toList();
+        return data.values().stream().filter(d -> d.getName().equalsIgnoreCase(name)).toList();
     }
 
     public Optional<Department> findByNameAndFaculty(String name, Faculty faculty){
         Map<Long, Department> data = getData();
         return data.values().stream().filter(d ->
-                d.getName().equals(name) &&
+                d.getName().equalsIgnoreCase(name) &&
                         d.getFaculty().equals(faculty)).findFirst();
     }
 
@@ -40,12 +41,12 @@ public class DepartmentRepository extends AbstractRepositoryByLong<Department> {
 
     public Optional<Department> findByHeadOfDepartment(Teacher headOfDepartment){
         Map<Long, Department> data = getData();
-        return data.values().stream().filter(d -> d.getHeadOfDepartment().orElse(null).equals(headOfDepartment)).findFirst();
+        return data.values().stream().filter(d -> Objects.equals(d.getHeadOfDepartment().orElse(null), headOfDepartment)).findFirst();
     }
 
     public boolean existsByHeadOfDepartment(Teacher headOfDepartment){
         Map<Long, Department> data = getData();
-        return data.values().stream().anyMatch(d -> d.getHeadOfDepartment().orElse(null).equals(headOfDepartment));
+        return data.values().stream().anyMatch(d -> Objects.equals(d.getHeadOfDepartment().orElse(null), headOfDepartment));
     }
 }
 
