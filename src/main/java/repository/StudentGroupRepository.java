@@ -5,34 +5,17 @@ import entity.Student;
 import entity.StudentGroup;
 import entity.Teacher;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
-public class StudentGroupRepository extends AbstractRepositoryByLong<StudentGroup> {
-    public StudentGroupRepository() {}
+public interface StudentGroupRepository extends Repository<StudentGroup, Long> {
+    List<StudentGroup> findByDepartment(Department department);
+    List<StudentGroup> findByName(String name);
 
-    public List<StudentGroup> findByDepartment(Department department) {
-        Map<Long, StudentGroup> data = getData();
-        return data.values().stream().filter(sg -> sg.getDepartment().equals(department)).toList();
-    }
-    public List<StudentGroup> findByName(String name) {
-        Map<Long, StudentGroup> data = getData();
-        return data.values().stream().filter(sg -> sg.getName().equalsIgnoreCase(name)).toList();
-    }
+    Optional<StudentGroup> findByNameAndDepartment(String name, Department department);
+    Optional<StudentGroup> findByHeadOfGroup(Teacher headOfDepartment);
 
-    public Optional<StudentGroup>findByNameAndDepartment(String name, Department department) {
-        Map<Long, StudentGroup> data = getData();
-        return data.values().stream().filter(sg -> sg.getName().equalsIgnoreCase(name)
-                && sg.getDepartment().equals(department)).findFirst();
-    }
-    public Optional<StudentGroup> findByHeadOfGroup(Teacher headOfDepartment) {
-        Map<Long, StudentGroup> data = getData();
-        return data.values().stream().filter(sg ->
-                Objects.equals(sg.getHeadOfGroup().orElse(null), headOfDepartment)).findFirst();
-    }
-
-    public Optional<StudentGroup> findByGroupLeader(Student groupLeader) {
-        Map<Long, StudentGroup> data = getData();
-        return data.values().stream().filter(sg ->
-                Objects.equals(sg.getGroupLeader().orElse(null), groupLeader)).findFirst();
-    }
+    Optional<StudentGroup> findByGroupLeader(Student groupLeader);
 }
