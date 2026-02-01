@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public abstract class AbstractPersonRepository <P extends Person> extends AbstractRepositoryByLong<P> {
+public abstract class AbstractPersonRepository <P extends Person> extends AbstractRepositoryByLong<P> implements PersonRepository <P> {
     public AbstractPersonRepository() {
     }
 

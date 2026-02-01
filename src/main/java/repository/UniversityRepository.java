@@ -6,31 +6,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class UniversityRepository extends AbstractRepositoryByLong<University> {
-    public UniversityRepository() {}
+public interface UniversityRepository extends Repository<University, Long> {
+    Optional<University> findByFullName(String fullName);
+    boolean existsByFullName(String fullName);
 
-    public Optional<University> findByFullName(String fullName) {
-        Map<Long, University> data = getData();
-        return data.values().stream().filter(u -> u.getFullName().equals(fullName)).findFirst();
-    }
+    Optional<University> findByShortName(String shortName);
 
-    public boolean existsByFullName(String fullName) {
-        Map<Long, University> data = getData();
-        return data.values().stream().anyMatch(u -> u.getFullName().equalsIgnoreCase(fullName));
-    }
+    boolean existsByShortName(String shortName);
 
-    public Optional<University> findByShortName(String shortName) {
-        Map<Long, University> data = getData();
-        return data.values().stream().filter(u -> u.getShortName().equalsIgnoreCase(shortName)).findFirst();
-    }
-
-    public  boolean existsByShortName(String shortName) {
-        Map<Long, University> data = getData();
-        return data.values().stream().anyMatch(u -> u.getShortName().equalsIgnoreCase(shortName));
-    }
-
-    public List<University> findByCity(String city){
-        Map<Long, University> data = getData();
-        return data.values().stream().filter(u -> u.getAddress().city().equalsIgnoreCase(city)).toList();
-    }
+    List<University> findByCity(String city);
 }

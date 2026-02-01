@@ -3,47 +3,23 @@ package repository;
 import entity.*;
 
 import java.time.Year;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
-public class StudentRepository extends AbstractPersonRepository<Student> {
-    public StudentRepository() {
-    }
+public interface StudentRepository extends PersonRepository<Student> {
 
-    public List<Student> findByFormOfEducation(FormOfEducation formOfEducation) {
-        Map<Long, Student> data = getData();
-        return data.values().stream().filter(p -> p.getFormOfEducation().equals(formOfEducation)).toList();
-    }
+    List<Student> findByFormOfEducation(FormOfEducation formOfEducation);
 
-    public List<Student> findByStudentStatus(StudentStatus studentStatus) {
-        Map<Long, Student> data = getData();
-        return data.values().stream().filter(p -> p.getStudentStatus().equals(studentStatus)).toList();
-    }
+    List<Student> findByStudentStatus(StudentStatus studentStatus);
 
-    public Optional<Student> findByRecordBookNumber(String recordBookNumber) {
-        Map<Long, Student> data = getData();
-        return data.values().stream().filter(p -> p.getRecordBookNumber().equals(recordBookNumber)).findFirst();
-    }
+    Optional<Student> findByRecordBookNumber(String recordBookNumber);
 
-    public boolean existsByRecordBookNumber(String recordBookNumber) {
-        Map<Long, Student> data = getData();
-        return data.values().stream().anyMatch(p -> p.getRecordBookNumber().equals(recordBookNumber));
-    }
+    boolean existsByRecordBookNumber(String recordBookNumber);
 
-    public List<Student> findByYearOfAdmission(Year yearOfAdmission) {
-        Map<Long, Student> data = getData();
-        return data.values().stream().filter(p -> p.getYearOfAdmission().equals(yearOfAdmission)).toList();
-    }
+    List<Student> findByYearOfAdmission(Year yearOfAdmission);
 
-    public List<Student> findByCourse(int course) {
-        Map<Long, Student> data = getData();
-        return data.values().stream().filter(p -> p.getCourse() == course).toList();
-    }
+    List<Student> findByCourse(int course);
 
-    public List<Student> findByGroup(StudentGroup studentGroup) {
-        Map<Long, Student> data = getData();
-        return data.values().stream().filter(p -> p.getGroup().equals(studentGroup)).toList();
-    }
+    List<Student> findByGroup(StudentGroup studentGroup);
+
 }

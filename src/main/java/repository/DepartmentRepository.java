@@ -5,48 +5,21 @@ import entity.Faculty;
 import entity.Teacher;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
-public class DepartmentRepository extends AbstractRepositoryByLong<Department> {
-    public DepartmentRepository() {}
+public interface DepartmentRepository extends Repository<Department, Long> {
 
-    public Optional<Department> findByUniqueCode(String code){
-        Map<Long, Department> data = getData();
-        return data.values().stream().filter(d -> d.getUniqueCode().equals(code)).findFirst();
-    }
+    Optional<Department> findByUniqueCode(String code);
 
-    public boolean existsByUniqueCode(String code){
-        Map<Long, Department> data = getData();
-        return data.values().stream().anyMatch(d -> d.getUniqueCode().equals(code));
-    }
+    boolean existsByUniqueCode(String code);
 
-    public List<Department> findByName(String name){
-        Map<Long, Department> data = getData();
-        return data.values().stream().filter(d -> d.getName().equalsIgnoreCase(name)).toList();
-    }
+    List<Department> findByName(String name);
 
-    public Optional<Department> findByNameAndFaculty(String name, Faculty faculty){
-        Map<Long, Department> data = getData();
-        return data.values().stream().filter(d ->
-                d.getName().equalsIgnoreCase(name) &&
-                        d.getFaculty().equals(faculty)).findFirst();
-    }
+    Optional<Department> findByNameAndFaculty(String name, Faculty faculty);
 
-    public List<Department> findByFaculty(Faculty faculty){
-        Map<Long, Department> data = getData();
-        return data.values().stream().filter(d -> d.getFaculty().equals(faculty)).toList();
-    }
+    List<Department> findByFaculty(Faculty faculty);
 
-    public Optional<Department> findByHeadOfDepartment(Teacher headOfDepartment){
-        Map<Long, Department> data = getData();
-        return data.values().stream().filter(d -> Objects.equals(d.getHeadOfDepartment().orElse(null), headOfDepartment)).findFirst();
-    }
+    Optional<Department> findByHeadOfDepartment(Teacher headOfDepartment);
 
-    public boolean existsByHeadOfDepartment(Teacher headOfDepartment){
-        Map<Long, Department> data = getData();
-        return data.values().stream().anyMatch(d -> Objects.equals(d.getHeadOfDepartment().orElse(null), headOfDepartment));
-    }
+    boolean existsByHeadOfDepartment(Teacher headOfDepartment);
 }
-
