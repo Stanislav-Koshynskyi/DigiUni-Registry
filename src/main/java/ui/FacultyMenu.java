@@ -1,37 +1,35 @@
 package ui;
+
 import java.io.Console;
 
-public class ConsoleMenu {
-    private final FacultyMenu facultyMenu = new FacultyMenu();
-    private final DepartmentMenu departmentMenu = new DepartmentMenu();
-    private final StudentMenu studentMenu = new StudentMenu();
-    private final TeacherMenu teacherMenu = new TeacherMenu();
-
-    public void main() {
-        var console = System.console();
-
+public class FacultyMenu {
+    public void main(Console console) {
         while (true) {
             System.out.println(
-                    "MainMenu\n 1 - Faculty\n 2 - Department\n 3 - Student\n 4 - Teacher\n 0 - Exit"
+                    " Faculties \n" +
+                            "1 - Create Faculty\n" +
+                            "2 - Edit Faculty\n" +
+                            "3 - Delete Faculty\n" +
+                            "4 - Show All Faculties\n" +
+                            "0 - Back"
             );
 
             int userSelect = readInt(console);
 
             switch (userSelect) {
                 case 1:
-                    facultyMenu.main(console);
+                    createFaculty();
                     break;
                 case 2:
-                    departmentMenu.main(console);
+                    editFaculty();
                     break;
                 case 3:
-                    studentMenu.main(console);
+                    deleteFaculty();
                     break;
                 case 4:
-                    teacherMenu.main(console);
+                    showAllFaculties();
                     break;
                 case 0:
-                    System.out.println("Exit");
                     return;
                 default:
                     System.out.println("Invalid input");
@@ -44,5 +42,22 @@ public class ConsoleMenu {
         } catch (NumberFormatException e){
             return -1;
         }
+    }
+
+
+    private void createFaculty() {
+
+    }
+
+    private void editFaculty() {
+
+    }
+
+    private void deleteFaculty() {
+
+    }
+
+    private void showAllFaculties() {
+
     }
 }
