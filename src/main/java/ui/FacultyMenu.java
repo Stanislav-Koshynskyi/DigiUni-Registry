@@ -1,8 +1,17 @@
 package ui;
 
+import entity.Faculty;
+import service.ServiceFacultyInterface;
 import java.io.Console;
 
 public class FacultyMenu {
+
+    private final ServiceFacultyInterface serviceFaculty;
+
+    public FacultyMenu(ServiceFacultyInterface serviceFaculty) {
+        this.serviceFaculty = serviceFaculty;
+    }
+
     public void main(Console console) {
         while (true) {
             System.out.println(
@@ -58,6 +67,7 @@ public class FacultyMenu {
     }
 
     private void showAllFaculties() {
-
+        for (Faculty faculty : serviceFaculty.findAll())
+            System.out.println(faculty);
     }
 }

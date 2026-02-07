@@ -1,8 +1,15 @@
 package ui;
 
 import java.io.Console;
+import entity.Teacher;
+import service.ServiceTeacherInterface;
 
 public class TeacherMenu {
+    private final ServiceTeacherInterface serviceTeacher;
+
+    public TeacherMenu(ServiceTeacherInterface serviceTeacher) {
+        this.serviceTeacher = serviceTeacher;
+    }
     public void main(Console console) {
         while (true) {
             System.out.println(
@@ -55,5 +62,8 @@ public class TeacherMenu {
     }
 
     private void showAllTeachers() {
+        for (Teacher teacher : serviceTeacher.findAll()) {
+            System.out.println(teacher);
+        }
     }
 }

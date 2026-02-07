@@ -1,8 +1,15 @@
 package ui;
 
 import java.io.Console;
+import entity.Student;
+import service.ServiceStudentInterface;
 
 public class StudentMenu {
+    private final ServiceStudentInterface serviceStudent;
+
+    public StudentMenu(ServiceStudentInterface serviceStudent) {
+        this.serviceStudent = serviceStudent;
+    }
     public void main(Console console) {
         while (true) {
             System.out.println(" Student \n 1 - Add student \n 2 - Edit student\n 3 - Delete student \n 4 - Show all students\n 5 - Transfer student\n 0 - Back");
@@ -54,7 +61,8 @@ public class StudentMenu {
     }
 
     private void showAllStudents() {
-
+        for (Student student : serviceStudent.findAll())
+            System.out.println(student);
     }
 
     private void transferStudent() {

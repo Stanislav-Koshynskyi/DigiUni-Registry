@@ -1,8 +1,16 @@
 package ui;
 
+import service.ServiceDepartmentInterface;
 import java.io.Console;
+import entity.Department;
 
 public class DepartmentMenu {
+
+    private final ServiceDepartmentInterface serviceDepartment;
+    public DepartmentMenu(ServiceDepartmentInterface serviceDepartment) {
+        this.serviceDepartment = serviceDepartment;
+    }
+
     public void main(Console console) {
         while (true) {
             System.out.println(
@@ -58,6 +66,7 @@ public class DepartmentMenu {
     }
 
     private void showAllDepartments() {
-
+        for (Department department : serviceDepartment.findAll())
+            System.out.println(department);
     }
 }

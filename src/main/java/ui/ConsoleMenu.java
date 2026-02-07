@@ -1,11 +1,43 @@
 package ui;
 import java.io.Console;
 
+import repository.StudentRepository;
+import repository.InMemoryStudentRepository;
+import service.ServiceStudentInterface;
+import service.ServiceStudent;
+
+import repository.DepartmentRepository;
+import repository.InMemoryDepartmentRepository;
+import service.ServiceDepartmentInterface;
+import service.ServiceDepartment;
+
+import repository.FacultyRepository;
+import repository.InMemoryFacultyRepository;
+import service.ServiceFacultyInterface;
+import service.ServiceFaculty;
+
+import repository.TeacherRepository;
+import repository.InMemoryTeacherRepository;
+import service.ServiceTeacherInterface;
+import service.ServiceTeacher;
+
 public class ConsoleMenu {
-    private final FacultyMenu facultyMenu = new FacultyMenu();
-    private final DepartmentMenu departmentMenu = new DepartmentMenu();
-    private final StudentMenu studentMenu = new StudentMenu();
-    private final TeacherMenu teacherMenu = new TeacherMenu();
+
+    private final FacultyRepository facultyRepository = new InMemoryFacultyRepository();
+    private final ServiceFacultyInterface serviceFaculty = new ServiceFaculty(facultyRepository);
+    private final FacultyMenu facultyMenu = new FacultyMenu(serviceFaculty);
+
+    private final DepartmentRepository departmentRepository = new InMemoryDepartmentRepository();
+    private final ServiceDepartmentInterface serviceDepartment = new ServiceDepartment(departmentRepository);
+    private final DepartmentMenu departmentMenu = new DepartmentMenu(serviceDepartment);
+
+    StudentRepository studentRepository = new InMemoryStudentRepository();
+    ServiceStudentInterface serviceStudent = new ServiceStudent(studentRepository);
+    private final StudentMenu studentMenu = new StudentMenu(serviceStudent);
+
+    TeacherRepository teacherRepository = new InMemoryTeacherRepository();
+    ServiceTeacherInterface serviceTeacher = new ServiceTeacher(teacherRepository);
+    private final TeacherMenu teacherMenu = new TeacherMenu(serviceTeacher);
 
     public void main() {
         var console = System.console();
