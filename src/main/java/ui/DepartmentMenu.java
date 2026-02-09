@@ -14,25 +14,20 @@ public class DepartmentMenu {
     public void main(Console console) {
         while (true) {
             System.out.println(
-                    " Departments \n" +
-                            "1 - Create Department\n" +
-                            "2 - Edit Department\n" +
-                            "3 - Delete Department\n" +
-                            "4 - Show All Departments\n" +
-                            "0 - Back"
+                    "Departments \n 1 - Create Department\n 2 - Edit Department\n 3 - Delete Department\n 4 - Show All Departments\n 0 - Back"
             );
 
             int userSelect = readInt(console);
 
             switch (userSelect) {
                 case 1:
-                    createDepartment();
+                    createDepartment(console);
                     break;
                 case 2:
-                    editDepartment();
+                    editDepartment(console);
                     break;
                 case 3:
-                    deleteDepartment();
+                    deleteDepartment(console);
                     break;
                 case 4:
                     showAllDepartments();
@@ -53,16 +48,25 @@ public class DepartmentMenu {
         }
     }
 
-    private void createDepartment() {
+    private void createDepartment(Console console) {
+        String name = console.readLine("Enter department name: ");
+        String shortName = console.readLine("Enter short name: ");
+        String cabinet = console.readLine("Enter cabinet/location: ");
 
+        Department department = new Department(null, name, shortName, null, null, cabinet);
+        serviceDepartment.create(department);
     }
 
-    private void editDepartment() {
-
+    private void editDepartment(Console console) {
+        Long id = Long.parseLong(console.readLine("Enter department id to edit: "));
+        String name = console.readLine("Enter department name: ");
+        String shortName = console.readLine("Enter short name: ");
+        String cabinet = console.readLine("Enter cabinet/location: ");
     }
 
-    private void deleteDepartment() {
-
+    private void deleteDepartment(Console console) {
+        Long id = Long.parseLong(console.readLine("Enter department id to edit: "));
+        serviceDepartment.delete(id);
     }
 
     private void showAllDepartments() {

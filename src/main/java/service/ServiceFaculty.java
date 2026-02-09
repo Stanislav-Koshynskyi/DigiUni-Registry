@@ -3,6 +3,7 @@ package service;
 import entity.Faculty;
 import repository.FacultyRepository;
 import java.util.List;
+import java.util.Optional;
 
 public class ServiceFaculty implements ServiceFacultyInterface{
     private final FacultyRepository facultyRepository;
@@ -30,5 +31,9 @@ public class ServiceFaculty implements ServiceFacultyInterface{
 
     public List<Faculty> findAll() {
         return facultyRepository.findAll();
+    }
+
+    public Optional<Faculty> findById(Long id) {
+        return facultyRepository.findById(id);
     }
 }

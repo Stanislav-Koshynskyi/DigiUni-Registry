@@ -13,19 +13,14 @@ public class TeacherMenu {
     public void main(Console console) {
         while (true) {
             System.out.println(
-                    " Teachers \n" +
-                            "1 - Add teacher\n" +
-                            "2 - Edit teacher\n" +
-                            "3 - Delete teacher\n" +
-                            "4 - Show all teachers\n" +
-                            "0 - Back"
+                    "Teachers \n 1 - Add teacher\n 2 - Edit teacher\n 3 - Delete teacher\n 4 - Show all teachers\n 0 - Back"
             );
 
             int userSelect = readInt(console);
 
             switch (userSelect) {
                 case 1:
-                    createTeacher();
+                    createTeacher(console);
                     break;
                 case 2:
                     editTeacher();
@@ -52,7 +47,8 @@ public class TeacherMenu {
         }
     }
 
-    private void createTeacher(){
+    private void createTeacher(Console console){
+
     }
 
     private void editTeacher() {

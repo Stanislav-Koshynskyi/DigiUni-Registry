@@ -1,25 +1,8 @@
 package ui;
 import java.io.Console;
 
-import repository.StudentRepository;
-import repository.InMemoryStudentRepository;
-import service.ServiceStudentInterface;
-import service.ServiceStudent;
-
-import repository.DepartmentRepository;
-import repository.InMemoryDepartmentRepository;
-import service.ServiceDepartmentInterface;
-import service.ServiceDepartment;
-
-import repository.FacultyRepository;
-import repository.InMemoryFacultyRepository;
-import service.ServiceFacultyInterface;
-import service.ServiceFaculty;
-
-import repository.TeacherRepository;
-import repository.InMemoryTeacherRepository;
-import service.ServiceTeacherInterface;
-import service.ServiceTeacher;
+import repository.*;
+import service.*;
 
 public class ConsoleMenu {
 
@@ -32,34 +15,43 @@ public class ConsoleMenu {
     private final DepartmentMenu departmentMenu = new DepartmentMenu(serviceDepartment);
 
     StudentRepository studentRepository = new InMemoryStudentRepository();
+    StudentGroupRepository studentGroupRepository = new InMemoryStudentGroupRepository();
     ServiceStudentInterface serviceStudent = new ServiceStudent(studentRepository);
-    private final StudentMenu studentMenu = new StudentMenu(serviceStudent);
+    ServiceStudentGroupInterface serviceStudentGroup = new ServiceStudentGroup(studentGroupRepository);
+    private final StudentMenu studentMenu = new StudentMenu(serviceStudent, serviceStudentGroup);
 
     TeacherRepository teacherRepository = new InMemoryTeacherRepository();
     ServiceTeacherInterface serviceTeacher = new ServiceTeacher(teacherRepository);
     private final TeacherMenu teacherMenu = new TeacherMenu(serviceTeacher);
+
+    private final UniversityRepository universityRepository = new InMemoryUniversityRepository();
+    private final ServiceUniversityInterface serviceUniversity = new ServiceUniversity(universityRepository);
+    private final UniversityMenu universityMenu = new UniversityMenu(serviceUniversity);
 
     public void main() {
         var console = System.console();
 
         while (true) {
             System.out.println(
-                    "MainMenu\n 1 - Faculty\n 2 - Department\n 3 - Student\n 4 - Teacher\n 0 - Exit"
+                    "MainMenu\n 1 - University\n 2 - Faculty\n 3 - Department\n 4 - Student\n 5 - Teacher\n 0 - Exit"
             );
 
             int userSelect = readInt(console);
 
             switch (userSelect) {
                 case 1:
-                    facultyMenu.main(console);
+                    universityMenu.main(console);
                     break;
                 case 2:
-                    departmentMenu.main(console);
+                    facultyMenu.main(console);
                     break;
                 case 3:
-                    studentMenu.main(console);
+                    departmentMenu.main(console);
                     break;
                 case 4:
+                    studentMenu.main(console);
+                    break;
+                case 5:
                     teacherMenu.main(console);
                     break;
                 case 0:
