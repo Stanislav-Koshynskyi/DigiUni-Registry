@@ -94,8 +94,8 @@ public class StudentMenu {
         StudentGroup group = optionalGroup.get();
 
         Student student = new Student(uniqueCode, recordBook, fullName, birthDate, contact, form, status, yearOfAdmission, course, group);
-        serviceStudent.create(student);
         group.addStudent(student);
+        serviceStudent.create(student);
     }
 
     private void editStudent(Console console) {
@@ -107,7 +107,7 @@ public class StudentMenu {
         }
         Student student = optionalStudent.get();
         String recordBook = console.readLine("Enter record book number: ");
-        String course = console.readLine(console.readLine("Enter course (1-4): "));
+        String course = console.readLine("Enter course (1-4): ");
         if (!recordBook.isBlank())
             student.setRecordBookNumber(recordBook);
         if (!course.isBlank())
