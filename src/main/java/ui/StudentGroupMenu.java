@@ -57,9 +57,9 @@ public class StudentGroupMenu {
 
         Department department;
         while (true) {
-            String departmentCode = ConsoleMenu.readRequiredString(console, "Enter department unique code(-1 to exit): ");
-            if (departmentCode.equals("-1")) return;
-            Optional<Department> optionalDepartment = serviceDepartment.findByUniqueCode(departmentCode);
+            Long id = ConsoleMenu.readRequiredLong(console, "Enter department unique code(-1 to exit): ");
+            if (id.equals(-1L)) return;
+            Optional<Department> optionalDepartment = serviceDepartment.findById(id);
             if (optionalDepartment.isPresent()) {
                 department = optionalDepartment.get();
                 break;
@@ -75,7 +75,7 @@ public class StudentGroupMenu {
     }
 
     private void editStudentGroup(Console console) {
-        Long id = Long.parseLong(console.readLine("Enter group id to edit: "));
+        Long id = ConsoleMenu.readRequiredLong(console, "Enter group id to edit: ");
         Optional<StudentGroup> optionalGroup = serviceStudentGroup.findById(id);
 
         if (optionalGroup.isEmpty()) {
