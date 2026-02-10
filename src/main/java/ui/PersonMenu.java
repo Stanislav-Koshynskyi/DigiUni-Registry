@@ -26,8 +26,14 @@ public class PersonMenu {
     }
 
     public static Contact contact(Console console) {
-        String phone = console.readLine("Enter phone: ");
-        String email = console.readLine("Enter email: ");
-        return new Contact(phone, email);
+        while (true) {
+            try {
+                String phone = console.readLine("Enter phone(10-13 numbers with optional +): ");
+                String email = console.readLine("Enter email(in format text.text@text): ");
+                return new Contact(phone, email);
+            }catch ( IllegalArgumentException e) {
+                System.out.println("Invalid email or phone format, use text.text@text for email and 10-13 numbers for phone");
+            }
+        }
     }
 }
