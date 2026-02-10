@@ -11,6 +11,8 @@ public abstract class Person implements Entity{
     private FullName fullName;
     private LocalDate birthDate;
     private Contact contact;
+    public static int MINIUM_AGE = 16;
+
     public Person() {}
     public Person(String uniqueCode,FullName fullName, LocalDate birthDate, Contact contact) {
         setUniqueCode(uniqueCode);
@@ -58,8 +60,8 @@ public abstract class Person implements Entity{
         if  (birthDate == null) throw new IllegalArgumentException("birthDate cannot be empty");
         LocalDate now = LocalDate.now();
         if (birthDate.isAfter(now)) throw new IllegalArgumentException("birthDate cannot be in the future");
-        if (Period.between( birthDate, now).getYears() < 16 ) {
-            throw new IllegalArgumentException("Person must be 16+ years old");
+        if (Period.between( birthDate, now).getYears() < MINIUM_AGE ) {
+            throw new IllegalArgumentException("Person must be " + MINIUM_AGE + "+ years old");
         }
         this.birthDate = birthDate;
     }

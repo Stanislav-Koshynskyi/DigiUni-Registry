@@ -2,13 +2,24 @@ package ui;
 
 import entity.Contact;
 import entity.FullName;
+import entity.Person;
+
 import java.io.Console;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 public class PersonMenu {
     public static FullName fullName(Console console) {
         String name = console.readLine("Enter name: ");
+        while (name.isBlank()) {
+            System.out.println("name cannot be blank");
+            name = console.readLine("Enter name: ");
+        }
         String surname = console.readLine("Enter surname: ");
+        while (surname.isBlank()) {
+            System.out.println("surname cannot be blank");
+            surname = console.readLine("Enter surname: ");
+        }
         String patronymic = console.readLine("Enter patronymic: ");
         return new FullName(name, surname, patronymic);
     }
@@ -18,7 +29,12 @@ public class PersonMenu {
             try {
 
                 String birth = console.readLine("Enter birth date(yyyy-mm-dd): ");
-                return  LocalDate.parse(birth);
+                LocalDate birthDate = LocalDate.parse(birth);
+                if (birthDate.getYear() >= Person.MINIUM_AGE)
+                    return birthDate;
+                else{
+                    System.out.println("Invalid birth date, person must be "+Person.MINIUM_AGE+"+ years old");
+                }
             }catch ( DateTimeParseException e) {
                 System.out.println("Invalid date format, use  yyyy-mm-dd");
             }
