@@ -13,13 +13,15 @@ public class UniversityMenu {
     }
 
     public void main(Console console){
-        System.out.println("Universities \n 1 - Create University \n 0 - Back");
+        System.out.println("Universities \n 1 - Create University \n 2 - Show all university \n 0 - Back");
 
         int userSelect = readInt(console);
         switch (userSelect) {
             case 1:
                 createUniversity(console);
                 break;
+            case 2:
+                showAllUniversity();
             case 0:
                 return;
             default:
@@ -53,5 +55,10 @@ public class UniversityMenu {
         University university = new University(fullName, shortName, address);
 
         serviceUniversity.create(university);
+    }
+    private void showAllUniversity(){
+        for (University university : serviceUniversity.findAll()) {
+            System.out.println("id - "+ university.getId() + ", " + university);
+        }
     }
 }
