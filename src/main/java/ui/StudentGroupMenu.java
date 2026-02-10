@@ -57,7 +57,7 @@ public class StudentGroupMenu {
 
         Department department;
         while (true) {
-            Long id = ConsoleMenu.readRequiredLong(console, "Enter department unique code(-1 to exit): ");
+            Long id = ConsoleMenu.readRequiredLong(console, "Enter department id(-1 to exit): ");
             if (id.equals(-1L)) return;
             Optional<Department> optionalDepartment = serviceDepartment.findById(id);
             if (optionalDepartment.isPresent()) {
