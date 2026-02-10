@@ -132,15 +132,7 @@ public class TeacherMenu {
     }
 
     private void editTeacher(Console console) {
-        Long id = null;
-        while (id == null) {
-            try {
-
-                id = Long.parseLong(console.readLine("Enter teacher id to edit: "));
-            }catch (NumberFormatException e) {
-                System.out.println("Invalid teacher id! Use number only");
-            }
-        }
+        Long id = ConsoleMenu.readRequiredLong(console, "Enter teacher id: ");
         Optional<Teacher> optionalTeacher = serviceTeacher.findById(id);
         if (optionalTeacher.isEmpty()) {
             System.out.println("Teacher not found!!!");
@@ -208,7 +200,7 @@ public class TeacherMenu {
     }
 
     private void deleteTeacher(Console console) {
-        Long id = Long.parseLong(console.readLine("Enter teacher id to edit: "));
+        Long id = ConsoleMenu.readRequiredLong(console, "Enter teacher id: ");
         Optional<Teacher> optionalTeacher = serviceTeacher.findById(id);
         if (optionalTeacher.isEmpty()) {
             System.out.println("Teacher not found!!!");
