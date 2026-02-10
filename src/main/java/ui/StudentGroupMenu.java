@@ -53,21 +53,23 @@ public class StudentGroupMenu {
         }
     }
     private void createStudentGroup(Console console) {
-        String name = console.readLine("Enter group name: ");
-        if (name == null || name.isBlank()) {
-            System.out.println("Group name cannot be empty!");
-            return;
+        String name = ConsoleMenu.readRequiredString(console, "Enter group name: ");
+
+        Department department;
+        while (true) {
+            String departmentCode = ConsoleMenu.readRequiredString(console, "Enter department unique code(-1 to exit): ");
+            if (departmentCode.equals("-1")) return;
+            Optional<Department> optionalDepartment = serviceDepartment.findByUniqueCode(departmentCode);
+            if (optionalDepartment.isPresent()) {
+                department = optionalDepartment.get();
+                break;
+            }
+            else{
+                System.out.println("Department not found");
+            }
         }
 
-        String departmentCode = console.readLine("Enter department unique code: ");
-        Optional<Department> optionalDepartment = serviceDepartment.findByUniqueCode(departmentCode);
 
-        if (optionalDepartment.isEmpty()) {
-            System.out.println("Department not found!");
-            return;
-        }
-
-        Department department = optionalDepartment.get();
         StudentGroup group = new StudentGroup(name, department);
         serviceStudentGroup.create(group);
     }
@@ -91,7 +93,7 @@ public class StudentGroupMenu {
     }
 
     private void deleteStudentGroup(Console console) {
-        Long id = Long.parseLong(console.readLine("Enter group id to delete: "));
+        Long id = ConsoleMenu.readRequiredLong(console, "Enter group id to delete: ");
         serviceStudentGroup.delete(id);
     }
 
