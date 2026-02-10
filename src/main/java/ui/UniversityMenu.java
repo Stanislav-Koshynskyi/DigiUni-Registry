@@ -36,11 +36,18 @@ public class UniversityMenu {
     }
 
     private void createUniversity(Console console) {
-        String fullName = console.readLine("Enter full name: ");
-        String shortName = console.readLine("Enter short name: ");
-        String city = console.readLine("Enter city: ");
-        String street = console.readLine("Enter street: ");
-        String buildNumber = console.readLine("Enter building number: ");
+        String fullName = ConsoleMenu.readRequiredString(console, "Enter full name: ");
+        String shortName;
+        while (true) {
+            shortName = ConsoleMenu.readRequiredString(console, "Enter short name: ");
+            if (shortName.length() <= University.MAX_SHORT_NAME_LENGTH) break;
+            else{
+                System.out.println("Short name must be shorter than "+ University.MAX_SHORT_NAME_LENGTH);
+            }
+        }
+        String city = ConsoleMenu.readRequiredString(console,"Enter city: ");
+        String street = ConsoleMenu.readRequiredString(console,"Enter street: ");
+        String buildNumber = ConsoleMenu.readRequiredString(console,"Enter building number: ");
 
         Address address = new Address(city, street, buildNumber);
         University university = new University(fullName, shortName, address);

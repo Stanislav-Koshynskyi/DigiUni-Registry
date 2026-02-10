@@ -132,6 +132,6 @@ public class FacultyMenu {
 
     private void showAllFaculties() {
         for (Faculty faculty : serviceFaculty.findAll())
-            System.out.println(faculty);
+            System.out.println("id -" + faculty.getId() + ", " +faculty);
     }
 }

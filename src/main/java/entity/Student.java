@@ -13,6 +13,8 @@ public class Student extends Person{
     private StudentGroup group;
     private Long groupId;
 
+    public static final int MINIUM_YEAR_OF_ADMISSION = 1898;
+
     public Student() {}
     public Student(String uniqueCode,String recordBookNumber, FullName fullName, LocalDate birthDate, Contact contact, FormOfEducation formOfEducation, StudentStatus studentStatus, Year yearOfAdmission, int course, StudentGroup group) {
         super(uniqueCode, fullName, birthDate, contact);
@@ -40,7 +42,13 @@ public class Student extends Person{
 
     public void setGroup(StudentGroup group) {
         if (group == null) throw new IllegalArgumentException("group cannot be null");
+        if (this.group != null && this.group.equals(group)) return;
+
+        if (this.group != null) {
+            this.group.removeStudent(this);
+        }
         this.group = group;
+        this.group.addStudent(this);
         this.groupId = group.getId();
     }
 
@@ -62,7 +70,7 @@ public class Student extends Person{
         if (yearOfAdmission.isAfter(Year.now())) {
             throw new IllegalArgumentException("yearOfAdmission cannot be in the future");
         }
-        if (yearOfAdmission.isBefore(Year.of(1898))) {
+        if (yearOfAdmission.isBefore(Year.of(MINIUM_YEAR_OF_ADMISSION))) {
             throw new IllegalArgumentException("yearOfAdmission too old");
         }
         this.yearOfAdmission = yearOfAdmission;

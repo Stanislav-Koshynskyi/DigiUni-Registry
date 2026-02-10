@@ -118,6 +118,6 @@ public class DepartmentMenu {
 
     private void showAllDepartments() {
         for (Department department : serviceDepartment.findAll())
-            System.out.println(department);
+            System.out.println("id -" + department.getId() + ", " + department);
     }
 }
