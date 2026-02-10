@@ -59,32 +59,51 @@ public class DepartmentMenu {
     }
 
     private void createDepartment(Console console) {
-        String uniqueCode = console.readLine("Enter unique code: ");
-        String name = console.readLine("Enter department name: ");
-        String shortName = console.readLine("Enter short name: ");
-        String cabinet = console.readLine("Enter cabinet/location: ");
+        String uniqueCode = ConsoleMenu.readRequiredString(console, "Enter unique code: ");
+        String name = ConsoleMenu.readRequiredString(console, "Enter department name: ");
+        String shortName;
+        while (true) {
+            shortName = console.readLine("Enter short name: ");
+            if (shortName.length() <= Department.MAX_SHORT_NAME_LENGTH) break;
+            else {
+                System.out.println("Short name must be shorter than " + Department.MAX_SHORT_NAME_LENGTH);
+            }
+        }
+        String cabinet = ConsoleMenu.readRequiredString(console, "Enter cabinet/location: ");
         Teacher headOfDepartment = null;
-        Long teacherId = Long.parseLong(console.readLine("Enter teacher id: "));
-        Optional<Teacher> optionalTeacher = serviceTeacher.findById(teacherId);
-        if (optionalTeacher.isEmpty()) {
-            System.out.println("Teacher not found!!!");
-            return;
-        }
-        headOfDepartment = optionalTeacher.get();
-        Long facultyId = Long.parseLong(console.readLine("Enter faculty id: "));
-        Optional<Faculty> optionalFaculty = serviceFaculty.findById(facultyId);
-        if (optionalFaculty.isEmpty()) {
-            System.out.println("Faculty not found!!!");
-            return;
-        }
-        Faculty faculty = optionalFaculty.get();
+        Long teacherId;
+        while (true) {
+            teacherId = ConsoleMenu.readRequiredLong(console, "Enter teacher id(if vacant write -1): ");
+            if (teacherId.equals(Long.valueOf(-1))) break;
+            Optional<Teacher> optionalTeacher = serviceTeacher.findById(teacherId);
+            if (optionalTeacher.isPresent()) {
+                headOfDepartment = optionalTeacher.get();
+                break;
+            } else {
+                System.out.println("Teacher not found!!!");
+            }
 
-        Department department = new Department(uniqueCode, name, shortName, faculty, headOfDepartment, cabinet);
-        serviceDepartment.create(department);
+        }
+        Faculty faculty;
+        while (true) {
+            Long facultyId = ConsoleMenu.readRequiredLong(console, "Enter faculty id(-1 to exit): ");
+            if (facultyId.equals(Long.valueOf(-1))) return;
+            Optional<Faculty> optionalFaculty = serviceFaculty.findById(facultyId);
+            if (optionalFaculty.isPresent()) {
+                faculty = optionalFaculty.get();
+                break;
+            } else {
+                System.out.println("Faculty not found!!!");
+            }
+        }
+
+            Department department = new Department(uniqueCode, name, shortName, faculty, headOfDepartment, cabinet);
+            serviceDepartment.create(department);
+
     }
 
     private void editDepartment(Console console) {
-        Long id = Long.parseLong(console.readLine("Enter department id to edit: "));
+        Long id =ConsoleMenu.readRequiredLong(console, "Enter department id to edit: ");
         Optional<Department> optionalDepartment = serviceDepartment.findById(id);
         if (optionalDepartment.isEmpty()) {
             System.out.println("Department not found!!!");
@@ -93,7 +112,14 @@ public class DepartmentMenu {
 
         Department department = optionalDepartment.get();
         String name = console.readLine("Enter department name: ");
-        String shortName = console.readLine("Enter short name: ");
+        String shortName;
+        while (true) {
+            shortName = console.readLine("Enter short name: ");
+            if (shortName.length() <= Department.MAX_SHORT_NAME_LENGTH) break;
+            else{
+                System.out.println("Short name must be shorter than " + Department.MAX_SHORT_NAME_LENGTH);
+            }
+        }
         String cabinet = console.readLine("Enter cabinet/location: ");
 
         if (!name.isBlank())
@@ -107,7 +133,7 @@ public class DepartmentMenu {
     }
 
     private void deleteDepartment(Console console) {
-        Long id = Long.parseLong(console.readLine("Enter department id to edit: "));
+        Long id = ConsoleMenu.readRequiredLong(console, "Enter department id to delete: ");
         Optional<Department> optionalDepartment = serviceDepartment.findById(id);
         if (optionalDepartment.isEmpty()) {
             System.out.println("Department not found!!!");

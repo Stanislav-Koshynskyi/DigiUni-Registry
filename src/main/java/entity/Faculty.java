@@ -13,6 +13,7 @@ public class Faculty implements Entity {
     private Contact contact;
     private University university;
     private Long universityId ;
+    public static final int MAX_SHORT_NAME_LENGTH = 15;
 
     public Faculty() {
     }
