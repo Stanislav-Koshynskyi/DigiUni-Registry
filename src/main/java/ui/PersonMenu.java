@@ -14,8 +14,15 @@ public class PersonMenu {
     }
 
     public static LocalDate birthDate(Console console) {
-        String birth = console.readLine("Enter birth date: ");
-        return LocalDate.parse(birth);
+        while (true) {
+            try {
+
+                String birth = console.readLine("Enter birth date(yyyy-mm-dd): ");
+                return  LocalDate.parse(birth);
+            }catch ( DateTimeParseException e) {
+                System.out.println("Invalid date format, use  yyyy-mm-dd");
+            }
+        }
     }
 
     public static Contact contact(Console console) {
