@@ -127,6 +127,7 @@ public class StudentMenu {
 
 
         Student student = new Student(uniqueCode, recordBook, fullName, birthDate, contact, form, status, yearOfAdmission, course, group);
+        group.addStudent(student);
         serviceStudent.create(student);
     }
 

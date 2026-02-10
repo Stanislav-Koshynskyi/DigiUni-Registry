@@ -25,6 +25,7 @@ public class ConsoleMenu {
     StudentGroupRepository studentGroupRepository = new InMemoryStudentGroupRepository();
     ServiceStudentInterface serviceStudent = new ServiceStudent(studentRepository);
     ServiceStudentGroupInterface serviceStudentGroup = new ServiceStudentGroup(studentGroupRepository);
+    private final StudentGroupMenu studentGroupMenu = new StudentGroupMenu(serviceStudentGroup, serviceDepartment);
     private final StudentMenu studentMenu = new StudentMenu(serviceStudent, serviceStudentGroup);
 
     public void main() {
@@ -32,7 +33,7 @@ public class ConsoleMenu {
 
         while (true) {
             System.out.println(
-                    "MainMenu\n 1 - University\n 2 - Faculty\n 3 - Department\n 4 - Student\n 5 - Teacher\n 0 - Exit"
+                    "MainMenu\n 1 - University\n 2 - Faculty\n 3 - Department\n 4 - Student\n 5 - Teacher\n 6 - Student Group\n 0 - Exit"
             );
 
             int userSelect = readInt(console);
@@ -52,6 +53,9 @@ public class ConsoleMenu {
                     break;
                 case 5:
                     teacherMenu.main(console);
+                    break;
+                case 6:
+                    studentGroupMenu.main(console);
                     break;
                 case 0:
                     System.out.println("Exit");
