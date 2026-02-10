@@ -40,7 +40,13 @@ public class Student extends Person{
 
     public void setGroup(StudentGroup group) {
         if (group == null) throw new IllegalArgumentException("group cannot be null");
+        if (this.group != null && this.group.equals(group)) return;
+
+        if (this.group != null) {
+            this.group.removeStudent(this);
+        }
         this.group = group;
+        this.group.addStudent(this);
         this.groupId = group.getId();
     }
 
