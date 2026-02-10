@@ -2,6 +2,7 @@ package ui;
 
 import java.io.Console;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Optional;
 import java.math.BigDecimal;
 
@@ -14,6 +15,7 @@ public class TeacherMenu {
     public TeacherMenu(ServiceTeacherInterface serviceTeacher) {
         this.serviceTeacher = serviceTeacher;
     }
+
     public void main(Console console) {
         while (true) {
             System.out.println(
@@ -46,67 +48,91 @@ public class TeacherMenu {
     private int readInt(Console console) {
         try {
             return Integer.parseInt(console.readLine("Your choice: "));
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             return -1;
         }
     }
 
-    private void createTeacher(Console console){
+    private void createTeacher(Console console) {
         FullName fullName = PersonMenu.fullName(console);
         LocalDate birthDate = PersonMenu.birthDate(console);
         Contact contact = PersonMenu.contact(console);
 
-        String uniqueCode = console.readLine("Enter unique code: ");
-        System.out.println("Academic degree: 1 - Candidate of sciences, 2 - Doctor of philosophy, 3 - Doctor of sciences, 4 - None");
-        int degreeChoice = readInt(console);
-        AcademicDegree degree;
-        switch (degreeChoice) {
-            case 1:
-                degree = AcademicDegree.CANDIDATE_OF_SCIENCES;
-                break;
-            case 2:
-                degree = AcademicDegree.DOCTOR_OF_PHILOSOPHY;
-                break;
-            case 3:
-                degree = AcademicDegree.DOCTOR_OF_SCIENCES;
-                break;
-            case 4:
-                degree = AcademicDegree.NONE;
-                break;
-            default:
-                System.out.println("Invalid academic degree!");
-                return;
-        }
+        String uniqueCode = ConsoleMenu.readRequiredString(console, "Enter unique code: ");
+        AcademicDegree degree = null;
+        while (degree == null) {
 
-        System.out.println("Academic rank: 1 - Associate professor, 2 - Senior researcher, 3 - Professor, 4 - None");
-        int rankChoice = readInt(console);
-        AcademicRank rank;
-        switch (rankChoice) {
-            case 1:
-                rank = AcademicRank.ASSOCIATE_PROFESSOR;
-                break;
-            case 2:
-                rank = AcademicRank.SENIOR_RESEARCHER;
-                break;
-            case 3:
-                rank = AcademicRank.PROFESSOR;
-                break;
-            case 4:
-                rank = AcademicRank.NONE;
-                break;
-            default:
-                System.out.println("Invalid academic rank!");
-                return;
+            System.out.println("Academic degree: 1 - Candidate of sciences, 2 - Doctor of philosophy, 3 - Doctor of sciences, 4 - None");
+            int degreeChoice = readInt(console);
+
+            switch (degreeChoice) {
+                case 1:
+                    degree = AcademicDegree.CANDIDATE_OF_SCIENCES;
+                    break;
+                case 2:
+                    degree = AcademicDegree.DOCTOR_OF_PHILOSOPHY;
+                    break;
+                case 3:
+                    degree = AcademicDegree.DOCTOR_OF_SCIENCES;
+                    break;
+                case 4:
+                    degree = AcademicDegree.NONE;
+                    break;
+                default:
+                    System.out.println("Invalid academic degree!");
+            }
         }
-        LocalDate dateOfEmployment = LocalDate.parse(console.readLine("Enter date of employment: "));
-        BigDecimal salary = new BigDecimal(console.readLine("Enter salary: "));
+        AcademicRank rank = null;
+        while (rank == null) {
+            System.out.println("Academic rank: 1 - Associate professor, 2 - Senior researcher, 3 - Professor, 4 - None");
+            int rankChoice = readInt(console);
+
+            switch (rankChoice) {
+                case 1:
+                    rank = AcademicRank.ASSOCIATE_PROFESSOR;
+                    break;
+                case 2:
+                    rank = AcademicRank.SENIOR_RESEARCHER;
+                    break;
+                case 3:
+                    rank = AcademicRank.PROFESSOR;
+                    break;
+                case 4:
+                    rank = AcademicRank.NONE;
+                    break;
+                default:
+                    System.out.println("Invalid academic rank!");
+            }
+        }
+        LocalDate dateOfEmployment;
+        while (true) {
+            try {
+
+                dateOfEmployment = LocalDate.parse(console.readLine("Enter date of employment: "));
+                if (!dateOfEmployment.isAfter(LocalDate.now())) {
+                    break;
+                } else {
+                    System.out.println("date of employment cannot be in future");
+                }
+            }catch (DateTimeParseException e){
+                System.out.println("Use format yyyy-mm-dd");
+            }
+        }
+        BigDecimal salary = null;
+        while (salary == null) {
+            try {
+                salary = new BigDecimal(console.readLine("Enter salary: "));
+            }catch (NumberFormatException e) {
+                System.out.println("Invalid salary! Use number and dot only");
+            }
+        }
 
         Teacher teacher = new Teacher(uniqueCode, fullName, birthDate, contact, degree, rank, dateOfEmployment, salary);
         serviceTeacher.create(teacher);
     }
 
     private void editTeacher(Console console) {
-        Long id = Long.parseLong(console.readLine("Enter teacher id to edit: "));
+        Long id = ConsoleMenu.readRequiredLong(console, "Enter teacher id: ");
         Optional<Teacher> optionalTeacher = serviceTeacher.findById(id);
         if (optionalTeacher.isEmpty()) {
             System.out.println("Teacher not found!!!");
@@ -114,55 +140,67 @@ public class TeacherMenu {
         }
 
         Teacher teacher = optionalTeacher.get();
-        System.out.println("Academic degree: 1 - Candidate of sciences, 2 - Doctor of philosophy, 3 - Doctor of sciences, 4 - None");
-        int degreeChoice = readInt(console);
-        switch (degreeChoice) {
-            case 1:
-                teacher.setAcademicDegree(AcademicDegree.CANDIDATE_OF_SCIENCES);
-                break;
-            case 2:
-                teacher.setAcademicDegree(AcademicDegree.DOCTOR_OF_PHILOSOPHY);
-                break;
-            case 3:
-                teacher.setAcademicDegree(AcademicDegree.DOCTOR_OF_SCIENCES);
-                break;
-            case 4:
-                teacher.setAcademicDegree(AcademicDegree.NONE);
-                break;
-            default:
-                System.out.println("Invalid academic degree!");
-                return;
+        AcademicDegree degree = null;
+        while (degree == null) {
+
+            System.out.println("Academic degree: 1 - Candidate of sciences, 2 - Doctor of philosophy, 3 - Doctor of sciences, 4 - None");
+            int degreeChoice = readInt(console);
+
+            switch (degreeChoice) {
+                case 1:
+                    degree = AcademicDegree.CANDIDATE_OF_SCIENCES;
+                    break;
+                case 2:
+                    degree = AcademicDegree.DOCTOR_OF_PHILOSOPHY;
+                    break;
+                case 3:
+                    degree = AcademicDegree.DOCTOR_OF_SCIENCES;
+                    break;
+                case 4:
+                    degree = AcademicDegree.NONE;
+                    break;
+                default:
+                    System.out.println("Invalid academic degree!");
+            }
         }
+        teacher.setAcademicDegree(degree);
+        AcademicRank rank = null;
+        while (rank == null) {
+            System.out.println("Academic rank: 1 - Associate professor, 2 - Senior researcher, 3 - Professor, 4 - None");
+            int rankChoice = readInt(console);
 
-        System.out.println("Academic rank: 1 - Associate professor, 2 - Senior researcher, 3 - Professor, 4 - None");
-        int rankChoice = readInt(console);
-        switch (rankChoice) {
-            case 1:
-                teacher.setAcademicRank(AcademicRank.ASSOCIATE_PROFESSOR);
-                break;
-            case 2:
-                teacher.setAcademicRank(AcademicRank.SENIOR_RESEARCHER);
-                break;
-            case 3:
-                teacher.setAcademicRank(AcademicRank.PROFESSOR);
-                break;
-            case 4:
-                teacher.setAcademicRank(AcademicRank.NONE);
-                break;
-            default:
-                System.out.println("Invalid academic rank!");
-                return;
+            switch (rankChoice) {
+                case 1:
+                    rank = AcademicRank.ASSOCIATE_PROFESSOR;
+                    break;
+                case 2:
+                    rank = AcademicRank.SENIOR_RESEARCHER;
+                    break;
+                case 3:
+                    rank = AcademicRank.PROFESSOR;
+                    break;
+                case 4:
+                    rank = AcademicRank.NONE;
+                    break;
+                default:
+                    System.out.println("Invalid academic rank!");
+            }
         }
-
-        String salaryStr = console.readLine("Enter salary: ");
-        if (!salaryStr.isBlank())
-            teacher.setSalary(new BigDecimal(salaryStr));
-
+        teacher.setAcademicRank(rank);
+        BigDecimal salary = null;
+        while (salary == null) {
+            try {
+                salary = new BigDecimal(console.readLine("Enter salary: "));
+            }catch (NumberFormatException e) {
+                System.out.println("Invalid salary! Use number and dot only");
+            }
+        }
+        teacher.setSalary(salary);
         serviceTeacher.update(teacher);
     }
 
     private void deleteTeacher(Console console) {
-        Long id = Long.parseLong(console.readLine("Enter teacher id to edit: "));
+        Long id = ConsoleMenu.readRequiredLong(console, "Enter teacher id: ");
         Optional<Teacher> optionalTeacher = serviceTeacher.findById(id);
         if (optionalTeacher.isEmpty()) {
             System.out.println("Teacher not found!!!");

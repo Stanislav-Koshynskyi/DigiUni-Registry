@@ -78,4 +78,20 @@ public class ConsoleMenu {
             System.out.println("This input cannot be blank");
         }
     }
+    public static Long readRequiredLong(Console console, String prompt) {
+        while (true) {
+            try {
+
+                String input = console.readLine(prompt);
+                if (input != null && !input.isBlank()) {
+                    return Long.parseLong(input);
+                }
+                else{
+                    System.out.println("This input cannot be blank");
+                }
+            }catch (NumberFormatException e){
+                System.out.println("Use only number");
+            }
+        }
+    }
 }
