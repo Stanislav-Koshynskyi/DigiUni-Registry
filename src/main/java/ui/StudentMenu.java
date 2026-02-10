@@ -147,6 +147,6 @@ public class StudentMenu {
 
     private void showAllStudents() {
         for (Student student : serviceStudent.findAll())
-            System.out.println(student);
+            System.out.println("id - "+ student.getId() + ", " + student);
     }
 }

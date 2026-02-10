@@ -174,7 +174,7 @@ public class TeacherMenu {
 
     private void showAllTeachers() {
         for (Teacher teacher : serviceTeacher.findAll()) {
-            System.out.println(teacher);
+            System.out.println("id -" + teacher.getId() + ", " + teacher);
         }
     }
 }
