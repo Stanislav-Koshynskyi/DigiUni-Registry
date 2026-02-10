@@ -17,4 +17,6 @@ public interface ServiceStudentInterface {
     Optional<Student> findByRecordBookNumber(String recordBookNumber);
 
     void transferStudent(Long studentId, StudentGroup newGroup, int newCourse);
+
+    Optional<Student> findById(Long id);
 }

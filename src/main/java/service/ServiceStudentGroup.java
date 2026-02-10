@@ -59,4 +59,8 @@ public class ServiceStudentGroup implements ServiceStudentGroupInterface{
     public Optional<StudentGroup> findByGroupLeader(Student leader) {
         return studentGroupRepository.findByGroupLeader(leader);
     }
+
+    public Optional<StudentGroup> findById(Long id) {
+        return studentGroupRepository.findById(id);
+    }
 }

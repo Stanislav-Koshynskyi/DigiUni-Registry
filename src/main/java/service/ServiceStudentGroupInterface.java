@@ -25,4 +25,6 @@ public interface ServiceStudentGroupInterface {
     Optional<StudentGroup> findByHeadOfGroup(Teacher head);
 
     Optional<StudentGroup> findByGroupLeader(Student leader);
+
+    Optional<StudentGroup> findById(Long id);
 }

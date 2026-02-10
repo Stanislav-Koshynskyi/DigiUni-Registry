@@ -1,5 +1,6 @@
 package service;
 
+import entity.Faculty;
 import entity.University;
 import java.util.List;
 import java.util.Optional;
@@ -18,4 +19,6 @@ public interface ServiceUniversityInterface {
     Optional<University> findByShortName(String shortName);
 
     List<University> findByCity(String city);
+
+    Optional<University> findById(Long id);
 }

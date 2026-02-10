@@ -2,6 +2,7 @@ package ui;
 
 import entity.Student;
 import entity.StudentGroup;
+import entity.FullName;
 import service.ServiceStudentInterface;
 import service.ServiceStudentGroupInterface;
 import java.io.Console;
@@ -38,6 +39,18 @@ public class FindByStudent {
     }
 
     private  void findByFullName(Console console){
+        FullName fullName = PersonMenu.fullName(console);
+        boolean found = false;
+        for (Student student : serviceStudent.findAll()) {
+            if (student.getFullName().equals(fullName)) {
+                System.out.println(student);
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("Student with this name not found!");
+        }
     }
 
     private void findByCourse(Console console){

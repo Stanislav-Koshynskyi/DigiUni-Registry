@@ -48,4 +48,8 @@ public class ServiceStudent implements ServiceStudentInterface{
 
         studentRepository.save(student);
     }
+
+    public Optional<Student> findById(Long id) {
+        return studentRepository.findById(id);
+    }
 }

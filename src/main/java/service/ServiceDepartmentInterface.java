@@ -15,4 +15,6 @@ public interface ServiceDepartmentInterface {
     List<Department> findAll();
 
     Optional<Department> findByUniqueCode(String code);
+
+    Optional<Department> findById(Long id);
 }

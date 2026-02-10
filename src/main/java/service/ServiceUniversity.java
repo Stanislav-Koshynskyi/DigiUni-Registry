@@ -1,5 +1,6 @@
 package service;
 
+import entity.Faculty;
 import entity.University;
 import repository.UniversityRepository;
 import java.util.List;
@@ -48,5 +49,9 @@ public class ServiceUniversity implements ServiceUniversityInterface{
 
     public List<University> findByCity(String city) {
         return universityRepository.findByCity(city);
+    }
+
+    public Optional<University> findById(Long id) {
+        return universityRepository.findById(id);
     }
 }

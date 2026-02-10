@@ -5,28 +5,27 @@ import repository.*;
 import service.*;
 
 public class ConsoleMenu {
+    private final UniversityRepository universityRepository = new InMemoryUniversityRepository();
+    private final ServiceUniversityInterface serviceUniversity = new ServiceUniversity(universityRepository);
+    private final UniversityMenu universityMenu = new UniversityMenu(serviceUniversity);
+
+    TeacherRepository teacherRepository = new InMemoryTeacherRepository();
+    ServiceTeacherInterface serviceTeacher = new ServiceTeacher(teacherRepository);
+    private final TeacherMenu teacherMenu = new TeacherMenu(serviceTeacher);
 
     private final FacultyRepository facultyRepository = new InMemoryFacultyRepository();
     private final ServiceFacultyInterface serviceFaculty = new ServiceFaculty(facultyRepository);
-    private final FacultyMenu facultyMenu = new FacultyMenu(serviceFaculty);
+    private final FacultyMenu facultyMenu = new FacultyMenu(serviceFaculty, serviceUniversity, serviceTeacher);
 
     private final DepartmentRepository departmentRepository = new InMemoryDepartmentRepository();
     private final ServiceDepartmentInterface serviceDepartment = new ServiceDepartment(departmentRepository);
-    private final DepartmentMenu departmentMenu = new DepartmentMenu(serviceDepartment);
+    private final DepartmentMenu departmentMenu = new DepartmentMenu(serviceDepartment, serviceFaculty, serviceTeacher);
 
     StudentRepository studentRepository = new InMemoryStudentRepository();
     StudentGroupRepository studentGroupRepository = new InMemoryStudentGroupRepository();
     ServiceStudentInterface serviceStudent = new ServiceStudent(studentRepository);
     ServiceStudentGroupInterface serviceStudentGroup = new ServiceStudentGroup(studentGroupRepository);
     private final StudentMenu studentMenu = new StudentMenu(serviceStudent, serviceStudentGroup);
-
-    TeacherRepository teacherRepository = new InMemoryTeacherRepository();
-    ServiceTeacherInterface serviceTeacher = new ServiceTeacher(teacherRepository);
-    private final TeacherMenu teacherMenu = new TeacherMenu(serviceTeacher);
-
-    private final UniversityRepository universityRepository = new InMemoryUniversityRepository();
-    private final ServiceUniversityInterface serviceUniversity = new ServiceUniversity(universityRepository);
-    private final UniversityMenu universityMenu = new UniversityMenu(serviceUniversity);
 
     public void main() {
         var console = System.console();
@@ -58,7 +57,7 @@ public class ConsoleMenu {
                     System.out.println("Exit");
                     return;
                 default:
-                    System.out.println("Invalid input");
+                    System.out.println("Invalid choice!");
             }
         }
     }

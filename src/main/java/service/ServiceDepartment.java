@@ -42,4 +42,8 @@ public class ServiceDepartment implements ServiceDepartmentInterface {
     public Optional<Department> findByUniqueCode(String code) {
         return departmentRepository.findByUniqueCode(code);
     }
+
+    public Optional<Department> findById(Long id) {
+        return departmentRepository.findById(id);
+    }
 }
