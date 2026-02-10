@@ -59,38 +59,61 @@ public class FacultyMenu {
     }
 
     private void createFaculty(Console console) {
-        String uniqueCode = console.readLine("Enter unique code: ");
-        String name = console.readLine("Enter faculty name: ");
-        String shortName = console.readLine("Enter short name: ");
-        String phone = console.readLine("Enter phone: ");
-        String email = console.readLine("Enter email: ");
-        Teacher dean = null;
-        String deanInput = console.readLine("Enter teacher id: ");
-        if (!deanInput.isBlank()) {
-            Long deanId = Long.parseLong(deanInput);
-            Optional<Teacher> optionalDean = serviceTeacher.findById(deanId);
-            if (optionalDean.isEmpty()) {
-                System.out.println("Teacher not found!");
-                return;
+        String uniqueCode = ConsoleMenu.readRequiredString(console, "Enter unique code: ");
+        String name = ConsoleMenu.readRequiredString(console,"Enter faculty name: ");
+        String shortName;
+        while (true) {
+            shortName = ConsoleMenu.readRequiredString(console,"Enter short name: ");
+            if (shortName.length() <= Faculty.MAX_SHORT_NAME_LENGTH) break;
+            else {
+                System.out.println("Short name must be shorter than "+ Faculty.MAX_SHORT_NAME_LENGTH);
             }
-            dean = optionalDean.get();
         }
-        Long universityId = Long.parseLong(console.readLine("Enter university id: "));
-        Optional<University> optionalUniversity = serviceUniversity.findById(universityId);
-        if (optionalUniversity.isEmpty()) {
-            System.out.println("University not found");
-            return;
+        Contact contact;
+        while (true) {
+            try {
+                String phone = console.readLine("Enter phone(10-13 numbers with optional +): ");
+                String email = console.readLine("Enter email(in format text@text.text): ");
+                contact = new Contact(phone, email);
+                break;
+            }catch ( IllegalArgumentException e) {
+                System.out.println("Invalid email or phone format, use text.text@text for email and 10-13 numbers for phone");
+            }
         }
+        Teacher dean = null;
+        Long teacherId;
+        while (true) {
+            teacherId = ConsoleMenu.readRequiredLong(console, "Enter teacher id(if vacant write -1): ");
+            if (teacherId.equals(Long.valueOf(-1))) break;
+            Optional<Teacher> optionalTeacher = serviceTeacher.findById(teacherId);
+            if (optionalTeacher.isPresent()) {
+                dean = optionalTeacher.get();
+                break;
+            } else {
+                System.out.println("Teacher not found!!!");
+            }
 
-        University university = optionalUniversity.get();
-        Contact contact = new Contact(phone, email);
+        }
+        University university;
+        while (true) {
+            Long universityId = ConsoleMenu.readRequiredLong(console, "Enter university id(-1 to exit): ");
+            if (universityId.equals(Long.valueOf(-1))) return;
+            Optional<University> optionalUniversity = serviceUniversity.findById(universityId);
+            if  (optionalUniversity.isPresent()) {
+                university = optionalUniversity.get();
+                break;
+            }
+            else {
+                System.out.println("University not found");
+            }
+        }
         Faculty faculty = new Faculty(uniqueCode, name, shortName, dean, contact, university);
 
         serviceFaculty.create(faculty);
     }
 
     private void editFaculty(Console console) {
-        Long id = Long.parseLong(console.readLine("Enter faculty id to edit: "));
+        Long id = ConsoleMenu.readRequiredLong(console, "Enter faculty id to edit: ");
         Optional<Faculty> optionalFaculty = serviceFaculty.findById(id);
         if (optionalFaculty.isEmpty()) {
             System.out.println("Faculty not found");
@@ -99,28 +122,41 @@ public class FacultyMenu {
         Faculty faculty = optionalFaculty.get();
 
         String name = console.readLine("Enter new name: ");
-        String shortName = console.readLine("Enter new short name: ");
+        String shortName;
+        while (true) {
+            shortName = console.readLine("Enter new short name: ");
+            if (shortName.length() <= Faculty.MAX_SHORT_NAME_LENGTH) break;
+            else {
+                System.out.println("Short name must  be shorter than "+ Faculty.MAX_SHORT_NAME_LENGTH);
+            }
+        }
         if (!name.isBlank())
             faculty.setName(name);
         if (!shortName.isBlank())
             faculty.setShortName(shortName);
-
-        String phone = console.readLine("Enter new phone: ");
-        String email = console.readLine("Enter new email: ");
-        Contact old = faculty.getContact();
-        String newPhone = old.phone();
-        String newEmail = old.email();
-        if (!phone.isBlank())
-            newPhone = phone;
-        if (!email.isBlank())
-            newEmail = email;
-        faculty.setContact(new Contact(newPhone, newEmail));
+        while (true) {
+            try {
+                String phone = console.readLine("Enter new phone(10-13 numbers with optional +): ");
+                String email = console.readLine("Enter new email(in format text@text.text): ");
+                Contact old = faculty.getContact();
+                String newPhone = old.phone();
+                String newEmail = old.email();
+                if (!phone.isBlank())
+                    newPhone = phone;
+                if (!email.isBlank())
+                    newEmail = email;
+                faculty.setContact(new Contact(newPhone, newEmail));
+                break;
+            }catch (IllegalArgumentException e) {
+                System.out.println("Invalid phone or email");
+            }
+        }
 
         serviceFaculty.update(faculty);
     }
 
     private void deleteFaculty(Console console) {
-        Long id = Long.parseLong(console.readLine("Enter faculty id to edit: "));
+        Long id = ConsoleMenu.readRequiredLong(console, "Enter faculty id to delete ");
         Optional<Faculty> optionalFaculty = serviceFaculty.findById(id);
         if (optionalFaculty.isEmpty()) {
             System.out.println("Faculty not found!!!");
