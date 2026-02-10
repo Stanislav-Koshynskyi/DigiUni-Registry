@@ -109,7 +109,7 @@ public class TeacherMenu {
             try {
 
                 dateOfEmployment = LocalDate.parse(console.readLine("Enter date of employment: "));
-                if (dateOfEmployment.isBefore(LocalDate.now())) {
+                if (!dateOfEmployment.isAfter(LocalDate.now())) {
                     break;
                 } else {
                     System.out.println("date of employment cannot be in future");
