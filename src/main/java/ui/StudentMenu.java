@@ -57,15 +57,21 @@ public class StudentMenu {
     }
 
     private void createStudent(Console console) {
+        StudentGroup group;
+        while (true) {
+            Long groupId = ConsoleMenu.readRequiredLong(console, "Enter group id(-1 to exit): ");
+            if (groupId.equals(Long.valueOf(-1))) return;
+            Optional<StudentGroup> optionalGroup = serviceStudentGroup.findById(groupId);
+            if  (optionalGroup.isPresent()) {
+                group = optionalGroup.get();
+                break;
+            }
+            else {
+                System.out.println("Group not found!!!");
 
-        Long groupId = Long.parseLong(console.readLine("Enter group id: "));
-        Optional<StudentGroup> optionalGroup = serviceStudentGroup.findById(groupId);
-        if (optionalGroup.isEmpty()) {
-            System.out.println("Group not found!!!");
-            return;
+            }
         }
 
-        StudentGroup group = optionalGroup.get();
 
         FullName fullName = PersonMenu.fullName(console);
         LocalDate birthDate = PersonMenu.birthDate(console);
@@ -76,7 +82,7 @@ public class StudentMenu {
         int course;
         while (true) {
             try {
-            course = Integer.parseInt(console.readLine("Enter course (1-6): "));
+            course = Math.toIntExact(ConsoleMenu.readRequiredLong(console, "Enter course (1-6): "));
             if (course >=1  && course <= 6) break;
             else System.out.println("course must be between 1 and 6");
 
@@ -87,7 +93,7 @@ public class StudentMenu {
         Year yearOfAdmission;
         while (true) {
             try {
-                int year = Integer.parseInt(console.readLine("Enter year of admission: "));
+                int year = Math.toIntExact(ConsoleMenu.readRequiredLong(console, "Enter year of admission: "));
                 yearOfAdmission = Year.of(year);
                 if (!yearOfAdmission.isAfter(Year.now()) && !yearOfAdmission.isBefore(Year.of(Student.MINIUM_YEAR_OF_ADMISSION))){
                     break;
@@ -125,7 +131,7 @@ public class StudentMenu {
     }
 
     private void editStudent(Console console) {
-        Long id = Long.parseLong(console.readLine("Enter student id to edit: "));
+        Long id = ConsoleMenu.readRequiredLong(console, "Enter student id to edit: ");
         Optional<Student> optionalStudent = serviceStudent.findById(id);
         if (optionalStudent.isEmpty()) {
             System.out.println("Student not found!!!");
@@ -133,11 +139,26 @@ public class StudentMenu {
         }
         Student student = optionalStudent.get();
         String recordBook = console.readLine("Enter record book number: ");
-        String course = console.readLine("Enter course (1-4): ");
+        Integer course = null;
+        while (true) {
+            String stringCourse = console.readLine("Enter course (1-6): ");
+            if (stringCourse.isBlank()) break;
+            else{
+                try {
+                    course = Integer.valueOf(stringCourse);
+                    if (course >=1  && course <= 6) break;
+                    else{
+                        System.out.println("Invalid course must be between 1 and 6");
+                    }
+                }catch (NumberFormatException e){
+                    System.out.println("Invalid input, use numbers only!");
+                }
+            }
+        }
         if (!recordBook.isBlank())
             student.setRecordBookNumber(recordBook);
-        if (!course.isBlank())
-            student.setCourse(Integer.parseInt(course));
+        if (course != null)
+            student.setCourse(course);
 
         System.out.println("Student status: 1 - Studies, 2 - Academic leave, 3 - Expelled");
         int statusChoice = readInt(console);
@@ -160,7 +181,7 @@ public class StudentMenu {
     }
 
     private void deleteStudent(Console console) {
-        Long id = Long.parseLong(console.readLine("Enter student id to edit: "));
+        Long id = ConsoleMenu.readRequiredLong(console, "Enter student id to delete: ");
         Optional<Student> optionalStudent = serviceStudent.findById(id);
         if (optionalStudent.isEmpty()) {
             System.out.println("Student not found!!!");
