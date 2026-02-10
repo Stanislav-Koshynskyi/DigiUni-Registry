@@ -7,6 +7,7 @@ public class University implements Entity{
     private String fullName;
     private String shortName;
     private Address address;
+    public static final int MAX_SHORT_NAME_LENGTH = 15;
 
     public University() {
     }
@@ -52,7 +53,7 @@ public class University implements Entity{
         if (shortName == null || shortName.isBlank()) {
             throw new IllegalArgumentException("universityShortName cannot be empty");
         }
-        if (shortName.length() > 15) {
+        if (shortName.length() > MAX_SHORT_NAME_LENGTH) {
             throw new IllegalArgumentException("universityShortName must be short");
         }
         this.shortName = shortName;
