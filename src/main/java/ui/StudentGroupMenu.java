@@ -54,6 +54,11 @@ public class StudentGroupMenu {
     }
     private void createStudentGroup(Console console) {
         String name = console.readLine("Enter group name: ");
+        if (name == null || name.isBlank()) {
+            System.out.println("Group name cannot be empty!");
+            return;
+        }
+
         String departmentCode = console.readLine("Enter department unique code: ");
         Optional<Department> optionalDepartment = serviceDepartment.findByUniqueCode(departmentCode);
 
