@@ -95,7 +95,6 @@ public class StudentMenu {
 
         Student student = new Student(uniqueCode, recordBook, fullName, birthDate, contact, form, status, yearOfAdmission, course, group);
         serviceStudent.create(student);
-        group.addStudent(student);
     }
 
     private void editStudent(Console console) {
