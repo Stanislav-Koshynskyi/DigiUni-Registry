@@ -45,10 +45,10 @@ public class PersonMenu {
         while (true) {
             try {
                 String phone = console.readLine("Enter phone(10-13 numbers with optional +): ");
-                String email = console.readLine("Enter email(in format text.text@text): ");
+                String email = console.readLine("Enter email(in format text@text.text): ");
                 return new Contact(phone, email);
             }catch ( IllegalArgumentException e) {
-                System.out.println("Invalid email or phone format, use text.text@text for email and 10-13 numbers for phone");
+                System.out.println("Invalid email or phone format, use text@text.text for email and 10-13 numbers for phone");
             }
         }
     }

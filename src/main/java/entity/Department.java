@@ -13,6 +13,7 @@ public class Department implements Entity {
     private Teacher headOfDepartment;
     private Long headOfDepartmentId;
     private String cabinet;
+    public static final int MAX_SHORT_NAME_LENGTH = 15;
 
 
     public Department(){}
