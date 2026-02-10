@@ -57,32 +57,6 @@ public class StudentMenu {
     }
 
     private void createStudent(Console console) {
-        FullName fullName = PersonMenu.fullName(console);
-        LocalDate birthDate = PersonMenu.birthDate(console);
-        Contact contact = PersonMenu.contact(console);
-
-        String uniqueCode = console.readLine("Enter unique code: ");
-        String recordBook = console.readLine("Enter record book number: ");
-        int course = Integer.parseInt(console.readLine("Enter course (1-4): "));
-        int year = Integer.parseInt(console.readLine("Enter year of admission: "));
-        Year yearOfAdmission = Year.of(year);
-
-        System.out.println("Form of education: 1 - Budget, 2 - Contract");
-        int userChoiceFormOfEducation = readInt(console);
-        FormOfEducation form;
-        switch (userChoiceFormOfEducation) {
-            case 1:
-                form = FormOfEducation.BUDGET;
-                break;
-            case 2:
-                form = FormOfEducation.CONTRACT;
-                break;
-            default:
-                System.out.println("Invalid choice!");
-                return;
-        }
-
-        StudentStatus status = StudentStatus.STUDIES;
 
         Long groupId = Long.parseLong(console.readLine("Enter group id: "));
         Optional<StudentGroup> optionalGroup = serviceStudentGroup.findById(groupId);
@@ -92,6 +66,59 @@ public class StudentMenu {
         }
 
         StudentGroup group = optionalGroup.get();
+
+        FullName fullName = PersonMenu.fullName(console);
+        LocalDate birthDate = PersonMenu.birthDate(console);
+        Contact contact = PersonMenu.contact(console);
+
+        String uniqueCode = ConsoleMenu.readRequiredString(console, "Enter unique code: ");
+        String recordBook = ConsoleMenu.readRequiredString(console, "Enter record book number: ");
+        int course;
+        while (true) {
+            try {
+            course = Integer.parseInt(console.readLine("Enter course (1-6): "));
+            if (course >=1  && course <= 6) break;
+            else System.out.println("course must be between 1 and 6");
+
+            }catch (NumberFormatException e){
+                System.out.println("Invalid input, use numbers only!");
+            }
+        }
+        Year yearOfAdmission;
+        while (true) {
+            try {
+                int year = Integer.parseInt(console.readLine("Enter year of admission: "));
+                yearOfAdmission = Year.of(year);
+                if (!yearOfAdmission.isAfter(Year.now()) && !yearOfAdmission.isBefore(Year.of(Student.MINIUM_YEAR_OF_ADMISSION))){
+                    break;
+                }
+                else{
+                    System.out.println("Invalid year of admission, cannot be in future and cannot be too past");
+                }
+            }catch (NumberFormatException e){
+                System.out.println("Use only numbers only!");
+            }
+        }
+        FormOfEducation form = null;
+        while (form == null) {
+        System.out.println("Form of education: 1 - Budget, 2 - Contract");
+        int userChoiceFormOfEducation = readInt(console);
+
+            switch (userChoiceFormOfEducation) {
+                case 1:
+                    form = FormOfEducation.BUDGET;
+                    break;
+                case 2:
+                    form = FormOfEducation.CONTRACT;
+                    break;
+                default:
+                    System.out.println("Invalid input!");
+            }
+        }
+
+        StudentStatus status = StudentStatus.STUDIES;
+
+
 
         Student student = new Student(uniqueCode, recordBook, fullName, birthDate, contact, form, status, yearOfAdmission, course, group);
         serviceStudent.create(student);
