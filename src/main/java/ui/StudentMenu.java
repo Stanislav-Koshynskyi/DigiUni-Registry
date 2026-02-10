@@ -106,7 +106,7 @@ public class StudentMenu {
         }
         Student student = optionalStudent.get();
         String recordBook = console.readLine("Enter record book number: ");
-        String course = console.readLine(console.readLine("Enter course (1-4): "));
+        String course = console.readLine("Enter course (1-4): ");
         if (!recordBook.isBlank())
             student.setRecordBookNumber(recordBook);
         if (!course.isBlank())
