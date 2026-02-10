@@ -68,4 +68,14 @@ public class ConsoleMenu {
             return -1;
         }
     }
+
+    public static String readRequiredString(Console console, String prompt) {
+        while (true) {
+            String input = console.readLine(prompt);
+            if (input != null && !input.isBlank()) {
+                return input;
+            }
+            System.out.println("This input cannot be blank");
+        }
+    }
 }
