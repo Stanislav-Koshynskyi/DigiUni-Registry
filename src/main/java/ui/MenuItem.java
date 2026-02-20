@@ -18,4 +18,7 @@ public class MenuItem {
     public Page execute() {
         return task.execute();
     }
+    public Right getRightNeeded() {
+        return rightNeeded;
+    }
 }
