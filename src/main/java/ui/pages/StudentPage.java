@@ -4,12 +4,14 @@ import entity.*;
 import service.ServiceStudentGroupInterface;
 import service.ServiceStudentInterface;
 import ui.*;
+import util.Reader;
 
 import java.io.Console;
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 public class StudentPage extends BasePage {
     private final ServiceStudentGroupInterface serviceStudentGroup;
@@ -35,13 +37,6 @@ public class StudentPage extends BasePage {
         );
     }
 
-    private int readInt() {
-        try {
-            return Integer.parseInt(console.readLine("Your choice: "));
-        } catch (NumberFormatException e){
-            return -1;
-        }
-    }
 
     private Page createStudent() {
         StudentGroup group;
@@ -60,55 +55,16 @@ public class StudentPage extends BasePage {
         }
 
 
-        FullName fullName = PersonMenu.fullName(console);
-        LocalDate birthDate = PersonMenu.birthDate(console);
-        Contact contact = PersonMenu.contact(console);
+        FullName fullName = Reader.fullName(console);
+        FormOfEducation form = Reader.readFormOfEducation(console);
+        LocalDate birthDate = Reader.readBirthDate(console);
+        Contact contact = Reader.readContact(console);
 
-        String uniqueCode = ConsoleMenu.readRequiredString(console, "Enter unique code: ");
-        String recordBook = ConsoleMenu.readRequiredString(console, "Enter record book number: ");
-        int course;
-        while (true) {
-            try {
-                course = Math.toIntExact(ConsoleMenu.readRequiredLong(console, "Enter course (1-6): "));
-                if (course >=1  && course <= 6) break;
-                else System.out.println("course must be between 1 and 6");
-
-            }catch (NumberFormatException e){
-                System.out.println("Invalid input, use numbers only!");
-            }
-        }
-        Year yearOfAdmission;
-        while (true) {
-            try {
-                int year = Math.toIntExact(ConsoleMenu.readRequiredLong(console, "Enter year of admission: "));
-                yearOfAdmission = Year.of(year);
-                if (!yearOfAdmission.isAfter(Year.now()) && !yearOfAdmission.isBefore(Year.of(Student.MINIUM_YEAR_OF_ADMISSION))){
-                    break;
-                }
-                else{
-                    System.out.println("Invalid year of admission, cannot be in future and cannot be too past");
-                }
-            }catch (NumberFormatException e){
-                System.out.println("Use only numbers only!");
-            }
-        }
-        FormOfEducation form = null;
-        while (form == null) {
-            System.out.println("Form of education: 1 - Budget, 2 - Contract");
-            int userChoiceFormOfEducation = readInt();
-
-            switch (userChoiceFormOfEducation) {
-                case 1:
-                    form = FormOfEducation.BUDGET;
-                    break;
-                case 2:
-                    form = FormOfEducation.CONTRACT;
-                    break;
-                default:
-                    System.out.println("Invalid input!");
-            }
-        }
-
+        String uniqueCode = Reader.readString(console, "Enter unique code: ");
+        // тут перевірка на унікальність
+        String recordBook = Reader.readString(console, "Enter record book number: ");
+        int course = Reader.readCourse(console);
+        Year yearOfAdmission = Reader.readYearOfAdmission(console);
         StudentStatus status = StudentStatus.STUDIES;
 
 
@@ -120,7 +76,7 @@ public class StudentPage extends BasePage {
     }
 
     private Page editStudent() {
-        Long id = ConsoleMenu.readRequiredLong(console, "Enter student id to edit: ");
+        Long id = Reader.readLong(console, "Enter student id to edit: ");
         Optional<Student> optionalStudent = serviceStudent.findById(id);
         if (optionalStudent.isEmpty()) {
             System.out.println("Student not found!!!");
@@ -150,7 +106,7 @@ public class StudentPage extends BasePage {
             student.setCourse(course);
 
         System.out.println("Student status: 1 - Studies, 2 - Academic leave, 3 - Expelled");
-        int statusChoice = readInt();
+        int statusChoice = Reader.readInt(console, "Enter student status(0 - not change): ");
 
         switch (statusChoice) {
             case 1:
