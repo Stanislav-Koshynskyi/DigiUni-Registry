@@ -1,8 +1,6 @@
 package util;
 
-import entity.Contact;
-import entity.Person;
-import entity.Student;
+import entity.*;
 
 import java.io.Console;
 import java.math.BigDecimal;
@@ -14,7 +12,7 @@ public class Reader {
      public static String readString(Console console, String prompt) {
         while (true) {
             String input = console.readLine(prompt);
-            if (!input.isBlank()) return input;
+            if (input != null && !input.isBlank()) return input;
             System.out.println("Input cannot be blank!");
         }
     }
@@ -115,5 +113,90 @@ public class Reader {
             if (course >= 1 && course <= 6) return course;
             System.out.println("Course must be between 1 and 6.");
         }
+    }
+    public static FormOfEducation readFormOfEducation(Console console) {
+
+         FormOfEducation form = null;
+         while (form == null) {
+            System.out.println("Form of education: 1 - Budget, 2 - Contract");
+            int userChoiceFormOfEducation = Reader.readInt(console, "Choose a form of education: ");
+
+            switch (userChoiceFormOfEducation) {
+                case 1:
+                    form = FormOfEducation.BUDGET;
+                    break;
+                case 2:
+                    form = FormOfEducation.CONTRACT;
+                    break;
+                default:
+                    System.out.println("Invalid input!");
+            }
+        }
+         return form;
+    }
+    public static FullName fullName(Console console) {
+        String name = console.readLine("Enter name: ");
+        while (name.isBlank()) {
+            System.out.println("name cannot be blank");
+            name = console.readLine("Enter name: ");
+        }
+        String surname = console.readLine("Enter surname: ");
+        while (surname.isBlank()) {
+            System.out.println("surname cannot be blank");
+            surname = console.readLine("Enter surname: ");
+        }
+        String patronymic = console.readLine("Enter patronymic: ");
+        return new FullName(name, surname, patronymic);
+    }
+    public static AcademicDegree readAcademicDegree(Console console) {
+        AcademicDegree degree = null;
+        while (degree == null) {
+
+            System.out.println("Academic degree: 1 - Candidate of sciences, 2 - Doctor of philosophy, 3 - Doctor of sciences, 4 - None");
+            int degreeChoice = readInt(console,"Choose academic degree: ");
+
+            switch (degreeChoice) {
+                case 1:
+                    degree = AcademicDegree.CANDIDATE_OF_SCIENCES;
+                    break;
+                case 2:
+                    degree = AcademicDegree.DOCTOR_OF_PHILOSOPHY;
+                    break;
+                case 3:
+                    degree = AcademicDegree.DOCTOR_OF_SCIENCES;
+                    break;
+                case 4:
+                    degree = AcademicDegree.NONE;
+                    break;
+                default:
+                    System.out.println("Invalid academic degree!");
+            }
+        }
+        return degree;
+    }
+    public static AcademicRank readAcademicRank(Console console) {
+        AcademicRank rank = null;
+        while (rank == null) {
+            System.out.println("Academic rank: 1 - Associate professor, 2 - Senior researcher, 3 - Professor, 4 - None");
+            int rankChoice = readInt(console, "Choose academic rank: ");
+
+            switch (rankChoice) {
+                case 1:
+                    rank = AcademicRank.ASSOCIATE_PROFESSOR;
+                    break;
+                case 2:
+                    rank = AcademicRank.SENIOR_RESEARCHER;
+                    break;
+                case 3:
+                    rank = AcademicRank.PROFESSOR;
+                    break;
+                case 4:
+                    rank = AcademicRank.NONE;
+                    break;
+                default:
+                    System.out.println("Invalid academic rank!");
+            }
+        }
+        return rank;
     }
 }
