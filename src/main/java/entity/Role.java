@@ -4,7 +4,7 @@ public enum Role {
     USER(1),
     ADMIN(15);
     //Right abcd (in binary) a - delete , b -edit , c - add , d - find
-    private int right;
+    private final int right;
     Role(int right) {
         this.right = right;
     }

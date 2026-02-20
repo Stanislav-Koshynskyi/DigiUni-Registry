@@ -38,4 +38,8 @@ public class User {
             throw new IllegalArgumentException("Login cannot be null or blank");
         this.login = login;
     }
+
+    public boolean canDo(Right right) {
+        return (right.getNeededRight() & role.getRight()) != 0;
+    }
 }
