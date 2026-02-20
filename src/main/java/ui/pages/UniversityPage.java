@@ -52,6 +52,3 @@ public class UniversityPage extends BasePage {
         return this;
     }
 }
-
-
-
