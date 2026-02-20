@@ -1,16 +1,12 @@
 package ui;
 
+import java.io.Console;
 import java.util.List;
 
 public abstract class BasePage implements Page {
-    private final List<MenuItem> menuItems;
-
-    public BasePage(List<MenuItem> menuItems) {
-        this.menuItems = menuItems;
+    private Console console;
+    public BasePage(Console console) {
+        this.console = console;
     }
-
-    @Override
-    public List<MenuItem> getMenuItems() {
-        return menuItems;
-    }
+    public abstract List<MenuItem> getMenuItems();
 }
