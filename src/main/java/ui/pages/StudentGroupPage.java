@@ -1,0 +1,96 @@
+package ui.pages;
+
+import entity.Department;
+import entity.Right;
+import entity.StudentGroup;
+import service.ServiceDepartmentInterface;
+import service.ServiceStudentGroupInterface;
+import ui.BasePage;
+import ui.MenuItem;
+import ui.Page;
+import util.Reader;
+
+import java.io.Console;
+import java.util.List;
+import java.util.Optional;
+
+public class StudentGroupPage extends BasePage {
+    private final ServiceDepartmentInterface serviceDepartment;
+    private final ServiceStudentGroupInterface serviceStudentGroup;
+    public StudentGroupPage(Console console, ServiceDepartmentInterface serviceDepartment, ServiceStudentGroupInterface serviceStudentGroup) {
+        super(console);
+        this.serviceDepartment = serviceDepartment;
+        this.serviceStudentGroup = serviceStudentGroup;
+    }
+
+    @Override
+    public String getTitle() {
+        return "Student Group";
+    }
+
+    @Override
+    public List<MenuItem> getMenuItems() {
+        return List.of(
+                new MenuItem("Create student group", Right.ADD, this::createStudentGroup),
+                new MenuItem("Edit student group", Right.EDIT, this::editStudentGroup),
+                new MenuItem("Delete student group", Right.DELETE, this::deleteStudentGroup),
+                new MenuItem("Show all student group", Right.FIND, this::showStudentGroup)
+        );
+    }
+    private Page createStudentGroup() {
+        String name = Reader.readString(console, "Enter group name: ");
+
+        Department department;
+        while (true) {
+            Long id = Reader.readLong(console, "Enter department id(-1 to exit): ");
+            if (id.equals(-1L)) return this;
+            Optional<Department> optionalDepartment = serviceDepartment.findById(id);
+            if (optionalDepartment.isPresent()) {
+                department = optionalDepartment.get();
+                break;
+            }
+            else{
+                System.out.println("Department not found");
+            }
+        }
+
+
+        StudentGroup group = new StudentGroup(name, department);
+        serviceStudentGroup.create(group);
+        return this;
+    }
+
+    private Page editStudentGroup() {
+        Long id = Reader.readLong(console, "Enter group id to edit: ");
+        Optional<StudentGroup> optionalGroup = serviceStudentGroup.findById(id);
+
+        if (optionalGroup.isEmpty()) {
+            System.out.println("Group not found!");
+            return this;
+        }
+        StudentGroup group = optionalGroup.get();
+
+        String name = console.readLine("Enter group name: ");
+        if (!name.isBlank()) {
+            group.setName(name);
+        }
+
+        serviceStudentGroup.update(group);
+        return this;
+    }
+
+    private Page deleteStudentGroup() {
+        Long id = Reader.readLong(console, "Enter group id to delete: ");
+        // треба додати перевірку на існування
+        serviceStudentGroup.delete(id);
+        return this;
+    }
+
+    private Page showStudentGroup() {
+        for (StudentGroup group : serviceStudentGroup.findAll()) {
+            System.out.println("ID: " + group.getId() + group);
+        }
+        return this;
+    }
+}
+
