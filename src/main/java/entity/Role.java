@@ -3,7 +3,8 @@ package entity;
 public enum Role {
     GUEST(16),
     USER(1),
-    ADMIN(15);
+    MODERATOR(15),
+    ADMIN(32);
     //Right abcd (in binary) a - delete , b -edit , c - add , d - find
     private final int right;
     Role(int right) {
