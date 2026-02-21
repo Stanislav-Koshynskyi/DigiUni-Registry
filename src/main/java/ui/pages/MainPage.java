@@ -17,7 +17,7 @@ public class MainPage extends BasePage {
 
     @Override
     public String getTitle() {
-        return "Work With";
+        return "Home";
     }
 
     @Override
