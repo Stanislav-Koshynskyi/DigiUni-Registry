@@ -3,6 +3,7 @@ package service;
 import entity.User;
 import repository.UserRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public class ServiceUser implements ServiceUserInterface {
@@ -28,5 +29,10 @@ public class ServiceUser implements ServiceUserInterface {
     @Override
     public void delete(User user) {
         userRepository.delete(user);
+    }
+
+    @Override
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
     }
 }

@@ -2,6 +2,7 @@ package service;
 
 import entity.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ServiceUserInterface {
@@ -9,5 +10,6 @@ public interface ServiceUserInterface {
     Optional<User> findUserById(Long id);
     User save(User user);
     void delete(User user);
+    List<User> findAllUsers();
 
 }
