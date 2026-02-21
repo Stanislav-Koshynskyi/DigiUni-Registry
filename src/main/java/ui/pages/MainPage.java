@@ -40,6 +40,9 @@ public class MainPage extends BasePage {
                 }),
                 new MenuItem("Department", Right.ANY, () -> {
                     return pagerBuilder.getDepartmentPage(console);
+                }),
+                new MenuItem("User", Right.ANY, () -> {
+                    return pagerBuilder.getUserPage(console);
                 })
         );
     }
