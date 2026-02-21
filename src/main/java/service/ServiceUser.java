@@ -23,6 +23,7 @@ public class ServiceUser implements ServiceUserInterface {
 
     @Override
     public User save(User user) {
+        user.setPassword(passwordCoder.encodePassword(user.getPassword()));
         return  userRepository.save(user);
     }
 
