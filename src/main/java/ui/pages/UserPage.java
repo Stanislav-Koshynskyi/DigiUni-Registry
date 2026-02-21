@@ -46,7 +46,7 @@ view all user for admin
     }
     private Page login(){
         String username = Reader.readString(console, "Enter username: ");
-        String password = Reader.readString(console, "Enter password: ");
+        String password = Reader.readPassword(console, "Enter password: ");
         try {
             authService.login(username, password);
         }catch (UserNotFoundException e){
@@ -61,7 +61,7 @@ view all user for admin
     }
     private Page register(){
         String username = Reader.readString(console, "Enter username: ");
-        String password = Reader.readString(console, "Enter password: ");
+        String password = Reader.readPassword(console, "Enter password: ");
         User user = new User(Role.USER, password, username);
         try {
             // або тут або в сервісі(краще в сервісі) додати перевірку ідентичності логіна

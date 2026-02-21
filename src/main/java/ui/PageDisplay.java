@@ -2,6 +2,7 @@ package ui;
 
 import entity.Role;
 import entity.User;
+import security.AuthService;
 import security.MethodFilter;
 import util.Reader;
 
@@ -11,11 +12,12 @@ import java.util.Stack;
 
 public class PageDisplay {
     // потім це перенести в sessionInfo(клас де зарашній юзер і стан логіна)
-    User currentUser = new User(Role.USER, "asd","asd");
-    private Console console;
+    private final AuthService authService;
+    private final Console console;
     Stack<Page> history = new Stack<>();
-    public PageDisplay(Console console) {
+    public PageDisplay(Console console, AuthService authService) {
         this.console = console;
+        this.authService = authService;
     }
     public void start(Page startPage){
         history.push(startPage);
@@ -25,7 +27,8 @@ public class PageDisplay {
         while (true) {
             if (history.isEmpty()) break;
             Page currentPage = history.peek();
-            List<MenuItem> itemToShow = MethodFilter.filterItems(currentPage, currentUser);
+            List<MenuItem> itemToShow = MethodFilter.filterItems(currentPage,
+                    authService.getCurrentUser());
             System.out.println(currentPage.getTitle());
             for (int i = 1; i <= itemToShow.size(); i++) {
                 System.out.println(i + " - " + itemToShow.get(i - 1).getLabel());

@@ -2,14 +2,17 @@ package service;
 
 import entity.User;
 import repository.UserRepository;
+import security.PasswordCoder;
 
 import java.util.List;
 import java.util.Optional;
 
 public class ServiceUser implements ServiceUserInterface {
     private final UserRepository userRepository;
-    public ServiceUser(UserRepository userRepository) {
+    PasswordCoder passwordCoder;
+    public ServiceUser(UserRepository userRepository, PasswordCoder passwordCoder) {
         this.userRepository = userRepository;
+        this.passwordCoder = passwordCoder;
     }
     @Override
     public Optional<User> findUserByLogin(String username) {
@@ -23,6 +26,7 @@ public class ServiceUser implements ServiceUserInterface {
 
     @Override
     public User save(User user) {
+        user.setPassword(passwordCoder.encodePassword(user.getPassword()));
         return  userRepository.save(user);
     }
 

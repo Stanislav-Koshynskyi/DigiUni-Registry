@@ -1,5 +1,6 @@
 package util;
 
+import security.AuthService;
 import service.*;
 import ui.Page;
 import ui.pages.*;
@@ -13,17 +14,21 @@ public class PagerBuilder {
     private final ServiceDepartmentInterface serviceDepartment;
     private final ServiceFacultyInterface serviceFaculty;
     private final ServiceUniversityInterface serviceUniversity;
+    private final AuthService authService;
+    private final ServiceUserInterface serviceUser;
 
-    public PagerBuilder(ServiceTeacherInterface serviceTeacherInterface,
-        ServiceStudentInterface serviceStudentInterface, ServiceStudentGroupInterface serviceStudentGroupInterface,
-        ServiceDepartmentInterface serviceDepartmentInterface, ServiceFacultyInterface serviceFacultyInterface,
-        ServiceUniversityInterface serviceUniversityInterface) {
-        this.serviceTeacher = serviceTeacherInterface;
-        this.serviceStudent = serviceStudentInterface;
-        this.serviceStudentGroup = serviceStudentGroupInterface;
-        this.serviceDepartment = serviceDepartmentInterface;
-        this.serviceFaculty = serviceFacultyInterface;
-        this.serviceUniversity = serviceUniversityInterface;
+    public PagerBuilder(ServiceTeacherInterface serviceTeacher, ServiceStudentInterface serviceStudent, ServiceStudentGroupInterface serviceStudentGroup,
+                        ServiceDepartmentInterface serviceDepartment, ServiceFacultyInterface serviceFaculty,
+                        ServiceUniversityInterface serviceUniversity, AuthService authService,
+                        ServiceUserInterface serviceUser) {
+        this.serviceTeacher = serviceTeacher;
+        this.serviceStudent = serviceStudent;
+        this.serviceStudentGroup = serviceStudentGroup;
+        this.serviceDepartment = serviceDepartment;
+        this.serviceFaculty = serviceFaculty;
+        this.serviceUniversity = serviceUniversity;
+        this.authService = authService;
+        this.serviceUser = serviceUser;
     }
 
     public Page getDepartmentPage(Console console){
@@ -44,6 +49,9 @@ public class PagerBuilder {
     }
     public Page getStudentGroupPage(Console console){
         return new StudentGroupPage(console, serviceDepartment, serviceStudentGroup);
+    }
+    public Page getUserPage(Console console){
+        return new UserPage(console, authService, serviceUser);
     }
 
 

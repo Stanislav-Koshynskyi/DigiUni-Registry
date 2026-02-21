@@ -16,6 +16,18 @@ public class Reader {
             System.out.println("Input cannot be blank!");
         }
     }
+    public static String readPassword(Console console, String prompt) {
+         while (true) {
+             char[] password = console.readPassword(prompt);
+             String input =  new String(password);
+             if (input != null && !input.isBlank()) {
+                 return input;
+             }
+             else  {
+                 System.out.println("Password cannot be blank!");
+             }
+         }
+    }
 
     public static String readStringWithMaxLength(Console console, String prompt, int maxLength) {
         while (true) {
