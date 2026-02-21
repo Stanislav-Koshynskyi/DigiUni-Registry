@@ -63,4 +63,21 @@ public class User implements Entity {
         this.id = id;
 
     }
+
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        User other = (User) obj;
+        return Objects.equals(id, other.id);
+    }
+
+    @Override
+    public String toString() {
+        return "User[username = " + login + ", password = " + password + ", role = " + role + "]";
+    }
+
 }
