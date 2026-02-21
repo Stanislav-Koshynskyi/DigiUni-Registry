@@ -1,5 +1,7 @@
 package entity;
 
+import java.util.Objects;
+
 public class User implements Entity {
     private Long id;
     private Role role;
