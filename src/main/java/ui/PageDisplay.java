@@ -49,7 +49,7 @@ public class PageDisplay {
                     history.push(newPage);
                 }
                 else{
-                    console.readLine("Continue");
+                    console.readPassword("Continue");
                 }
             }
 
