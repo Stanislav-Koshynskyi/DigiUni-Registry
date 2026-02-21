@@ -8,7 +8,7 @@ public class InMemoryUserRepository extends AbstractRepositoryByLong<User> imple
 
     @Override
     public Optional<User> findUserByLogin(String login) {
-        getData().values().stream().filter(d -> d.getLogin().equals(login)).findFirst();
+        return getData().values().stream().filter(d -> d.getLogin().equals(login)).findFirst();
     }
     @Override
     public boolean existsByLogin(String login) {
