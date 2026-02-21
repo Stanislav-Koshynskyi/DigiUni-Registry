@@ -25,11 +25,14 @@ public class Main {
         ServiceTeacherInterface serviceTeacherInterface = new ServiceTeacher(teacherRepository);
         ServiceUniversityInterface serviceUniversityInterface = new ServiceUniversity(universityRepository);
         ServiceStudentGroupInterface serviceStudentGroupInterface = new ServiceStudentGroup(studentGroupRepository);
-        ServiceUserInterface serviceUserInterface = new ServiceUser(userRepository);
+
+        PasswordCoder coder = new BCryptPasswordEncoder();
+
+        ServiceUserInterface serviceUserInterface = new ServiceUser(userRepository, coder);
 
         SessionInfo sessionInfo = new LocalSessionInfo();
 
-        PasswordCoder coder = new BCryptPasswordEncoder();
+
         AuthService authService = new LocalAuthService(coder, serviceUserInterface, sessionInfo);
 
         PagerBuilder pagerBuilder = new PagerBuilder(serviceTeacherInterface, serviceStudentInterface, serviceStudentGroupInterface, serviceDepartmentInterface,
