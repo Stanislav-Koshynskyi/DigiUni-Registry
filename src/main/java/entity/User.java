@@ -40,6 +40,6 @@ public class User {
     }
 
     public boolean canDo(Right right) {
-        return (right.getNeededRight() & role.getRight()) != 0;
+        return ((right.getNeededRight() & role.getRight()) != 0) || right.getNeededRight() == 0;
     }
 }
