@@ -4,6 +4,7 @@ import entity.Role;
 import entity.User;
 import security.AuthService;
 import security.MethodFilter;
+import util.Pretier;
 import util.Reader;
 
 import java.io.Console;
@@ -20,6 +21,7 @@ public class PageDisplay {
         this.authService = authService;
     }
     public void start(Page startPage){
+        System.out.println(Pretier.printLogo());
         history.push(startPage);
         display();
     }
@@ -29,7 +31,7 @@ public class PageDisplay {
             Page currentPage = history.peek();
             List<MenuItem> itemToShow = MethodFilter.filterItems(currentPage,
                     authService.getCurrentUser());
-            System.out.println(currentPage.getTitle());
+            System.out.println(Pretier.wrapInFrame(currentPage.getTitle()));
             for (int i = 1; i <= itemToShow.size(); i++) {
                 System.out.println(i + " - " + itemToShow.get(i - 1).getLabel());
             }
@@ -43,7 +45,12 @@ public class PageDisplay {
                 history.pop();
             else{
                 Page newPage = (itemToShow.get(choose-1).execute());
-                if (!newPage.equals(history.peek())) history.push(newPage);
+                if (!newPage.equals(history.peek())) {
+                    history.push(newPage);
+                }
+                else{
+                    console.readLine("Continue");
+                }
             }
 
         }
