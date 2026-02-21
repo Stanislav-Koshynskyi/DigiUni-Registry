@@ -1,13 +1,22 @@
 package entity;
 
-public class User {
-    Role role;
-    String password;
-    String login;
+public class User implements Entity {
+    private Long id;
+    private Role role;
+    private String password;
+    private String login;
     public User(Role role, String password, String login) {
         setRole(role);
         setPassword(password);
         setLogin(login);
+    }
+    public User() {
+    }
+    public User(Role role, String password, String login, Long id) {
+        setRole(role);
+        setPassword(password);
+        setLogin(login);
+        setId(id);
     }
 
     public Role getRole() {
@@ -41,5 +50,17 @@ public class User {
 
     public boolean canDo(Right right) {
         return ((right.getNeededRight() & role.getRight()) != 0) || right.getNeededRight() == 0;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(Long id) {
+        if (id == null) throw new IllegalArgumentException("Id cannot be null");
+        this.id = id;
+
     }
 }
