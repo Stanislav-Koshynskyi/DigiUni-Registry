@@ -6,7 +6,8 @@ public enum Right {
     ADD (2),
     EDIT (4),
     DELETE (8),
-    ANY(15);
+    ANY(15),
+    GUEST_ONLY(16);
     private final int value;
     Right(int value) {
         this.value = value;
