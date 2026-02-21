@@ -1,6 +1,7 @@
 package entity;
 
 public enum Right {
+    NONE(0),
     FIND(1),
     ADD (2),
     EDIT (4),
