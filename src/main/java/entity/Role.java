@@ -1,7 +1,7 @@
 package entity;
 
 public enum Role {
-    GUEST(0),
+    GUEST(16),
     USER(1),
     ADMIN(15);
     //Right abcd (in binary) a - delete , b -edit , c - add , d - find
