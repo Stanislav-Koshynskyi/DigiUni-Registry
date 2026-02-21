@@ -11,7 +11,7 @@ import java.util.Stack;
 
 public class PageDisplay {
     // потім це перенести в sessionInfo(клас де зарашній юзер і стан логіна)
-    User currentUser = new User(Role.ADMIN, "asd","asd");
+    User currentUser = new User(Role.USER, "asd","asd");
     private Console console;
     Stack<Page> history = new Stack<>();
     public PageDisplay(Console console) {
@@ -26,8 +26,9 @@ public class PageDisplay {
             if (history.isEmpty()) break;
             Page currentPage = history.peek();
             List<MenuItem> itemToShow = MethodFilter.filterItems(currentPage, currentUser);
+            System.out.println(currentPage.getTitle());
             for (int i = 1; i <= itemToShow.size(); i++) {
-                System.out.println(i + " - " + itemToShow.get(i - 1));
+                System.out.println(i + " - " + itemToShow.get(i - 1).getLabel());
             }
             System.out.println("0 - exit");
             int choose;
@@ -38,9 +39,11 @@ public class PageDisplay {
             if (choose == 0)
                 history.pop();
             else{
-                history.push(itemToShow.get(choose-1).execute());
+                Page newPage = (itemToShow.get(choose-1).execute());
+                if (!newPage.equals(history.peek())) history.push(newPage);
             }
 
         }
+        System.out.println("Goodbye!");
     }
 }
