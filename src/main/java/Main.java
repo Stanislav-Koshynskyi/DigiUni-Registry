@@ -1,3 +1,5 @@
+import entity.Role;
+import entity.User;
 import repository.*;
 import security.*;
 import service.*;
@@ -6,6 +8,7 @@ import ui.Page;
 import ui.PageDisplay;
 import ui.pages.MainPage;
 import util.PagerBuilder;
+import util.Pretier;
 
 import java.io.Console;
 
@@ -29,6 +32,13 @@ public class Main {
         PasswordCoder coder = new BCryptPasswordEncoder();
 
         ServiceUserInterface serviceUserInterface = new ServiceUser(userRepository, coder);
+
+        /*
+        Initial user
+         */
+        serviceUserInterface.save(new User(Role.ADMIN,"admin","admin"));
+        serviceUserInterface.save(new User(Role.MODERATOR,"moderator","moderator"));
+        serviceUserInterface.save(new User(Role.USER,"user","user"));
 
         SessionInfo sessionInfo = new LocalSessionInfo();
 
