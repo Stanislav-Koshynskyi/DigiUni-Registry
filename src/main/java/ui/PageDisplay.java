@@ -2,7 +2,7 @@ package ui;
 
 import entity.Role;
 import entity.User;
-import util.MethodFilter;
+import security.MethodFilter;
 import util.Reader;
 
 import java.io.Console;
