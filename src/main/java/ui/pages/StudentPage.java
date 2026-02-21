@@ -4,6 +4,7 @@ import entity.*;
 import service.ServiceStudentGroupInterface;
 import service.ServiceStudentInterface;
 import ui.*;
+import ui.probably_to_delete.ConsoleMenu;
 import util.Reader;
 
 import java.io.Console;
@@ -11,7 +12,6 @@ import java.time.LocalDate;
 import java.time.Year;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 public class StudentPage extends BasePage {
     private final ServiceStudentGroupInterface serviceStudentGroup;

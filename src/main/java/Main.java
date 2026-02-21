@@ -3,12 +3,10 @@ import entity.User;
 import repository.*;
 import security.*;
 import service.*;
-import ui.ConsoleMenu;
 import ui.Page;
 import ui.PageDisplay;
 import ui.pages.MainPage;
 import util.PagerBuilder;
-import util.Pretier;
 
 import java.io.Console;
 

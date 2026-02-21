@@ -1,4 +1,4 @@
-package ui;
+package ui.probably_to_delete;
 
 import entity.Address;
 import entity.University;

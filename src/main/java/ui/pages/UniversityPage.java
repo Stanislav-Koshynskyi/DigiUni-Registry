@@ -3,7 +3,6 @@ package ui.pages;
 import entity.*;
 import service.ServiceUniversityInterface;
 import ui.BasePage;
-import ui.ConsoleMenu;
 import ui.MenuItem;
 import ui.Page;
 import util.Reader;
