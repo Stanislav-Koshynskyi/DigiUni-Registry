@@ -1,0 +1,13 @@
+package service;
+
+import entity.User;
+
+import java.util.Optional;
+
+public interface ServiceUserInterface {
+    Optional<User> findUserByLogin(String username);
+    Optional<User> findUserById(Long id);
+    User save(User user);
+    void delete(User user);
+
+}
