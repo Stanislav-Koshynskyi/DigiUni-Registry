@@ -13,9 +13,9 @@ import java.util.Optional;
 public class InMemoryFacultyRepository extends AbstractRepositoryByLong<Faculty> implements FacultyRepository {
     public InMemoryFacultyRepository() {}
 
-    public Optional<Faculty> findByUniqueCode(String uniqueCode) {
+    public List<Faculty> findByUniqueCode(String uniqueCode) {
         Map<Long, Faculty> data = getData();
-        return data.values().stream().filter(f -> f.getUniqueCode().equals(uniqueCode)).findFirst();
+        return data.values().stream().filter(f -> f.getUniqueCode().equals(uniqueCode)).toList();
     }
 
     public boolean existsByUniqueCode(String uniqueCode) {
@@ -62,5 +62,11 @@ public class InMemoryFacultyRepository extends AbstractRepositoryByLong<Faculty>
     public boolean existsByEmail(String email) {
         Map<Long, Faculty> data = getData();
         return data.values().stream().anyMatch(f -> f.getContact().email().equals(email));
+    }
+
+    @Override
+    public List<Faculty> findByShortName(String shortName) {
+        Map<Long, Faculty> data = getData();
+        return data.values().stream().filter(f -> f.getShortName().equals(shortName)).toList();
     }
 }

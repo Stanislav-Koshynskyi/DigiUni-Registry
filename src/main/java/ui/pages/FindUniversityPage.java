@@ -60,7 +60,7 @@ public class FindUniversityPage extends BasePage {
         }
         else{
             //тут можна зробити перехід на сторінку сортування
-            System.out.println(universityList);
+            universityList.forEach(System.out::println);
         }
         return this;
     }

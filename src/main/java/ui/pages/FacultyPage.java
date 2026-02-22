@@ -5,7 +5,9 @@ import service.ServiceFacultyInterface;
 import service.ServiceTeacherInterface;
 import service.ServiceUniversityInterface;
 import ui.*;
+import ui.finders.FacultyFinderInterface;
 import ui.finders.UniversityFinderInterface;
+import util.PagerBuilder;
 
 import java.io.Console;
 import java.util.List;
@@ -15,13 +17,16 @@ public class FacultyPage extends BasePage {
     private final ServiceFacultyInterface serviceFaculty;
     private final ServiceTeacherInterface serviceTeacher;
     private final UniversityFinderInterface universityFinder;
+    private final PagerBuilder pagerBuilder;
 
     public FacultyPage(ServiceFacultyInterface serviceFaculty, ServiceTeacherInterface serviceTeacher,
-                       InputReader inputReader, UniversityFinderInterface universityFinder) {
+                       InputReader inputReader, UniversityFinderInterface universityFinder,
+                       PagerBuilder pagerBuilder) {
         super(inputReader);
         this.serviceFaculty = serviceFaculty;
         this.serviceTeacher = serviceTeacher;
         this.universityFinder = universityFinder;
+        this.pagerBuilder = pagerBuilder;
     }
 
     @Override
@@ -35,6 +40,7 @@ public class FacultyPage extends BasePage {
                 new MenuItem("Create faculty", Right.ADD, this::createFaculty),
                 new MenuItem("Edit faculty", Right.EDIT, this::editFaculty),
                 new MenuItem("Delete faculty", Right.DELETE, this::deleteFaculty),
+                new MenuItem("Find faculty", Right.FIND, pagerBuilder::getFindFacultyPage),
                 new MenuItem("Show all faculties", Right.FIND, this::showAllFaculties)
         );
     }
