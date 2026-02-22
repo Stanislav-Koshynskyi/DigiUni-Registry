@@ -2,7 +2,6 @@ package ui.finders;
 
 import entity.University;
 import entity.find_criteria.UniversityFind;
-import repository.UniversityRepository;
 import service.ServiceUniversityInterface;
 import ui.InputReader;
 

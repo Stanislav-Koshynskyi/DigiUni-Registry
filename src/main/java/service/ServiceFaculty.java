@@ -36,4 +36,8 @@ public class ServiceFaculty implements ServiceFacultyInterface{
     public Optional<Faculty> findById(Long id) {
         return facultyRepository.findById(id);
     }
+
+    public Optional<Faculty> findByUniqueCode(String uniqueCode) {
+        return facultyRepository.findByUniqueCode(uniqueCode);
+    }
 }
