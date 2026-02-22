@@ -9,7 +9,9 @@ public interface ServiceUserInterface {
     Optional<User> findUserByLogin(String username);
     Optional<User> findUserById(Long id);
     User save(User user);
+    User update(User user);
     void delete(User user);
     List<User> findAllUsers();
+
 
 }

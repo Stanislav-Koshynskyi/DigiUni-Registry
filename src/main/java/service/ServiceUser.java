@@ -29,7 +29,10 @@ public class ServiceUser implements ServiceUserInterface {
         user.setPassword(passwordCoder.encodePassword(user.getPassword()));
         return  userRepository.save(user);
     }
-
+    @Override
+    public User update(User user){
+        return userRepository.save(user);
+    }
     @Override
     public void delete(User user) {
         userRepository.delete(user);
