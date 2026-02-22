@@ -5,6 +5,7 @@ import service.ServiceFacultyInterface;
 import service.ServiceTeacherInterface;
 import service.ServiceUniversityInterface;
 import ui.*;
+import ui.finders.UniversityFinderInterface;
 
 import java.io.Console;
 import java.util.List;
@@ -12,15 +13,15 @@ import java.util.Optional;
 
 public class FacultyPage extends BasePage {
     private final ServiceFacultyInterface serviceFaculty;
-    private final ServiceUniversityInterface serviceUniversity;
     private final ServiceTeacherInterface serviceTeacher;
+    private final UniversityFinderInterface universityFinder;
 
-    public FacultyPage(ServiceFacultyInterface serviceFaculty,
-                       ServiceUniversityInterface serviceUniversity, ServiceTeacherInterface serviceTeacher, InputReader inputReader) {
+    public FacultyPage(ServiceFacultyInterface serviceFaculty, ServiceTeacherInterface serviceTeacher,
+                       InputReader inputReader, UniversityFinderInterface universityFinder) {
         super(inputReader);
         this.serviceFaculty = serviceFaculty;
-        this.serviceUniversity = serviceUniversity;
         this.serviceTeacher = serviceTeacher;
+        this.universityFinder = universityFinder;
     }
 
     @Override
@@ -57,19 +58,12 @@ public class FacultyPage extends BasePage {
             }
 
         }
-        University university;
-        while (true) {
-            Long universityId = inputReader.readLong("Enter university id(-1 to exit): ");
-            if (universityId.equals(Long.valueOf(-1))) return this;
-            Optional<University> optionalUniversity = serviceUniversity.findById(universityId);
-            if  (optionalUniversity.isPresent()) {
-                university = optionalUniversity.get();
-                break;
-            }
-            else {
-                System.out.println("University not found");
-            }
+        Optional<University> optionalUniversity = universityFinder.findAndSelect();
+        if (optionalUniversity.isEmpty()){
+            System.out.println("Faculty not created!");
+            return this;
         }
+        University university = optionalUniversity.get();
         Faculty faculty = new Faculty(uniqueCode, name, shortName, dean, contact, university);
 
         serviceFaculty.create(faculty);
