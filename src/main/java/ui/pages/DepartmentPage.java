@@ -9,7 +9,6 @@ import service.ServiceFacultyInterface;
 import service.ServiceTeacherInterface;
 import ui.*;
 
-import java.io.Console;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,15 +16,12 @@ public class DepartmentPage extends BasePage {
     private final ServiceDepartmentInterface serviceDepartment;
     private final ServiceFacultyInterface serviceFaculty;
     private final ServiceTeacherInterface serviceTeacher;
-    private final InputReader inputReader;
-
-    public DepartmentPage(Console console, ServiceDepartmentInterface serviceDepartment, 
+    public DepartmentPage(ServiceDepartmentInterface serviceDepartment,
                           ServiceFacultyInterface serviceFaculty, ServiceTeacherInterface serviceTeacher, InputReader inputReader) {
-        super(console);
+        super(inputReader);
         this.serviceDepartment = serviceDepartment;
         this.serviceFaculty = serviceFaculty;
         this.serviceTeacher = serviceTeacher;
-        this.inputReader = inputReader;
     }
 
     @Override
@@ -46,7 +42,7 @@ public class DepartmentPage extends BasePage {
     private Page createDepartment() {
         String uniqueCode = inputReader.readString("Enter unique code: ");
         String name = inputReader.readString("Enter department name: ");
-        String shortName = inputReader.readStringWithMaxLength("Enter short name",
+        String shortName = inputReader.readStringWithMaxLengthProbablyBlank("Enter short name",
                 Department.MAX_SHORT_NAME_LENGTH);
         String cabinet = inputReader.readString("Enter cabinet/location: ");
         Teacher headOfDepartment = null;
@@ -91,16 +87,11 @@ public class DepartmentPage extends BasePage {
         }
 
         Department department = optionalDepartment.get();
-        String name = console.readLine("Enter department name: ");
-        String shortName;
-        while (true) {
-            shortName = console.readLine("Enter short name: ");
-            if (shortName.length() <= Department.MAX_SHORT_NAME_LENGTH) break;
-            else{
-                System.out.println("Short name must be shorter than " + Department.MAX_SHORT_NAME_LENGTH);
-            }
-        }
-        String cabinet = console.readLine("Enter cabinet/location: ");
+        String name = inputReader.readProbablyBlank("Enter department name: ");
+        String shortName = inputReader.readStringWithMaxLengthProbablyBlank(
+                "Enter new short name", Department.MAX_SHORT_NAME_LENGTH);
+
+        String cabinet = inputReader.readProbablyBlank("Enter cabinet/location: ");
 
         if (!name.isBlank())
             department.setName(name);

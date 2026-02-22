@@ -14,14 +14,12 @@ import java.util.Optional;
 public class StudentGroupPage extends BasePage {
     private final ServiceDepartmentInterface serviceDepartment;
     private final ServiceStudentGroupInterface serviceStudentGroup;
-    private final InputReader inputReader;
 
-    public StudentGroupPage(Console console, ServiceDepartmentInterface serviceDepartment, 
+    public StudentGroupPage(ServiceDepartmentInterface serviceDepartment,
                             ServiceStudentGroupInterface serviceStudentGroup, InputReader inputReader) {
-        super(console);
+        super(inputReader);
         this.serviceDepartment = serviceDepartment;
         this.serviceStudentGroup = serviceStudentGroup;
-        this.inputReader = inputReader;
     }
 
     @Override
@@ -71,7 +69,7 @@ public class StudentGroupPage extends BasePage {
         }
         StudentGroup group = optionalGroup.get();
 
-        String name = console.readLine("Enter group name: ");
+        String name = inputReader.readProbablyBlank("Enter group name: ");
         if (!name.isBlank()) {
             group.setName(name);
         }

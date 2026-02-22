@@ -9,12 +9,10 @@ import java.util.List;
 
 public class UniversityPage extends BasePage {
     private final ServiceUniversityInterface serviceUniversity;
-    private final InputReader inputReader;
-    public UniversityPage(Console console, ServiceUniversityInterface serviceUniversity,
+    public UniversityPage(ServiceUniversityInterface serviceUniversity,
                           InputReader inputReader) {
-        super(console);
+        super(inputReader);
         this.serviceUniversity = serviceUniversity;
-        this.inputReader = inputReader;
     }
 
     @Override
@@ -32,7 +30,7 @@ public class UniversityPage extends BasePage {
 
     private Page createUniversity() {
         String fullName = inputReader.readString("Enter full name");
-        String shortName = inputReader.readStringWithMaxLength("Enter short name",
+        String shortName = inputReader.readStringWithMaxLengthProbablyBlank("Enter short name",
                 University.MAX_SHORT_NAME_LENGTH);
         String city = inputReader.readString("Enter city: ");
         String street = inputReader.readString("Enter street: ");
