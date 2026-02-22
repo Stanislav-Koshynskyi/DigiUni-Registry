@@ -48,7 +48,6 @@ public class Student extends Person{
             this.group.removeStudent(this);
         }
         this.group = group;
-        this.group.addStudent(this);
         this.groupId = group.getId();
     }
 

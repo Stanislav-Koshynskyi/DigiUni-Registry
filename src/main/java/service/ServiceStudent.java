@@ -17,7 +17,9 @@ public class ServiceStudent implements ServiceStudentInterface{
         if (studentRepository.existsByRecordBookNumber(student.getRecordBookNumber())) {
             throw new IllegalArgumentException("Student already exists!!!");
         }
-        return studentRepository.save(student);
+        Student student1 = studentRepository.save(student);
+        student1.getGroup().addStudent(student1);
+        return student1;
     }
 
     public Student update(Student student) {
@@ -44,6 +46,7 @@ public class ServiceStudent implements ServiceStudentInterface{
         Student student = studentRepository.findById(studentId).orElseThrow(() -> new IllegalArgumentException("Student not found!!!"));
 
         student.setGroup(newGroup);
+        student.getGroup().addStudent(student);
         student.setCourse(newCourse);
 
         studentRepository.save(student);
