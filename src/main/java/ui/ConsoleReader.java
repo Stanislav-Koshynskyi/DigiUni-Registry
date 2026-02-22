@@ -34,13 +34,22 @@ public class ConsoleReader implements InputReader {
          }
     }
 
-    public String readStringWithMaxLength(String prompt, int maxLength) {
+    public String readStringWithMaxLengthProbablyBlank(String prompt, int maxLength) {
         while (true) {
             String input = readString(prompt);
             if (input.length() <= maxLength) return input;
             System.out.println("Input must be shorter than or equal to " + maxLength + " characters.");
         }
     }
+    public String readStringWithMaxLength(String prompt, int maxLength) {
+        while (true) {
+            String input = readString(prompt);
+            if (input.isBlank()) System.out.println("Input cannot be blank!");
+            else if (input.length() >  maxLength) System.out.println("Input must be less than or equal to " + maxLength + " characters.");
+            else return input;
+        }
+    }
+
 
     public int readInt(String prompt) {
         while (true) {
@@ -62,6 +71,20 @@ public class ConsoleReader implements InputReader {
                 System.out.println("Invalid input! Please enter a valid integer number.");
             }
 
+        }
+    }
+    public Integer readIntInRangeProbablyNull(String prompt,Integer min, Integer max) {
+        String string;
+        while (true) {
+            try {
+                string = console.readLine(prompt);
+                if (string.isBlank()) return null;
+                int number =  Integer.parseInt(string);
+                if (number >= min && number <= max) return number;
+                else System.out.println("Number must be between "+min+" and "+max);
+            }catch (NumberFormatException e) {
+                System.out.println("Invalid input! Please enter a valid integer number.");
+            }
         }
     }
 
@@ -89,6 +112,19 @@ public class ConsoleReader implements InputReader {
             try {
                 String phone = console.readLine("Enter phone (10-13 numbers with optional +): ");
                 String email = console.readLine("Enter email (format text@text.text): ");
+                return new Contact(phone, email);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid email or phone format!");
+            }
+        }
+
+    }
+    public Contact readContactProbablyNull() {
+        while (true) {
+            try {
+                String phone = console.readLine("Enter phone (10-13 numbers with optional +): ");
+                String email = console.readLine("Enter email (format text@text.text): ");
+                if (phone.isBlank() && email.isBlank()) return null;
                 return new Contact(phone, email);
             } catch (IllegalArgumentException e) {
                 System.out.println("Invalid email or phone format!");
@@ -236,6 +272,21 @@ public class ConsoleReader implements InputReader {
              System.out.println(i++ + " - " + t);
          }
          int choose = readIntInRange(promt, 1, list.size());
+         return list.get(choose - 1);
+    }
+    public <T> T readChooseProbablyNull(List<T> list, String promt, String promptForZero) {
+        if (list == null || list.isEmpty()) return null;
+         int i = 1;
+         System.out.println("0" + promptForZero);
+         for (T t : list) {
+             System.out.println(i++ + " - " + t);
+         }
+         int choose = readIntInRange(promt, 0, list.size());
+         if (choose == 0) return null;
          return list.get(choose);
+    }
+    @Override
+    public String readProbablyBlank(String prompt) {
+        return console.readLine(prompt);
     }
 }

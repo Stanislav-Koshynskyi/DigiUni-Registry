@@ -15,11 +15,10 @@ import java.util.List;
 public class UserPage extends BasePage {
     AuthService authService;
     ServiceUserInterface serviceUser;
-    InputReader inputReader;
 
-    public UserPage(Console console, AuthService authService, ServiceUserInterface serviceUser,
+    public UserPage(AuthService authService, ServiceUserInterface serviceUser,
                     InputReader inputReader) {
-        super(console);
+        super(inputReader);
         this.authService = authService;
         this.serviceUser = serviceUser;
         this.inputReader = inputReader;

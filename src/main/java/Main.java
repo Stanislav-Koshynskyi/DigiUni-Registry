@@ -39,7 +39,7 @@ public class Main {
                 serviceFacultyInterface, serviceUniversityInterface,
                 authService, serviceUserInterface, inputReader);
 
-        Page mainPage = new MainPage(console, pagerBuilder);
+        Page mainPage = new MainPage(inputReader, pagerBuilder);
         PageDisplay pageDisplay = new PageDisplay(console, authService, inputReader);
         pageDisplay.start(mainPage);
 

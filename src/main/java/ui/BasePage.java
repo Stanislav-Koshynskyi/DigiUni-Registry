@@ -4,9 +4,9 @@ import java.io.Console;
 import java.util.List;
 
 public abstract class BasePage implements Page {
-    protected Console console;
-    public BasePage(Console console) {
-        this.console = console;
+    protected InputReader inputReader;
+    public BasePage(InputReader inputReader) {
+        this.inputReader = inputReader;
     }
     public abstract List<MenuItem> getMenuItems();
 }
