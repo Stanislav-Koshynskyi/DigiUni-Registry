@@ -4,22 +4,24 @@ import entity.*;
 import service.ServiceStudentGroupInterface;
 import service.ServiceStudentInterface;
 import ui.*;
-import util.Reader;
 
 import java.io.Console;
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 public class StudentPage extends BasePage {
     private final ServiceStudentGroupInterface serviceStudentGroup;
     private final ServiceStudentInterface serviceStudent;
-    public StudentPage(Console console,  ServiceStudentInterface serviceStudent, ServiceStudentGroupInterface serviceStudentGroup) {
+    private final InputReader inputReader;
+
+    public StudentPage(Console console, ServiceStudentGroupInterface serviceStudentGroup, 
+                       ServiceStudentInterface serviceStudent, InputReader inputReader) {
         super(console);
-        this.serviceStudent = serviceStudent;
         this.serviceStudentGroup = serviceStudentGroup;
+        this.serviceStudent = serviceStudent;
+        this.inputReader = inputReader;
     }
 
     @Override
@@ -41,7 +43,7 @@ public class StudentPage extends BasePage {
     private Page createStudent() {
         StudentGroup group;
         while (true) {
-            Long groupId = ConsoleMenu.readRequiredLong(console, "Enter group id(-1 to exit): ");
+            Long groupId = inputReader.readLong("Enter group id(-1 to exit): ");
             if (groupId.equals(Long.valueOf(-1))) return this;
             Optional<StudentGroup> optionalGroup = serviceStudentGroup.findById(groupId);
             if  (optionalGroup.isPresent()) {
@@ -55,16 +57,16 @@ public class StudentPage extends BasePage {
         }
 
 
-        FullName fullName = Reader.fullName(console);
-        FormOfEducation form = Reader.readFormOfEducation(console);
-        LocalDate birthDate = Reader.readBirthDate(console);
-        Contact contact = Reader.readContact(console);
+        FullName fullName = inputReader.readfullName();
+        FormOfEducation form = inputReader.readFormOfEducation();
+        LocalDate birthDate = inputReader.readBirthDate();
+        Contact contact = inputReader.readContact();
 
-        String uniqueCode = Reader.readString(console, "Enter unique code: ");
+        String uniqueCode = inputReader.readString("Enter unique code: ");
         // тут перевірка на унікальність
-        String recordBook = Reader.readString(console, "Enter record book number: ");
-        int course = Reader.readCourse(console);
-        Year yearOfAdmission = Reader.readYearOfAdmission(console);
+        String recordBook = inputReader.readString( "Enter record book number: ");
+        int course = inputReader.readIntInRange("Enter course(1-6)", 1, 6);
+        Year yearOfAdmission = inputReader.readYearOfAdmission();
         StudentStatus status = StudentStatus.STUDIES;
 
 
@@ -76,7 +78,7 @@ public class StudentPage extends BasePage {
     }
 
     private Page editStudent() {
-        Long id = Reader.readLong(console, "Enter student id to edit: ");
+        Long id = inputReader.readLong("Enter student id to edit: ");
         Optional<Student> optionalStudent = serviceStudent.findById(id);
         if (optionalStudent.isEmpty()) {
             System.out.println("Student not found!!!");
@@ -106,7 +108,7 @@ public class StudentPage extends BasePage {
             student.setCourse(course);
 
         System.out.println("Student status: 1 - Studies, 2 - Academic leave, 3 - Expelled");
-        int statusChoice = Reader.readInt(console, "Enter student status(0 - not change): ");
+        int statusChoice = inputReader.readInt("Enter student status(0 - not change): ");
 
         switch (statusChoice) {
             case 1:
@@ -127,7 +129,7 @@ public class StudentPage extends BasePage {
     }
 
     private Page deleteStudent() {
-        Long id = ConsoleMenu.readRequiredLong(console, "Enter student id to delete: ");
+        Long id = inputReader.readLong("Enter student id to delete: ");
         Optional<Student> optionalStudent = serviceStudent.findById(id);
         if (optionalStudent.isEmpty()) {
             System.out.println("Student not found!!!");
