@@ -45,7 +45,7 @@ public class PageDisplay {
                     history.push(newPage);
                 }
                 else{
-                    inputReader.readPassword("Continue");
+                    inputReader.readHide("Continue");
                 }
             }
 

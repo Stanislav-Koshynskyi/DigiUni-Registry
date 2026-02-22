@@ -10,6 +10,7 @@ import java.util.List;
 public interface InputReader {
     public String readString(String prompt);
     public String readPassword( String prompt);
+    public String readHide(String prompt);
     public String readStringWithMaxLengthProbablyBlank(String prompt, int maxLength);
 
     public int readInt(String prompt);

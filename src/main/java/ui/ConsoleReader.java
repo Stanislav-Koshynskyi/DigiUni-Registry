@@ -34,6 +34,11 @@ public class ConsoleReader implements InputReader {
          }
     }
 
+    @Override
+    public String readHide(String prompt) {
+        return console.readPassword(prompt).toString();
+    }
+
     public String readStringWithMaxLengthProbablyBlank(String prompt, int maxLength) {
         while (true) {
             String input = readString(prompt);
