@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class FacultyFinder {
+public class FacultyFinder implements FacultyFinderInterface {
     private final InputReader inputReader;
     private final ServiceFacultyInterface  serviceFaculty;
     private final UniversityFinderInterface universityFinder;
