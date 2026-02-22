@@ -60,7 +60,7 @@ public class Main {
                 universityFinderInterface,  facultyFinder);
 
         Page mainPage = new MainPage(inputReader, pagerBuilder);
-        PageDisplay pageDisplay = new PageDisplay(console, authService, inputReader);
+        PageDisplay pageDisplay = new PageDisplay(authService, inputReader);
         pageDisplay.start(mainPage);
 
     }

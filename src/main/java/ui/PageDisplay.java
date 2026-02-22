@@ -9,13 +9,10 @@ import java.util.List;
 import java.util.Stack;
 
 public class PageDisplay {
-    // потім це перенести в sessionInfo(клас де зарашній юзер і стан логіна)
     private final AuthService authService;
-    private final Console console;
     private final InputReader inputReader;
     Stack<Page> history = new Stack<>();
-    public PageDisplay(Console console, AuthService authService, InputReader inputReader) {
-        this.console = console;
+    public PageDisplay(AuthService authService, InputReader inputReader) {
         this.authService = authService;
         this.inputReader = inputReader;
     }
@@ -48,7 +45,7 @@ public class PageDisplay {
                     history.push(newPage);
                 }
                 else{
-                    console.readLine("Continue");
+                    inputReader.readPassword("Continue");
                 }
             }
 
