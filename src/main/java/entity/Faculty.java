@@ -131,6 +131,7 @@ public class Faculty implements Entity {
 
     public String toString() {
         String deanInfo = dean !=null ? dean.getFullName().toString() : "vacant";
-        return "Faculty[ unique code - " + getUniqueCode() + ", name - " + getName() +", contact - "+ getContact()+ ", dean -" + deanInfo +  "]";
+        return "Faculty[ university - " + university.getFullName() + ", unique code - " + getUniqueCode() + ", name - " + getName() +", contact - "+
+                getContact()+ ", dean -" + deanInfo +  "]";
     }
 }

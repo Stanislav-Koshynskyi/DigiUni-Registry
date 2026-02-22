@@ -42,8 +42,8 @@ public class PagerBuilder {
                 serviceTeacher, inputReader);
     }
     public Page getFacultyPage(){
-        return new FacultyPage(serviceFaculty, serviceUniversity, serviceTeacher,
-                inputReader);
+        return new FacultyPage(serviceFaculty, serviceTeacher, inputReader,
+                universityFinder);
     }
     public Page getUniversityPage(){
         return new UniversityPage(serviceUniversity, inputReader, this);
