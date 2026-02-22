@@ -12,11 +12,9 @@ import java.util.Optional;
 
 public class TeacherPage extends BasePage {
     private final ServiceTeacherInterface serviceTeacher;
-    private final InputReader inputReader;
-    public TeacherPage(Console console, ServiceTeacherInterface serviceTeacher, InputReader inputReader) {
-        super(console);
+    public TeacherPage( ServiceTeacherInterface serviceTeacher, InputReader inputReader) {
+        super(inputReader);
         this.serviceTeacher = serviceTeacher;
-        this.inputReader = inputReader;
     }
 
     @Override

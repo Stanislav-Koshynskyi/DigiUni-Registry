@@ -8,20 +8,19 @@ import ui.*;
 import java.io.Console;
 import java.time.LocalDate;
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class StudentPage extends BasePage {
     private final ServiceStudentGroupInterface serviceStudentGroup;
     private final ServiceStudentInterface serviceStudent;
-    private final InputReader inputReader;
 
-    public StudentPage(Console console, ServiceStudentGroupInterface serviceStudentGroup, 
+    public StudentPage(ServiceStudentGroupInterface serviceStudentGroup,
                        ServiceStudentInterface serviceStudent, InputReader inputReader) {
-        super(console);
+        super(inputReader);
         this.serviceStudentGroup = serviceStudentGroup;
         this.serviceStudent = serviceStudent;
-        this.inputReader = inputReader;
     }
 
     @Override
@@ -85,45 +84,18 @@ public class StudentPage extends BasePage {
             return this;
         }
         Student student = optionalStudent.get();
-        String recordBook = console.readLine("Enter record book number: ");
-        Integer course = null;
-        while (true) {
-            String stringCourse = console.readLine("Enter course (1-6): ");
-            if (stringCourse.isBlank()) break;
-            else{
-                try {
-                    course = Integer.valueOf(stringCourse);
-                    if (course >=1  && course <= 6) break;
-                    else{
-                        System.out.println("Invalid course must be between 1 and 6");
-                    }
-                }catch (NumberFormatException e){
-                    System.out.println("Invalid input, use numbers only!");
-                }
-            }
-        }
+        String recordBook = inputReader.readProbablyBlank("Enter record book number: ");
+        Integer course = inputReader.readIntInRangeProbablyNull( "Enter course number (1-6)", 1, 6);
         if (!recordBook.isBlank())
             student.setRecordBookNumber(recordBook);
         if (course != null)
             student.setCourse(course);
 
-        System.out.println("Student status: 1 - Studies, 2 - Academic leave, 3 - Expelled");
-        int statusChoice = inputReader.readInt("Enter student status(0 - not change): ");
-
-        switch (statusChoice) {
-            case 1:
-                student.setStudentStatus(StudentStatus.STUDIES);
-                break;
-            case 2:
-                student.setStudentStatus(StudentStatus.ACADEMIC_LEAVE);
-                break;
-            case 3:
-                student.setStudentStatus(StudentStatus.EXPELLED);
-                break;
-            default:
-                System.out.println("Status not changed!");
+        StudentStatus status = inputReader.readChooseProbablyNull(List.of(StudentStatus.values()),
+                "Choose new student status", "not change");
+        if (status != null) {
+            student.setStudentStatus(status);
         }
-
         serviceStudent.update(student);
         return this;
     }

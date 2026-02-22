@@ -33,32 +33,30 @@ public class PagerBuilder {
         this.inputReader = inputReader;
     }
 
-    public Page getDepartmentPage(Console console){
-        return new DepartmentPage(console, serviceDepartment, serviceFaculty,
+    public Page getDepartmentPage(){
+        return new DepartmentPage(serviceDepartment, serviceFaculty,
                 serviceTeacher, inputReader);
     }
-    public Page getFacultyPage(Console console){
-        return new FacultyPage(console, serviceFaculty, serviceUniversity, serviceTeacher,
+    public Page getFacultyPage(){
+        return new FacultyPage(serviceFaculty, serviceUniversity, serviceTeacher,
                 inputReader);
     }
-    public Page getUniversityPage(Console console){
-        return new UniversityPage(console,
-                serviceUniversity, inputReader);
+    public Page getUniversityPage(){
+        return new UniversityPage(serviceUniversity, inputReader);
     }
-    public Page getTeacherPage(Console console){
-        return new TeacherPage(console,
-                serviceTeacher, inputReader);
+    public Page getTeacherPage(){
+        return new TeacherPage(serviceTeacher, inputReader);
     }
-    public  Page getStudentPage(Console console){
-        return new StudentPage(console, serviceStudentGroup,
+    public  Page getStudentPage(){
+        return new StudentPage(serviceStudentGroup,
                 serviceStudent, inputReader);
     }
-    public Page getStudentGroupPage(Console console){
-        return new StudentGroupPage(console, serviceDepartment,
+    public Page getStudentGroupPage(){
+        return new StudentGroupPage(serviceDepartment,
                 serviceStudentGroup, inputReader);
     }
-    public Page getUserPage(Console console){
-        return new UserPage(console, authService,
+    public Page getUserPage(){
+        return new UserPage(authService,
                 serviceUser, inputReader);
     }
 
