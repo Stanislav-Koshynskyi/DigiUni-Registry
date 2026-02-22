@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Year;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 
 public class Reader {
      public static String readString(Console console, String prompt) {
@@ -44,6 +45,19 @@ public class Reader {
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input! Please enter a valid integer number.");
             }
+        }
+    }
+    public static int readIntInRange(Console console, String prompt, int min, int max) {
+        int input;
+         while (true) {
+            try {
+                input = Integer.parseInt(console.readLine(prompt));
+                if (input >= min && input <=max)return input;
+                else System.out.println("Invalid input! Input must be between " + min + " and " + max);
+            }catch (NumberFormatException e) {
+                System.out.println("Invalid input! Please enter a valid integer number.");
+            }
+
         }
     }
 
@@ -210,5 +224,14 @@ public class Reader {
             }
         }
         return rank;
+    }
+    public static <T> T choose(Console console, List<T> list, String promt){
+         if (list == null || list.isEmpty()) return null;
+         int i = 0;
+         for (T t : list) {
+             System.out.println(i++ + " - " + t);
+         }
+         int choose = readIntInRange(console, promt, 1, list.size());
+         return list.get(choose);
     }
 }
