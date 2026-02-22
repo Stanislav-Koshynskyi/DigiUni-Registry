@@ -2,20 +2,19 @@ package ui.pages;
 
 import entity.*;
 import service.ServiceUniversityInterface;
-import ui.BasePage;
-import ui.ConsoleMenu;
-import ui.MenuItem;
-import ui.Page;
-import util.Reader;
+import ui.*;
 
 import java.io.Console;
 import java.util.List;
 
 public class UniversityPage extends BasePage {
     private final ServiceUniversityInterface serviceUniversity;
-    public UniversityPage(Console console, ServiceUniversityInterface serviceUniversity) {
+    private final InputReader inputReader;
+    public UniversityPage(Console console, ServiceUniversityInterface serviceUniversity,
+                          InputReader inputReader) {
         super(console);
         this.serviceUniversity = serviceUniversity;
+        this.inputReader = inputReader;
     }
 
     @Override
@@ -32,12 +31,12 @@ public class UniversityPage extends BasePage {
     }
 
     private Page createUniversity() {
-        String fullName = Reader.readString(console, "Enter full name");
-        String shortName = Reader.readStringWithMaxLength(console, "Enter short name",
+        String fullName = inputReader.readString("Enter full name");
+        String shortName = inputReader.readStringWithMaxLength("Enter short name",
                 University.MAX_SHORT_NAME_LENGTH);
-        String city = Reader.readString(console,"Enter city: ");
-        String street = Reader.readString(console,"Enter street: ");
-        String buildNumber = Reader.readString(console,"Enter building number: ");
+        String city = inputReader.readString("Enter city: ");
+        String street = inputReader.readString("Enter street: ");
+        String buildNumber = inputReader.readString("Enter building number: ");
 
         Address address = new Address(city, street, buildNumber);
         University university = new University(fullName, shortName, address);

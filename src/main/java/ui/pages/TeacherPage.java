@@ -3,20 +3,20 @@ package ui.pages;
 import entity.*;
 import service.ServiceTeacherInterface;
 import ui.*;
-import util.Reader;
 
 import java.io.Console;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 
 public class TeacherPage extends BasePage {
     private final ServiceTeacherInterface serviceTeacher;
-    public TeacherPage(Console console, ServiceTeacherInterface serviceTeacher) {
+    private final InputReader inputReader;
+    public TeacherPage(Console console, ServiceTeacherInterface serviceTeacher, InputReader inputReader) {
         super(console);
         this.serviceTeacher = serviceTeacher;
+        this.inputReader = inputReader;
     }
 
     @Override
@@ -34,22 +34,22 @@ public class TeacherPage extends BasePage {
         );
     }
     private Page createTeacher() {
-        FullName fullName = Reader.fullName(console);
-        LocalDate birthDate = Reader.readBirthDate(console);
-        Contact contact = Reader.readContact(console);
+        FullName fullName = inputReader.readfullName();
+        LocalDate birthDate = inputReader.readBirthDate();
+        Contact contact = inputReader.readContact();
 
-        String uniqueCode = Reader.readString(console, "Enter unique code: ");
-        AcademicDegree degree = Reader.readAcademicDegree(console);
-        AcademicRank rank = Reader.readAcademicRank(console);
-        LocalDate dateOfEmployment = Reader.readEmploymentDate(console);
-        BigDecimal salary = Reader.readBigDecimal(console, "Enter salary: ");
+        String uniqueCode = inputReader.readString("Enter unique code: ");
+        AcademicDegree degree = inputReader.readAcademicDegree();
+        AcademicRank rank = inputReader.readAcademicRank();
+        LocalDate dateOfEmployment = inputReader.readEmploymentDate();
+        BigDecimal salary = inputReader.readBigDecimal("Enter salary: ");
         Teacher teacher = new Teacher(uniqueCode, fullName, birthDate, contact, degree, rank, dateOfEmployment, salary);
         serviceTeacher.create(teacher);
         return this;
     }
 
     private Page editTeacher() {
-        Long id = ConsoleMenu.readRequiredLong(console, "Enter teacher id: ");
+        Long id = inputReader.readLong("Enter teacher id: ");
         Optional<Teacher> optionalTeacher = serviceTeacher.findById(id);
         if (optionalTeacher.isEmpty()) {
             System.out.println("Teacher not found!!!");
@@ -57,18 +57,18 @@ public class TeacherPage extends BasePage {
         }
 
         Teacher teacher = optionalTeacher.get();
-        AcademicDegree degree = Reader.readAcademicDegree(console);
+        AcademicDegree degree = inputReader.readAcademicDegree();
         teacher.setAcademicDegree(degree);
-        AcademicRank rank = Reader.readAcademicRank(console);
+        AcademicRank rank = inputReader.readAcademicRank();
         teacher.setAcademicRank(rank);
-        BigDecimal salary = Reader.readBigDecimal(console, "Enter salary: ");
+        BigDecimal salary = inputReader.readBigDecimal("Enter salary: ");
         teacher.setSalary(salary);
         serviceTeacher.update(teacher);
         return this;
     }
 
     private Page deleteTeacher() {
-        Long id = Reader.readLong(console, "Enter teacher id: ");
+        Long id = inputReader.readLong("Enter teacher id: ");
         Optional<Teacher> optionalTeacher = serviceTeacher.findById(id);
         if (optionalTeacher.isEmpty()) {
             System.out.println("Teacher not found!!!");

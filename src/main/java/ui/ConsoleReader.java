@@ -1,4 +1,4 @@
-package util;
+package ui;
 
 import entity.*;
 
@@ -9,15 +9,19 @@ import java.time.Year;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
-public class Reader {
-     public static String readString(Console console, String prompt) {
+public class ConsoleReader implements InputReader {
+    private final Console console;
+    public ConsoleReader(Console console){
+        this.console = console;
+    }
+     public String readString(String prompt) {
         while (true) {
             String input = console.readLine(prompt);
             if (input != null && !input.isBlank()) return input;
             System.out.println("Input cannot be blank!");
         }
     }
-    public static String readPassword(Console console, String prompt) {
+    public String readPassword( String prompt) {
          while (true) {
              char[] password = console.readPassword(prompt);
              String input =  new String(password);
@@ -30,15 +34,15 @@ public class Reader {
          }
     }
 
-    public static String readStringWithMaxLength(Console console, String prompt, int maxLength) {
+    public String readStringWithMaxLength(String prompt, int maxLength) {
         while (true) {
-            String input = readString(console, prompt);
+            String input = readString(prompt);
             if (input.length() <= maxLength) return input;
             System.out.println("Input must be shorter than or equal to " + maxLength + " characters.");
         }
     }
 
-    public static int readInt(Console console, String prompt) {
+    public int readInt(String prompt) {
         while (true) {
             try {
                 return Integer.parseInt(console.readLine(prompt));
@@ -47,7 +51,7 @@ public class Reader {
             }
         }
     }
-    public static int readIntInRange(Console console, String prompt, int min, int max) {
+    public int readIntInRange(String prompt, int min, int max) {
         int input;
          while (true) {
             try {
@@ -61,7 +65,7 @@ public class Reader {
         }
     }
 
-    public static Long readLong(Console console, String prompt) {
+    public Long readLong(String prompt) {
         while (true) {
             try {
                 return Long.parseLong(console.readLine(prompt));
@@ -71,7 +75,7 @@ public class Reader {
         }
     }
 
-    public static BigDecimal readBigDecimal(Console console, String prompt) {
+    public BigDecimal readBigDecimal(String prompt) {
         while (true) {
             try {
                 return new BigDecimal(console.readLine(prompt));
@@ -80,7 +84,7 @@ public class Reader {
             }
         }
     }
-    public static Contact readContact(Console console) {
+    public Contact readContact() {
         while (true) {
             try {
                 String phone = console.readLine("Enter phone (10-13 numbers with optional +): ");
@@ -92,7 +96,7 @@ public class Reader {
         }
     }
 
-    public static LocalDate readBirthDate(Console console) {
+    public LocalDate readBirthDate() {
         while (true) {
             try {
                 LocalDate birthDate = LocalDate.parse(console.readLine("Enter birth date (yyyy-mm-dd): "));
@@ -106,7 +110,7 @@ public class Reader {
         }
     }
 
-    public static LocalDate readEmploymentDate(Console console) {
+    public LocalDate readEmploymentDate() {
         while (true) {
             try {
                 LocalDate date = LocalDate.parse(console.readLine("Enter date of employment (yyyy-mm-dd): "));
@@ -118,10 +122,10 @@ public class Reader {
         }
     }
 
-    public static Year readYearOfAdmission(Console console) {
+    public Year readYearOfAdmission() {
         while (true) {
             try {
-                int yearValue = readInt(console, "Enter year of admission: ");
+                int yearValue = readInt( "Enter year of admission: ");
                 Year year = Year.of(yearValue);
                 if (!year.isAfter(Year.now()) && !year.isBefore(Year.of(Student.MINIUM_YEAR_OF_ADMISSION))) {
                     return year;
@@ -133,19 +137,19 @@ public class Reader {
         }
     }
 
-    public static int readCourse(Console console) {
+    public int readCourse() {
         while (true) {
-            int course = readInt(console, "Enter course (1-6): ");
+            int course = readInt("Enter course (1-6): ");
             if (course >= 1 && course <= 6) return course;
             System.out.println("Course must be between 1 and 6.");
         }
     }
-    public static FormOfEducation readFormOfEducation(Console console) {
+    public FormOfEducation readFormOfEducation() {
 
          FormOfEducation form = null;
          while (form == null) {
             System.out.println("Form of education: 1 - Budget, 2 - Contract");
-            int userChoiceFormOfEducation = Reader.readInt(console, "Choose a form of education: ");
+            int userChoiceFormOfEducation = readInt("Choose a form of education: ");
 
             switch (userChoiceFormOfEducation) {
                 case 1:
@@ -160,7 +164,7 @@ public class Reader {
         }
          return form;
     }
-    public static FullName fullName(Console console) {
+    public FullName readfullName() {
         String name = console.readLine("Enter name: ");
         while (name.isBlank()) {
             System.out.println("name cannot be blank");
@@ -174,12 +178,12 @@ public class Reader {
         String patronymic = console.readLine("Enter patronymic: ");
         return new FullName(name, surname, patronymic);
     }
-    public static AcademicDegree readAcademicDegree(Console console) {
+    public AcademicDegree readAcademicDegree() {
         AcademicDegree degree = null;
         while (degree == null) {
 
             System.out.println("Academic degree: 1 - Candidate of sciences, 2 - Doctor of philosophy, 3 - Doctor of sciences, 4 - None");
-            int degreeChoice = readInt(console,"Choose academic degree: ");
+            int degreeChoice = readInt("Choose academic degree: ");
 
             switch (degreeChoice) {
                 case 1:
@@ -200,11 +204,11 @@ public class Reader {
         }
         return degree;
     }
-    public static AcademicRank readAcademicRank(Console console) {
+    public AcademicRank readAcademicRank() {
         AcademicRank rank = null;
         while (rank == null) {
             System.out.println("Academic rank: 1 - Associate professor, 2 - Senior researcher, 3 - Professor, 4 - None");
-            int rankChoice = readInt(console, "Choose academic rank: ");
+            int rankChoice = readInt("Choose academic rank: ");
 
             switch (rankChoice) {
                 case 1:
@@ -225,13 +229,13 @@ public class Reader {
         }
         return rank;
     }
-    public static <T> T choose(Console console, List<T> list, String promt){
+    public <T> T readChoose(List<T> list, String promt){
          if (list == null || list.isEmpty()) return null;
-         int i = 0;
+         int i = 1;
          for (T t : list) {
              System.out.println(i++ + " - " + t);
          }
-         int choose = readIntInRange(console, promt, 1, list.size());
+         int choose = readIntInRange(promt, 1, list.size());
          return list.get(choose);
     }
 }
