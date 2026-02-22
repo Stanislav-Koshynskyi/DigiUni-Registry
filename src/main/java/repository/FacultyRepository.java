@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FacultyRepository extends  Repository<Faculty, Long> {
-    Optional<Faculty> findByUniqueCode(String uniqueCode);
+    List<Faculty> findByUniqueCode(String uniqueCode);
 
     boolean existsByUniqueCode(String uniqueCode);
 
@@ -26,4 +26,6 @@ public interface FacultyRepository extends  Repository<Faculty, Long> {
     Optional<Faculty> findByEmail(String email);
 
     boolean existsByEmail(String email);
+
+    List<Faculty> findByShortName(String shortName);
 }

@@ -1,6 +1,7 @@
 package service;
 
 import entity.Faculty;
+import entity.University;
 import repository.FacultyRepository;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +38,32 @@ public class ServiceFaculty implements ServiceFacultyInterface{
         return facultyRepository.findById(id);
     }
 
-    public Optional<Faculty> findByUniqueCode(String uniqueCode) {
+    public List<Faculty> findByUniqueCode(String uniqueCode) {
         return facultyRepository.findByUniqueCode(uniqueCode);
+    }
+
+    @Override
+    public List<Faculty> findByName(String name) {
+        return facultyRepository.findByName(name);
+    }
+
+    @Override
+    public List<Faculty> findByShortName(String shortName) {
+        return facultyRepository.findByShortName(shortName);
+    }
+
+    @Override
+    public Optional<Faculty> findByEmail(String email) {
+        return facultyRepository.findByEmail(email);
+    }
+
+    @Override
+    public Optional<Faculty> findByPhoneNumber(String phoneNumber) {
+        return findByPhoneNumber(phoneNumber);
+    }
+
+    @Override
+    public List<Faculty> findByUniversity(University university) {
+        return facultyRepository.findByUniversity(university);
     }
 }

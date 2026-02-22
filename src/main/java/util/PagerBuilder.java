@@ -4,6 +4,7 @@ import security.AuthService;
 import service.*;
 import ui.InputReader;
 import ui.Page;
+import ui.finders.FacultyFinderInterface;
 import ui.finders.UniversityFinderInterface;
 import ui.pages.*;
 
@@ -20,11 +21,12 @@ public class PagerBuilder {
     private final ServiceUserInterface serviceUser;
     private final InputReader inputReader;
     private final UniversityFinderInterface universityFinder;
+    private final FacultyFinderInterface facultyFinder;
     public PagerBuilder(ServiceTeacherInterface serviceTeacher, ServiceStudentInterface serviceStudent, ServiceStudentGroupInterface serviceStudentGroup,
                         ServiceDepartmentInterface serviceDepartment, ServiceFacultyInterface serviceFaculty,
                         ServiceUniversityInterface serviceUniversity, AuthService authService,
                         ServiceUserInterface serviceUser, InputReader inputReader,
-                        UniversityFinderInterface universityFinder) {
+                        UniversityFinderInterface universityFinder, FacultyFinderInterface facultyFinder) {
         this.serviceTeacher = serviceTeacher;
         this.serviceStudent = serviceStudent;
         this.serviceStudentGroup = serviceStudentGroup;
@@ -35,6 +37,7 @@ public class PagerBuilder {
         this.serviceUser = serviceUser;
         this.inputReader = inputReader;
         this.universityFinder = universityFinder;
+        this.facultyFinder = facultyFinder;
     }
 
     public Page getDepartmentPage(){
@@ -43,7 +46,7 @@ public class PagerBuilder {
     }
     public Page getFacultyPage(){
         return new FacultyPage(serviceFaculty, serviceTeacher, inputReader,
-                universityFinder);
+                universityFinder, this);
     }
     public Page getUniversityPage(){
         return new UniversityPage(serviceUniversity, inputReader, this);
@@ -65,6 +68,9 @@ public class PagerBuilder {
     }
     public Page getFindUniversityPage(){
         return new FindUniversityPage(inputReader, universityFinder);
+    }
+    public  Page getFindFacultyPage(){
+        return new FindFacultyPage(inputReader, facultyFinder);
     }
 
 

@@ -5,6 +5,8 @@ import repository.*;
 import security.*;
 import service.*;
 import ui.*;
+import ui.finders.FacultyFinder;
+import ui.finders.FacultyFinderInterface;
 import ui.finders.UniversityFinder;
 import ui.finders.UniversityFinderInterface;
 import ui.pages.MainPage;
@@ -48,12 +50,14 @@ public class Main {
         InputReader inputReader = new ConsoleReader(console);
 
         UniversityFinderInterface universityFinderInterface = new UniversityFinder(serviceUniversityInterface, inputReader);
+        FacultyFinderInterface facultyFinder = new FacultyFinder(serviceFacultyInterface, inputReader, universityFinderInterface);
 
 
-
-        PagerBuilder pagerBuilder = new PagerBuilder(serviceTeacherInterface, serviceStudentInterface, serviceStudentGroupInterface, serviceDepartmentInterface,
+        PagerBuilder pagerBuilder = new PagerBuilder(serviceTeacherInterface, serviceStudentInterface,
+                serviceStudentGroupInterface, serviceDepartmentInterface,
                 serviceFacultyInterface, serviceUniversityInterface,
-                authService, serviceUserInterface, inputReader, universityFinderInterface);
+                authService, serviceUserInterface, inputReader,
+                universityFinderInterface,  facultyFinder);
 
         Page mainPage = new MainPage(inputReader, pagerBuilder);
         PageDisplay pageDisplay = new PageDisplay(console, authService, inputReader);
