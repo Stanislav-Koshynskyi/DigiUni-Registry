@@ -1,7 +1,12 @@
+import entity.Role;
+import entity.User;
+import entity.find_criteria.UniversityFind;
 import repository.*;
 import security.*;
 import service.*;
 import ui.*;
+import ui.finders.UniversityFinder;
+import ui.finders.UniversityFinderInterface;
 import ui.pages.MainPage;
 import util.PagerBuilder;
 
@@ -17,6 +22,8 @@ public class Main {
         UniversityRepository universityRepository = new InMemoryUniversityRepository();
         UserRepository userRepository = new InMemoryUserRepository();
 
+
+
         ServiceDepartmentInterface serviceDepartmentInterface = new ServiceDepartment(departmentRepository);
         ServiceFacultyInterface serviceFacultyInterface = new ServiceFaculty(facultyRepository);
         ServiceStudentInterface serviceStudentInterface = new ServiceStudent(studentRepository);
@@ -31,6 +38,7 @@ public class Main {
         serviceUserInterface.save(new User(Role.USER, "user", "user"));
         serviceUserInterface.save(new User(Role.MODERATOR, "moderator", "moderator"));
 
+
         SessionInfo sessionInfo = new LocalSessionInfo();
 
 
@@ -38,9 +46,14 @@ public class Main {
 
         Console console = System.console();
         InputReader inputReader = new ConsoleReader(console);
+
+        UniversityFinderInterface universityFinderInterface = new UniversityFinder(serviceUniversityInterface, inputReader);
+
+
+
         PagerBuilder pagerBuilder = new PagerBuilder(serviceTeacherInterface, serviceStudentInterface, serviceStudentGroupInterface, serviceDepartmentInterface,
                 serviceFacultyInterface, serviceUniversityInterface,
-                authService, serviceUserInterface, inputReader);
+                authService, serviceUserInterface, inputReader, universityFinderInterface);
 
         Page mainPage = new MainPage(inputReader, pagerBuilder);
         PageDisplay pageDisplay = new PageDisplay(console, authService, inputReader);

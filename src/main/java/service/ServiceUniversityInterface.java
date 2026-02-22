@@ -21,4 +21,8 @@ public interface ServiceUniversityInterface {
     List<University> findByCity(String city);
 
     Optional<University> findById(Long id);
+
+    boolean existsByFullName(String fullName);
+    boolean existsByShortName(String shortName);
+    boolean existsByCity(String city);
 }

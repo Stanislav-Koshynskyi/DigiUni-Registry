@@ -24,6 +24,12 @@ public class InMemoryUniversityRepository extends AbstractRepositoryByLong<Unive
         return data.values().stream().filter(u -> u.getShortName().equalsIgnoreCase(shortName)).findFirst();
     }
 
+    @Override
+    public boolean existsByCity(String city) {
+        Map<Long, University> data = getData();
+        return data.values().stream().anyMatch(u -> u.getShortName().equalsIgnoreCase(city));
+    }
+
     public  boolean existsByShortName(String shortName) {
         Map<Long, University> data = getData();
         return data.values().stream().anyMatch(u -> u.getShortName().equalsIgnoreCase(shortName));

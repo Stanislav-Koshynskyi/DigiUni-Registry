@@ -11,7 +11,7 @@ public interface UniversityRepository extends Repository<University, Long> {
     boolean existsByFullName(String fullName);
 
     Optional<University> findByShortName(String shortName);
-
+    boolean existsByCity(String city);
     boolean existsByShortName(String shortName);
 
     List<University> findByCity(String city);

@@ -54,4 +54,19 @@ public class ServiceUniversity implements ServiceUniversityInterface{
     public Optional<University> findById(Long id) {
         return universityRepository.findById(id);
     }
+
+    @Override
+    public boolean existsByFullName(String fullName) {
+        return universityRepository.existsByFullName(fullName);
+    }
+
+    @Override
+    public boolean existsByShortName(String shortName) {
+        return universityRepository.existsByShortName(shortName);
+    }
+
+    @Override
+    public boolean existsByCity(String city) {
+        return universityRepository.existsByCity(city);
+    }
 }

@@ -3,16 +3,19 @@ package ui.pages;
 import entity.*;
 import service.ServiceUniversityInterface;
 import ui.*;
+import util.PagerBuilder;
 
 import java.io.Console;
 import java.util.List;
 
 public class UniversityPage extends BasePage {
     private final ServiceUniversityInterface serviceUniversity;
+    private final PagerBuilder pagerBuilder;
     public UniversityPage(ServiceUniversityInterface serviceUniversity,
-                          InputReader inputReader) {
+                          InputReader inputReader, PagerBuilder pagerBuilder) {
         super(inputReader);
         this.serviceUniversity = serviceUniversity;
+        this.pagerBuilder = pagerBuilder;
     }
 
     @Override
@@ -24,6 +27,7 @@ public class UniversityPage extends BasePage {
     public List<MenuItem> getMenuItems() {
         return List.of(
             new MenuItem("Create university", Right.ADD, this::createUniversity),
+            new MenuItem("Find university", Right.FIND, pagerBuilder::getFindUniversityPage),
             new MenuItem("Show all university", Right.FIND,this::showAllUniversity)
         );
     }
