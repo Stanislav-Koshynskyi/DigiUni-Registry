@@ -27,6 +27,9 @@ public class Main {
         PasswordCoder coder = new BCryptPasswordEncoder();
 
         ServiceUserInterface serviceUserInterface = new ServiceUser(userRepository, coder);
+        serviceUserInterface.save(new User(Role.ADMIN, "admin", "admin"));
+        serviceUserInterface.save(new User(Role.USER, "user", "user"));
+        serviceUserInterface.save(new User(Role.MODERATOR, "moderator", "moderator"));
 
         SessionInfo sessionInfo = new LocalSessionInfo();
 
