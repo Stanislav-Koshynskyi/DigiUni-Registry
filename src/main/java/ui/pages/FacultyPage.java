@@ -4,10 +4,7 @@ import entity.*;
 import service.ServiceFacultyInterface;
 import service.ServiceTeacherInterface;
 import service.ServiceUniversityInterface;
-import ui.BasePage;
-import ui.MenuItem;
-import ui.Page;
-import util.Reader;
+import ui.*;
 
 import java.io.Console;
 import java.util.List;
@@ -17,11 +14,15 @@ public class FacultyPage extends BasePage {
     private final ServiceFacultyInterface serviceFaculty;
     private final ServiceUniversityInterface serviceUniversity;
     private final ServiceTeacherInterface serviceTeacher;
-    public FacultyPage(Console console, ServiceFacultyInterface serviceFaculty, ServiceUniversityInterface serviceUniversity, ServiceTeacherInterface serviceTeacher ) {
+    private final InputReader inputReader;
+
+    public FacultyPage(Console console, ServiceFacultyInterface serviceFaculty,
+                       ServiceUniversityInterface serviceUniversity, ServiceTeacherInterface serviceTeacher, InputReader inputReader) {
         super(console);
-        this .serviceFaculty = serviceFaculty;
+        this.serviceFaculty = serviceFaculty;
         this.serviceUniversity = serviceUniversity;
         this.serviceTeacher = serviceTeacher;
+        this.inputReader = inputReader;
     }
 
     @Override
@@ -40,14 +41,14 @@ public class FacultyPage extends BasePage {
     }
 
     private Page createFaculty() {
-        String uniqueCode = Reader.readString(console, "Enter unique code: ");
-        String name = Reader.readString(console,"Enter faculty name: ");
-        String shortName = Reader.readStringWithMaxLength(console,"Enter short name", Faculty.MAX_SHORT_NAME_LENGTH);
-        Contact contact = Reader.readContact(console);
+        String uniqueCode = inputReader.readString( "Enter unique code: ");
+        String name = inputReader.readString("Enter faculty name: ");
+        String shortName = inputReader.readStringWithMaxLength("Enter short name", Faculty.MAX_SHORT_NAME_LENGTH);
+        Contact contact = inputReader.readContact();
         Teacher dean = null;
         Long teacherId;
         while (true) {
-            teacherId = Reader.readLong(console, "Enter teacher id(if vacant write -1): ");
+            teacherId = inputReader.readLong("Enter teacher id(if vacant write -1): ");
             if (teacherId.equals(Long.valueOf(-1))) break;
             Optional<Teacher> optionalTeacher = serviceTeacher.findById(teacherId);
             if (optionalTeacher.isPresent()) {
@@ -60,7 +61,7 @@ public class FacultyPage extends BasePage {
         }
         University university;
         while (true) {
-            Long universityId = Reader.readLong(console, "Enter university id(-1 to exit): ");
+            Long universityId = inputReader.readLong("Enter university id(-1 to exit): ");
             if (universityId.equals(Long.valueOf(-1))) return this;
             Optional<University> optionalUniversity = serviceUniversity.findById(universityId);
             if  (optionalUniversity.isPresent()) {
@@ -78,7 +79,7 @@ public class FacultyPage extends BasePage {
     }
 
     private Page editFaculty() {
-        Long id = Reader.readLong(console, "Enter faculty id to edit: ");
+        Long id = inputReader.readLong("Enter faculty id to edit: ");
         Optional<Faculty> optionalFaculty = serviceFaculty.findById(id);
         if (optionalFaculty.isEmpty()) {
             System.out.println("Faculty not found");
@@ -123,7 +124,7 @@ public class FacultyPage extends BasePage {
     }
 
     private Page deleteFaculty() {
-        Long id = Reader.readLong(console, "Enter faculty id to delete ");
+        Long id = inputReader.readLong("Enter faculty id to delete ");
         Optional<Faculty> optionalFaculty = serviceFaculty.findById(id);
         if (optionalFaculty.isEmpty()) {
             System.out.println("Faculty not found!!!");

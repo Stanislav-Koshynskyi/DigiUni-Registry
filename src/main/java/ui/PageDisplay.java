@@ -1,11 +1,8 @@
 package ui;
 
-import entity.Role;
-import entity.User;
 import security.AuthService;
 import security.MethodFilter;
 import util.Pretier;
-import util.Reader;
 
 import java.io.Console;
 import java.util.List;
@@ -15,10 +12,12 @@ public class PageDisplay {
     // потім це перенести в sessionInfo(клас де зарашній юзер і стан логіна)
     private final AuthService authService;
     private final Console console;
+    private final InputReader inputReader;
     Stack<Page> history = new Stack<>();
-    public PageDisplay(Console console, AuthService authService) {
+    public PageDisplay(Console console, AuthService authService, InputReader inputReader) {
         this.console = console;
         this.authService = authService;
+        this.inputReader = inputReader;
     }
     public void start(Page startPage){
         System.out.println(Pretier.printLogo());
@@ -38,7 +37,7 @@ public class PageDisplay {
             System.out.println("0 - exit");
             int choose;
             while (true) {
-                choose = Reader.readInt(console, "choose :");
+                choose = inputReader.readInt("choose :");
                 if (choose >= 0 && choose <= itemToShow.size()) break;
             }
             if (choose == 0)

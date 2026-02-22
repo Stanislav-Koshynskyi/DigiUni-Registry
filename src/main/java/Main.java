@@ -1,9 +1,7 @@
 import repository.*;
 import security.*;
 import service.*;
-import ui.ConsoleMenu;
-import ui.Page;
-import ui.PageDisplay;
+import ui.*;
 import ui.pages.MainPage;
 import util.PagerBuilder;
 
@@ -35,12 +33,14 @@ public class Main {
 
         AuthService authService = new LocalAuthService(coder, serviceUserInterface, sessionInfo);
 
+        Console console = System.console();
+        InputReader inputReader = new ConsoleReader(console);
         PagerBuilder pagerBuilder = new PagerBuilder(serviceTeacherInterface, serviceStudentInterface, serviceStudentGroupInterface, serviceDepartmentInterface,
                 serviceFacultyInterface, serviceUniversityInterface,
-                authService, serviceUserInterface);
-        Console console = System.console();
+                authService, serviceUserInterface, inputReader);
+
         Page mainPage = new MainPage(console, pagerBuilder);
-        PageDisplay pageDisplay = new PageDisplay(console, authService);
+        PageDisplay pageDisplay = new PageDisplay(console, authService, inputReader);
         pageDisplay.start(mainPage);
 
     }

@@ -5,10 +5,7 @@ import entity.Right;
 import entity.StudentGroup;
 import service.ServiceDepartmentInterface;
 import service.ServiceStudentGroupInterface;
-import ui.BasePage;
-import ui.MenuItem;
-import ui.Page;
-import util.Reader;
+import ui.*;
 
 import java.io.Console;
 import java.util.List;
@@ -17,10 +14,14 @@ import java.util.Optional;
 public class StudentGroupPage extends BasePage {
     private final ServiceDepartmentInterface serviceDepartment;
     private final ServiceStudentGroupInterface serviceStudentGroup;
-    public StudentGroupPage(Console console, ServiceDepartmentInterface serviceDepartment, ServiceStudentGroupInterface serviceStudentGroup) {
+    private final InputReader inputReader;
+
+    public StudentGroupPage(Console console, ServiceDepartmentInterface serviceDepartment, 
+                            ServiceStudentGroupInterface serviceStudentGroup, InputReader inputReader) {
         super(console);
         this.serviceDepartment = serviceDepartment;
         this.serviceStudentGroup = serviceStudentGroup;
+        this.inputReader = inputReader;
     }
 
     @Override
@@ -38,11 +39,11 @@ public class StudentGroupPage extends BasePage {
         );
     }
     private Page createStudentGroup() {
-        String name = Reader.readString(console, "Enter group name: ");
+        String name = inputReader.readString("Enter group name: ");
 
         Department department;
         while (true) {
-            Long id = Reader.readLong(console, "Enter department id(-1 to exit): ");
+            Long id = inputReader.readLong("Enter department id(-1 to exit): ");
             if (id.equals(-1L)) return this;
             Optional<Department> optionalDepartment = serviceDepartment.findById(id);
             if (optionalDepartment.isPresent()) {
@@ -61,7 +62,7 @@ public class StudentGroupPage extends BasePage {
     }
 
     private Page editStudentGroup() {
-        Long id = Reader.readLong(console, "Enter group id to edit: ");
+        Long id = inputReader.readLong("Enter group id to edit: ");
         Optional<StudentGroup> optionalGroup = serviceStudentGroup.findById(id);
 
         if (optionalGroup.isEmpty()) {
@@ -80,7 +81,7 @@ public class StudentGroupPage extends BasePage {
     }
 
     private Page deleteStudentGroup() {
-        Long id = Reader.readLong(console, "Enter group id to delete: ");
+        Long id = inputReader.readLong("Enter group id to delete: ");
         // треба додати перевірку на існування
         serviceStudentGroup.delete(id);
         return this;

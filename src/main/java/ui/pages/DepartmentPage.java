@@ -7,10 +7,7 @@ import entity.Teacher;
 import service.ServiceDepartmentInterface;
 import service.ServiceFacultyInterface;
 import service.ServiceTeacherInterface;
-import ui.BasePage;
-import ui.MenuItem;
-import ui.Page;
-import util.Reader;
+import ui.*;
 
 import java.io.Console;
 import java.util.List;
@@ -20,13 +17,16 @@ public class DepartmentPage extends BasePage {
     private final ServiceDepartmentInterface serviceDepartment;
     private final ServiceFacultyInterface serviceFaculty;
     private final ServiceTeacherInterface serviceTeacher;
-    public DepartmentPage(ServiceDepartmentInterface serviceDepartment, ServiceFacultyInterface serviceFaculty,ServiceTeacherInterface serviceTeacher, Console console){
+    private final InputReader inputReader;
+
+    public DepartmentPage(Console console, ServiceDepartmentInterface serviceDepartment, 
+                          ServiceFacultyInterface serviceFaculty, ServiceTeacherInterface serviceTeacher, InputReader inputReader) {
         super(console);
         this.serviceDepartment = serviceDepartment;
         this.serviceFaculty = serviceFaculty;
         this.serviceTeacher = serviceTeacher;
+        this.inputReader = inputReader;
     }
-
 
     @Override
     public String getTitle() {
@@ -44,15 +44,15 @@ public class DepartmentPage extends BasePage {
     }
 
     private Page createDepartment() {
-        String uniqueCode = Reader.readString(console, "Enter unique code: ");
-        String name = Reader.readString(console, "Enter department name: ");
-        String shortName = Reader.readStringWithMaxLength(console, "Enter short name",
+        String uniqueCode = inputReader.readString("Enter unique code: ");
+        String name = inputReader.readString("Enter department name: ");
+        String shortName = inputReader.readStringWithMaxLength("Enter short name",
                 Department.MAX_SHORT_NAME_LENGTH);
-        String cabinet = Reader.readString(console, "Enter cabinet/location: ");
+        String cabinet = inputReader.readString("Enter cabinet/location: ");
         Teacher headOfDepartment = null;
         Long teacherId;
         while (true) {
-            teacherId = Reader.readLong(console, "Enter teacher id(if vacant write -1): ");
+            teacherId = inputReader.readLong("Enter teacher id(if vacant write -1): ");
             if (teacherId.equals(Long.valueOf(-1))) break;
             Optional<Teacher> optionalTeacher = serviceTeacher.findById(teacherId);
             if (optionalTeacher.isPresent()) {
@@ -65,7 +65,7 @@ public class DepartmentPage extends BasePage {
         }
         Faculty faculty;
         while (true) {
-            Long facultyId = Reader.readLong(console, "Enter faculty id(-1 to exit): ");
+            Long facultyId = inputReader.readLong("Enter faculty id(-1 to exit): ");
             if (facultyId.equals(Long.valueOf(-1))) return this;
             Optional<Faculty> optionalFaculty = serviceFaculty.findById(facultyId);
             if (optionalFaculty.isPresent()) {
@@ -83,7 +83,7 @@ public class DepartmentPage extends BasePage {
     }
 
     private Page editDepartment() {
-        Long id =Reader.readLong(console, "Enter department id to edit: ");
+        Long id = inputReader.readLong("Enter department id to edit: ");
         Optional<Department> optionalDepartment = serviceDepartment.findById(id);
         if (optionalDepartment.isEmpty()) {
             System.out.println("Department not found!!!");
@@ -114,7 +114,7 @@ public class DepartmentPage extends BasePage {
     }
 
     private Page deleteDepartment() {
-        Long id = Reader.readLong(console, "Enter department id to delete: ");
+        Long id = inputReader.readLong("Enter department id to delete: ");
         Optional<Department> optionalDepartment = serviceDepartment.findById(id);
         if (optionalDepartment.isEmpty()) {
             System.out.println("Department not found!!!");
