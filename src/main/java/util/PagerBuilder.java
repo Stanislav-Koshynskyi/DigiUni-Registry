@@ -4,6 +4,7 @@ import security.AuthService;
 import service.*;
 import ui.InputReader;
 import ui.Page;
+import ui.finders.UniversityFinderInterface;
 import ui.pages.*;
 
 import java.io.Console;
@@ -18,10 +19,12 @@ public class PagerBuilder {
     private final AuthService authService;
     private final ServiceUserInterface serviceUser;
     private final InputReader inputReader;
+    private final UniversityFinderInterface universityFinder;
     public PagerBuilder(ServiceTeacherInterface serviceTeacher, ServiceStudentInterface serviceStudent, ServiceStudentGroupInterface serviceStudentGroup,
                         ServiceDepartmentInterface serviceDepartment, ServiceFacultyInterface serviceFaculty,
                         ServiceUniversityInterface serviceUniversity, AuthService authService,
-                        ServiceUserInterface serviceUser, InputReader inputReader) {
+                        ServiceUserInterface serviceUser, InputReader inputReader,
+                        UniversityFinderInterface universityFinder) {
         this.serviceTeacher = serviceTeacher;
         this.serviceStudent = serviceStudent;
         this.serviceStudentGroup = serviceStudentGroup;
@@ -31,6 +34,7 @@ public class PagerBuilder {
         this.authService = authService;
         this.serviceUser = serviceUser;
         this.inputReader = inputReader;
+        this.universityFinder = universityFinder;
     }
 
     public Page getDepartmentPage(){
@@ -42,7 +46,7 @@ public class PagerBuilder {
                 inputReader);
     }
     public Page getUniversityPage(){
-        return new UniversityPage(serviceUniversity, inputReader);
+        return new UniversityPage(serviceUniversity, inputReader, this);
     }
     public Page getTeacherPage(){
         return new TeacherPage(serviceTeacher, inputReader);
@@ -58,6 +62,9 @@ public class PagerBuilder {
     public Page getUserPage(){
         return new UserPage(authService,
                 serviceUser, inputReader);
+    }
+    public Page getFindUniversityPage(){
+        return new FindUniversityPage(inputReader, universityFinder);
     }
 
 

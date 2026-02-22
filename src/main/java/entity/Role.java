@@ -4,7 +4,7 @@ public enum Role {
     GUEST(16),
     USER(1),
     MODERATOR(15),
-    ADMIN(32);
+    ADMIN(32 + 15);
     //Right abcd (in binary) a - delete , b -edit , c - add , d - find
     private final int right;
     Role(int right) {
