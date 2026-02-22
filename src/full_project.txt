@@ -1,0 +1,5614 @@
+
+--- FILE: ./main/java/entity/AcademicDegree.java ---
+package entity;
+
+public enum AcademicDegree {
+    CANDIDATE_OF_SCIENCES("Кандидат наук"),
+    DOCTOR_OF_PHILOSOPHY("Доктор філософії"),
+    DOCTOR_OF_SCIENCES("Доктор наук"),
+    NONE("Відсутнє");
+    private final String nameUa;
+    AcademicDegree(String nameUa) {
+        this.nameUa = nameUa;
+    }
+    public String getNameUa() {
+        return nameUa;
+    }
+    @Override
+    public String toString() {
+        return nameUa;
+    }
+}
+
+--- FILE: ./main/java/entity/AcademicRank.java ---
+package entity;
+
+public enum AcademicRank {
+    ASSOCIATE_PROFESSOR("Доцент"),
+    SENIOR_RESEARCHER("Старший дослідник"),
+    PROFESSOR("Професор"),
+    NONE("Відсутнє");
+    private final String nameUa;
+    AcademicRank(final String nameUa) {
+        this.nameUa = nameUa;
+    }
+    public String getNameUa() {
+        return nameUa;
+    }
+    @Override
+    public String toString() {
+        return this.nameUa;
+    }
+}
+
+--- FILE: ./main/java/entity/Contact.java ---
+package entity;
+
+public record Contact(String phone, String email) {
+    public Contact {
+        if (email == null || !email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,255}$")){
+            throw new IllegalArgumentException("Invalid email address");
+        }
+        if (phone == null || !phone.matches("^\\+?\\d{10,13}$")){
+            throw new IllegalArgumentException("Invalid phone number");
+        }
+
+    }
+}
+
+--- FILE: ./main/java/entity/Entity.java ---
+package entity;
+
+public interface Entity {
+    public Long getId();
+    public void setId(Long id);
+}
+
+--- FILE: ./main/java/entity/FormOfEducation.java ---
+package entity;
+
+public enum FormOfEducation {
+    BUDGET("бюджет"),
+    CONTRACT("контракт");
+
+    private final String nameUa;
+
+    FormOfEducation(String nameUa) {
+        this.nameUa = nameUa;
+    }
+
+    public String getNameUa() {
+        return nameUa;
+    }
+
+    @Override
+    public String toString() {
+        return nameUa;
+    }
+
+}
+
+--- FILE: ./main/java/entity/FullName.java ---
+package entity;
+
+public record FullName(String name, String surname, String patronymic) {
+    public FullName {
+        if (name == null || name.isBlank()) throw new IllegalArgumentException("name cannot be empty");
+        if (surname == null || surname.isBlank()) throw new IllegalArgumentException("surname cannot be empty");
+        if (patronymic == null || patronymic.isBlank()) {
+            patronymic = "";
+        }
+    }
+}
+
+--- FILE: ./main/java/entity/StudentStatus.java ---
+package entity;
+
+public enum StudentStatus {
+    STUDIES("навчається"),
+    EXPELLED("відрахований"),
+    ACADEMIC_LEAVE("академічна відпустка");
+
+    private final String nameUa;
+    StudentStatus(String nameUa) {
+        this.nameUa = nameUa;
+    }
+    public String getNameUa() {
+        return nameUa;
+    }
+
+    @Override
+    public String toString() {
+        return nameUa;
+    }
+
+}
+
+--- FILE: ./main/java/entity/Teacher.java ---
+package entity;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+public class Teacher extends Person{
+    private AcademicRank academicRank;
+    private AcademicDegree academicDegree;
+    LocalDate dateOfEmployment;
+    BigDecimal salary;
+
+    public Teacher(){}
+    public Teacher(String uniqueCode,FullName fullName, LocalDate birthDate, Contact contact,
+                   AcademicDegree academicDegree, AcademicRank academicRank,LocalDate dateOfEmployment,
+                   BigDecimal salary){
+        super(uniqueCode, fullName, birthDate, contact);
+        setAcademicDegree(academicDegree);
+        setAcademicRank(academicRank);
+        setDateOfEmployment(dateOfEmployment);
+        setSalary(salary);
+    }
+    public Teacher(Long id, String uniqueCode, FullName fullName, LocalDate birthDate, Contact contact,
+                   AcademicDegree academicDegree, AcademicRank academicRank,LocalDate dateOfEmployment,
+                   BigDecimal salary){
+        this(uniqueCode, fullName, birthDate, contact, academicDegree, academicRank,dateOfEmployment,salary);
+        setId(id);
+    }
+
+    public AcademicRank getAcademicRank() {
+        return academicRank;
+    }
+
+    public void setAcademicRank(AcademicRank academicRank) {
+        if (academicRank == null) {
+            throw new IllegalArgumentException("academicRank can't be null");
+        }
+        this.academicRank = academicRank;
+    }
+
+    public AcademicDegree getAcademicDegree() {
+        return academicDegree;
+    }
+
+    public void setAcademicDegree(AcademicDegree academicDegree) {
+        if (academicDegree == null) {
+            throw new IllegalArgumentException("academicDegree can't be null");
+        }
+        this.academicDegree = academicDegree;
+    }
+
+    public LocalDate getDateOfEmployment() {
+        return dateOfEmployment;
+    }
+
+    public void setDateOfEmployment(LocalDate dateOfEmployment) {
+        if (dateOfEmployment == null) {
+            throw new IllegalArgumentException("dateOfEmployment can't be null");
+        }
+        if (dateOfEmployment.isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("dateOfEmployment can not be in future");
+        }
+        this.dateOfEmployment = dateOfEmployment;
+    }
+
+    public BigDecimal getSalary() {
+        return salary;
+    }
+
+    public void setSalary(BigDecimal salary) {
+        if  (salary == null) {
+            throw new IllegalArgumentException("salary can't be null");
+        }
+        if (salary.signum() < 0) {
+            throw new IllegalArgumentException("salary can't be negative");
+        }
+        this.salary = salary;
+    }
+
+    @Override
+    public String toString() {
+        return "Teacher[unique code - " + getUniqueCode()+", name - " + getFullName() +", salary - " + salary
+                + ", academic rank - " + academicRank + ", academic degree - " + academicDegree + ", contact - " + getContact()
+                + ", date of employment - " + dateOfEmployment +  ", birthday - "+getBirthDate() +"]";
+    }
+}
+
+--- FILE: ./main/java/entity/Address.java ---
+package entity;
+
+public record Address (String city,String street, String buildNumber) {
+    public Address {
+        if (city == null || city.isBlank()) {
+            throw new IllegalArgumentException("city can not be empty");
+        }
+        if (street == null || street.isBlank()) {
+            throw new IllegalArgumentException("street can not be empty");
+        }
+        if (buildNumber == null || buildNumber.isBlank()) {
+            throw new IllegalArgumentException("buildNumber can not be empty");
+        }
+
+    }
+}
+
+--- FILE: ./main/java/entity/StudentGroup.java ---
+package entity;
+import java.util.*;
+
+public class StudentGroup implements Entity{
+    private Long id;
+    private String name;
+    private Teacher headOfGroup;
+    private Student groupLeader;
+    private final HashSet<Student> students;
+    private Department department;
+    private Long departmentId;
+
+    public StudentGroup(Long id, String name,Department department, Teacher headOfGroup, Student groupLeader, HashSet<Student> students) {
+        this.students = students != null ? new HashSet<>(students) : new HashSet<>();
+        setId(id);
+        setName(name);
+        setHeadOfGroup(headOfGroup);
+        setGroupLeader(groupLeader);
+        setDepartment(department);
+
+
+    }
+
+
+    public StudentGroup(String name, Department department) {
+        setName(name);
+        setDepartment(department);
+        students = new HashSet<>();
+
+    }
+    public Department getDepartment() {
+        return department;
+    }
+    public void setDepartment(Department department) {
+        if (department == null) throw new IllegalArgumentException("Department cannot be null");
+        this.department = department;
+        setDepartmentId(department.getId());
+    }
+
+    public Long getDepartmentId() {
+        return departmentId;
+    }
+    public void setDepartmentId(Long departmentId) {
+        if  (departmentId == null) throw new IllegalArgumentException("Department cannot be null");
+        this.departmentId = departmentId;
+    }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        if (name == null || name.isBlank()) throw new IllegalArgumentException("name cannot be empty");
+        this.name = name;
+    }
+
+    public Optional<Teacher> getHeadOfGroup() {
+        return Optional.ofNullable(headOfGroup);
+    }
+
+    public void setHeadOfGroup(Teacher headOfGroup) {
+        this.headOfGroup = headOfGroup;
+    }
+
+    public Optional<Student> getGroupLeader() {
+        return Optional.ofNullable(groupLeader);
+    }
+
+    public void setGroupLeader(Student groupLeader) {
+        if (groupLeader!=null && !students.contains(groupLeader)) {
+            addStudent(groupLeader);
+        }
+
+        this.groupLeader = groupLeader;
+    }
+    public void addStudent(Student student) {
+        if (student ==  null) throw new IllegalArgumentException("student cannot be null");
+        students.add(student);
+    }
+    public void removeStudent(Student student) {
+        if (student ==  null) throw new IllegalArgumentException("student cannot be null");
+        if (students.contains(student)) {
+            students.remove(student);
+            if (student.equals(groupLeader))
+                setGroupLeader(null);
+
+        }
+        else{
+            throw new IllegalArgumentException("student not in group");
+        }
+    }
+    public List<Student> getStudents() {
+        return new ArrayList<>(students);
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StudentGroup that = (StudentGroup) o;
+        return Objects.equals(id, that.id);
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        List<Student> studentsList = getStudents();
+        List <FullName> studentsName = studentsList.stream()
+                .map(Person::getFullName)
+                .toList();
+        String  headOfGroupInfo = headOfGroup == null ? "vacant" : headOfGroup.getFullName().toString();
+        String departmentInfo = department == null ? "lost, id = "+ departmentId : department.getName();
+        String groupLeaderInfo = groupLeader == null ? "vacant" : groupLeader.getFullName().toString();
+        return "Group[name - " +name + ", head - " +  headOfGroupInfo +
+                ",department - "+ departmentInfo + ", group leader - " + groupLeaderInfo +
+                ", students - " + studentsName +"]";
+    }
+}
+--- FILE: ./main/java/entity/Department.java ---
+package entity;
+
+import java.util.Objects;
+import java.util.Optional;
+
+public class Department implements Entity {
+    private Long id;
+    private String uniqueCode;
+    private String name;
+    private String shortName;
+    private Faculty faculty;
+    private Long facultyId;
+    private Teacher headOfDepartment;
+    private Long headOfDepartmentId;
+    private String cabinet;
+    public static final int MAX_SHORT_NAME_LENGTH = 15;
+
+
+    public Department(){}
+    public Department(String uniqueCode, String name, String shortName, Faculty faculty, Teacher headOfDepartment, String cabinet) {
+        setUniqueCode(uniqueCode);
+        setName(name);
+        setShortName(shortName);
+        setFaculty(faculty);
+        setHeadOfDepartment(headOfDepartment);
+        setCabinet(cabinet);
+    }
+    public Department (Long id, String uniqueCode, String name, String shortName, Faculty faculty, Teacher headOfDepartment, String cabinet) {
+        this(uniqueCode, name, shortName, faculty, headOfDepartment, cabinet);
+        setId(id);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUniqueCode() {
+        return uniqueCode;
+    }
+
+    public void setUniqueCode(String uniqueCode) {
+        if (uniqueCode == null || uniqueCode.isBlank()) {
+            throw new IllegalArgumentException("uniqueCode can not be blank");
+        }
+        this.uniqueCode = uniqueCode;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("name can not be blank");
+        }
+        this.name = name;
+    }
+
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        if (shortName == null || shortName.isBlank()) {
+            throw new IllegalArgumentException("shortName can not be blank");
+        }
+        if (shortName.length() > 15) {
+            throw new IllegalArgumentException("shortName must be short");
+        }
+        this.shortName = shortName;
+    }
+
+    public Faculty getFaculty() {
+        return faculty;
+    }
+
+    public void setFaculty(Faculty faculty) {
+        if (faculty == null) {
+            throw new IllegalArgumentException("faculty can not be null");
+        }
+        this.faculty = faculty;
+        setFacultyId(faculty.getId());
+
+    }
+
+    public Long getFacultyId() {
+        return facultyId;
+    }
+    public void setFacultyId(Long facultyId) {
+        if (facultyId == null) {
+            throw new IllegalArgumentException("facultyId can not be null");
+        }
+        this.facultyId = facultyId;
+    }
+
+    public Optional<Teacher> getHeadOfDepartment() {
+        return Optional.ofNullable(headOfDepartment);
+    }
+
+    public void setHeadOfDepartment(Teacher headOfDepartment) {
+        this.headOfDepartment = headOfDepartment;
+        if  (headOfDepartment == null) {
+            setHeadOfDepartmentId(null);
+        }
+        else {
+            setHeadOfDepartmentId(headOfDepartment.getId());
+        }
+    }
+
+    public Long getHeadOfDepartmentId() {
+
+        return headOfDepartmentId;
+    }
+
+    public void setHeadOfDepartmentId(Long headOfDepartmentId) {
+        this.headOfDepartmentId = headOfDepartmentId;
+    }
+
+    public String getCabinet() {
+        return cabinet;
+    }
+
+    public void setCabinet(String cabinet) {
+        if (cabinet == null || cabinet.isBlank()) {
+            throw new IllegalArgumentException("cabinet can not be blank");
+        }
+        this.cabinet = cabinet;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Department that = (Department) obj;
+        return Objects.equals(id, that.id);
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+    @Override
+    public String toString() {
+        String facultyInfo = faculty == null ? "lost, id =" + facultyId  : faculty.getShortName();
+        String headOfDepartmentInfo = headOfDepartment == null ? "vacant" : headOfDepartment.getFullName().toString();
+        return "Department [uniqueCode=" + uniqueCode + ", name=" + name + ", shortName=" + shortName+
+                ", faculty=" + facultyInfo + ", head of department=" + headOfDepartmentInfo +
+                ", cabinet=" + cabinet + "]";
+    }
+}
+
+--- FILE: ./main/java/entity/Person.java ---
+package entity;
+
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Date;
+import java.util.Objects;
+
+public abstract class Person implements Entity{
+    private Long id;
+    private String uniqueCode;
+    private FullName fullName;
+    private LocalDate birthDate;
+    private Contact contact;
+    public static int MINIUM_AGE = 16;
+
+    public Person() {}
+    public Person(String uniqueCode,FullName fullName, LocalDate birthDate, Contact contact) {
+        setUniqueCode(uniqueCode);
+        setFullName(fullName);
+        setBirthDate(birthDate);
+        setContact(contact);
+    }
+    public Person(Long id, String uniqueCode, FullName fullName, LocalDate birthDate, Contact contact) {
+        this (uniqueCode, fullName, birthDate, contact);
+        setId(id);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUniqueCode() {
+        return uniqueCode;
+    }
+
+    public void setUniqueCode(String uniqueCode) {
+        if (uniqueCode == null || uniqueCode.isBlank()) throw new IllegalArgumentException("uniqueCode cannot be empty");
+        this.uniqueCode = uniqueCode;
+    }
+
+    public FullName getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(FullName fullName) {
+        this.fullName = fullName;
+    }
+
+
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        if  (birthDate == null) throw new IllegalArgumentException("birthDate cannot be empty");
+        LocalDate now = LocalDate.now();
+        if (birthDate.isAfter(now)) throw new IllegalArgumentException("birthDate cannot be in the future");
+        if (Period.between( birthDate, now).getYears() < MINIUM_AGE ) {
+            throw new IllegalArgumentException("Person must be " + MINIUM_AGE + "+ years old");
+        }
+        this.birthDate = birthDate;
+    }
+
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Person other = (Person) obj;
+        return Objects.equals(id, other.id);
+    }
+}
+
+--- FILE: ./main/java/entity/Student.java ---
+package entity;
+
+import java.time.LocalDate;
+import java.time.Year;
+import java.util.Objects;
+
+public class Student extends Person{
+    private FormOfEducation formOfEducation;
+    private String recordBookNumber;
+    private StudentStatus studentStatus;
+    private Year yearOfAdmission;
+    private int course;
+    private StudentGroup group;
+    private Long groupId;
+
+    public static final int MINIUM_YEAR_OF_ADMISSION = 1898;
+
+    public Student() {}
+    public Student(String uniqueCode,String recordBookNumber, FullName fullName, LocalDate birthDate, Contact contact, FormOfEducation formOfEducation, StudentStatus studentStatus, Year yearOfAdmission, int course, StudentGroup group) {
+        super(uniqueCode, fullName, birthDate, contact);
+        setFormOfEducation(formOfEducation);
+        setStudentStatus(studentStatus);
+        setYearOfAdmission(yearOfAdmission);
+        setCourse(course);
+        setGroup(group);
+        setRecordBookNumber(recordBookNumber);
+    }
+    public Student(Long id, String recordBookNumber, String uniqueCode, FullName fullName, LocalDate birthDate, Contact contact, FormOfEducation formOfEducation, StudentStatus studentStatus, Year yearOfAdmission, int course, StudentGroup group) {
+        super(id, uniqueCode, fullName, birthDate, contact);
+        setFormOfEducation(formOfEducation);
+        setStudentStatus(studentStatus);
+        setYearOfAdmission(yearOfAdmission);
+        setCourse(course);
+        setGroup(group);
+        setRecordBookNumber(recordBookNumber);
+    }
+
+
+    public StudentGroup getGroup() {
+        return group;
+    }
+
+    public void setGroup(StudentGroup group) {
+        if (group == null) throw new IllegalArgumentException("group cannot be null");
+        if (this.group != null && this.group.equals(group)) return;
+
+        if (this.group != null) {
+            this.group.removeStudent(this);
+        }
+        this.group = group;
+        this.groupId = group.getId();
+    }
+
+    public int getCourse() {
+        return course;
+    }
+
+    public void setCourse(int course) {
+        if  (course < 1 || course > 6) throw new IllegalArgumentException("course cannot be less than 1 or bigger than 6");
+        this.course = course;
+    }
+
+    public Year getYearOfAdmission() {
+        return yearOfAdmission;
+    }
+
+    public void setYearOfAdmission(Year yearOfAdmission) {
+        if (yearOfAdmission == null) throw new IllegalArgumentException("yearOfAdmission cannot be null");
+        if (yearOfAdmission.isAfter(Year.now())) {
+            throw new IllegalArgumentException("yearOfAdmission cannot be in the future");
+        }
+        if (yearOfAdmission.isBefore(Year.of(MINIUM_YEAR_OF_ADMISSION))) {
+            throw new IllegalArgumentException("yearOfAdmission too old");
+        }
+        this.yearOfAdmission = yearOfAdmission;
+    }
+
+    public StudentStatus getStudentStatus() {
+        return studentStatus;
+    }
+
+    public void setStudentStatus(StudentStatus studentStatus) {
+        if (studentStatus == null) throw new IllegalArgumentException("studentStatus cannot be null");
+        this.studentStatus = studentStatus;
+    }
+
+    public FormOfEducation getFormOfEducation() {
+        return formOfEducation;
+    }
+
+    public void setFormOfEducation(FormOfEducation formOfEducation) {
+        if (formOfEducation == null) throw new IllegalArgumentException("formOfEducation cannot be null");
+        this.formOfEducation = formOfEducation;
+    }
+    public String getRecordBookNumber() {
+        return recordBookNumber;
+    }
+    public void setRecordBookNumber(String recordBookNumber) {
+        if (recordBookNumber == null || recordBookNumber.isBlank()) throw new IllegalArgumentException("recordBookNumber can not be null or blank");
+        this.recordBookNumber = recordBookNumber;
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return Objects.equals(this.getId() , student.getId());
+    }
+    @Override
+    public int hashCode() {
+        return  Objects.hash(this.getId());
+    }
+
+    @Override
+    public String toString() {
+        String groupInfo = group == null ? "lost" : group.getName();
+        return "Student[unique code - "+ getUniqueCode()+", record book number - " + recordBookNumber
+                + ", name - " + getFullName() +", course - "+ course
+                + ", form of education - " + formOfEducation + ", student status - " + studentStatus + ", contact - " + getContact()
+                + ", group - " + groupInfo +", year of admission - " + yearOfAdmission + ", birthday - "+getBirthDate() +"]";
+    }
+}
+
+--- FILE: ./main/java/entity/University.java ---
+package entity;
+
+import java.util.Objects;
+
+public class University implements Entity{
+    private Long id;
+    private String fullName;
+    private String shortName;
+    private Address address;
+    public static final int MAX_SHORT_NAME_LENGTH = 15;
+
+    public University() {
+    }
+
+    public University(String universityFullName, String universityShortName, Address address) {
+        setFullName(universityFullName);
+        setShortName(universityShortName);
+        setAddress(address);
+    }
+
+
+    public University(Long universityId, String universityFullName, String universityShortName, Address address) {
+        this(universityFullName, universityShortName, address);
+        this.id = universityId;
+    }
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        if (fullName == null || fullName.isBlank()) {
+            throw new IllegalArgumentException("universityFullName cannot be empty");
+        }
+        this.fullName = fullName;
+    }
+
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+
+        if (shortName == null || shortName.isBlank()) {
+            throw new IllegalArgumentException("universityShortName cannot be empty");
+        }
+        if (shortName.length() > MAX_SHORT_NAME_LENGTH) {
+            throw new IllegalArgumentException("universityShortName must be short");
+        }
+        this.shortName = shortName;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        if (address == null) {
+            throw new IllegalArgumentException("address cannot be null");
+        }
+        this.address = address;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj == null || getClass() != obj.getClass()) return false;
+        University other = (University) obj;
+        return Objects.equals(id, other.id);
+    }
+
+    @Override
+    public String toString() {
+        return "university[fullName: " + fullName + ", shortName: " + shortName + ", address: " + address + "]";
+    }
+}
+
+
+--- FILE: ./main/java/entity/Right.java ---
+package entity;
+
+public enum Right {
+    NONE(0),
+    FIND(1),
+    ADD (2),
+    EDIT (4),
+    DELETE (8),
+    LOGGED_IN(32+15),
+    GUEST_ONLY(16),
+    ADMIN_ONLY(32),
+    ANY(63);
+    private final int value;
+    Right(int value) {
+        this.value = value;
+    }
+    public int getNeededRight() {
+        return value;
+    }
+}
+
+--- FILE: ./main/java/entity/User.java ---
+package entity;
+
+import java.util.Objects;
+
+public class User implements Entity {
+    private Long id;
+    private Role role;
+    private String password;
+    private String login;
+    public User(Role role, String password, String login) {
+        setRole(role);
+        setPassword(password);
+        setLogin(login);
+    }
+    public User() {
+    }
+    public User(Role role, String password, String login, Long id) {
+        setRole(role);
+        setPassword(password);
+        setLogin(login);
+        setId(id);
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        if (role == null) throw new IllegalArgumentException("Role cannot be null");
+        this.role = role;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        if (password == null || password.isBlank())
+            throw new IllegalArgumentException("Password cannot be null or blank");
+        this.password = password;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        if (login == null || login.isBlank())
+            throw new IllegalArgumentException("Login cannot be null or blank");
+        this.login = login;
+    }
+
+    public boolean canDo(Right right) {
+        return ((right.getNeededRight() & role.getRight()) != 0) || right.getNeededRight() == 0;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(Long id) {
+        if (id == null) throw new IllegalArgumentException("Id cannot be null");
+        this.id = id;
+
+    }
+
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        User other = (User) obj;
+        return Objects.equals(id, other.id);
+    }
+
+    @Override
+    public String toString() {
+        return "User[username = " + login + ", password = " + password + ", role = " + role + "]";
+    }
+
+}
+
+--- FILE: ./main/java/entity/Role.java ---
+package entity;
+
+public enum Role {
+    GUEST(16),
+    USER(1),
+    MODERATOR(15),
+    ADMIN(32 + 15);
+    //Right abcd (in binary) a - delete , b -edit , c - add , d - find
+    private final int right;
+    Role(int right) {
+        this.right = right;
+    }
+    public int getRight() {
+        return right;
+    }
+
+    public static final int FIND = 1;
+    public static final int ADD = 2;
+    public static final int EDIT= 4;
+    public static final int DELETE = 8;
+
+    public boolean can(int right){
+        return (this.right & right) != 0;
+    }
+}
+
+--- FILE: ./main/java/entity/find_criteria/UniversityFind.java ---
+package entity.find_criteria;
+
+import entity.University;
+
+public enum UniversityFind {
+    NAME ("Find by name"),
+    SHORT_NAME("Find bu short name"),
+    CITY("Find by city"),
+    ALL("Show all"),
+    CANCEL("Cancel");
+
+    private final String name;
+    private UniversityFind(String name) {
+        this.name = name;
+    }
+}
+
+--- FILE: ./main/java/entity/find_criteria/FacultyFind.java ---
+package entity.find_criteria;
+
+public enum FacultyFind {
+    UNIQUE_CODE("By unique code"),
+    NAME("By name"),
+    SHORT_NAME("By short name"),
+    EMAIL("By email"),
+    PHONE("By phone"),
+    UNIVERSITY("By university"),
+    ADVANCED("Advanced"),
+    SHOW_ALL("Show all"),
+    CANCEL("Cancel");
+    private String name;
+    private FacultyFind(String name) {
+        this.name = name;
+    }
+
+}
+
+--- FILE: ./main/java/entity/find_criteria/FacultyForAdvancedFind.java ---
+package entity.find_criteria;
+
+public enum FacultyForAdvancedFind {
+    UNIQUE_CODE("By unique code"),
+    NAME("By name"),
+    SHORT_NAME("By short name"),
+    UNIVERSITY("By university");
+    private String name;
+    private FacultyForAdvancedFind(String name) {
+        this.name = name;
+    }
+}
+
+--- FILE: ./main/java/entity/Faculty.java ---
+package entity;
+
+import java.util.Objects;
+import java.util.Optional;
+
+public class Faculty implements Entity {
+    private Long id;
+    private String uniqueCode;
+    private String name;
+    private String shortName;
+    private Long deanId;
+    private Teacher dean;
+    private Contact contact;
+    private University university;
+    private Long universityId ;
+    public static final int MAX_SHORT_NAME_LENGTH = 15;
+
+    public Faculty() {
+    }
+
+    public Faculty(String uniqueCode, String name, String shortName, Teacher dean, Contact contact, University university) {
+        setUniqueCode(uniqueCode);
+        setName(name);
+        setShortName(shortName);
+        setDean(dean);
+        setContact(contact);
+        setUniversity(university);
+    }
+
+
+
+
+    public Faculty(Long id,String uniqueCode, String name, String shortName, Teacher dean, Contact contact, University university) {
+        this(uniqueCode, name, shortName, dean, contact,  university);
+        setId(id);
+    }
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setUniversity(University university) {
+        if (university == null)throw new NullPointerException("university can not be null");
+        this.university = university;
+        this.universityId = university.getId();
+    }
+    public University getUniversity() {
+        return university;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUniqueCode() {
+        return uniqueCode;
+    }
+
+    public void setUniqueCode(String uniqueCode) {
+        if (uniqueCode == null) {
+            throw new IllegalArgumentException("uniqueCode cannot be null");
+        }
+        this.uniqueCode = uniqueCode;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("name cannot be empty");
+        }
+        this.name = name;
+    }
+
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        if (shortName == null || shortName.isBlank()) {
+            throw new IllegalArgumentException("Invalid short name");
+        }
+        if (shortName.length() > 15){
+            throw new IllegalArgumentException("Short name must be short");
+        }
+        this.shortName = shortName;
+    }
+
+    public Long getDeanId() {
+        return deanId;
+    }
+
+    public void setDeanId(Long deanId) {
+        this.deanId = deanId;
+    }
+
+    public Optional<Teacher> getDean() {
+        return Optional.ofNullable(dean);
+    }
+
+    public void setDean(Teacher dean) {
+
+        this.dean = dean;
+        if (dean != null) {
+            setDeanId(dean.getId());
+        }
+        else{
+            setDeanId(null);
+        }
+    }
+
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
+    }
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Faculty other = (Faculty) obj;
+        return Objects.equals(id, other.id);
+    }
+
+    public String toString() {
+        String deanInfo = dean !=null ? dean.getFullName().toString() : "vacant";
+        return "Faculty[ university - " + university.getFullName() + ", unique code - " + getUniqueCode() + ", name - " + getName() +", contact - "+
+                getContact()+ ", dean -" + deanInfo +  "]";
+    }
+}
+
+--- FILE: ./main/java/repository/AbstractRepositoryByLong.java ---
+package repository;
+
+import entity.Entity;
+import util.IdGenerator;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
+
+public abstract class AbstractRepositoryByLong<T extends Entity> implements Repository<T, Long>{
+    private final IdGenerator idGenerator = new IdGenerator();
+    private final HashMap<Long, T> data = new HashMap<>();
+    public AbstractRepositoryByLong(){}
+
+    public AbstractRepositoryByLong(long id){
+        idGenerator.setCurrentId(id);
+    }
+    @Override
+    public Optional<T> findById(Long id){
+        return Optional.ofNullable(data.get(id));
+    }
+
+    @Override
+    public List<T> findAll(){
+        return new ArrayList<>(data.values());
+    }
+
+    @Override
+    public T save(T entity){
+        if (entity.getId() == null) {
+            entity.setId(idGenerator.nextId());
+        }
+        data.put(entity.getId(), entity);
+        return entity;
+    }
+    @Override
+    public void delete(T entity){
+        data.remove(entity.getId());
+    }
+    @Override
+    public void deleteById(Long id){
+        data.remove(id);
+    }
+    @Override
+    public boolean existsById(Long id){
+        return data.containsKey(id);
+    }
+
+    protected HashMap<Long, T> getData(){
+        return data;
+    }
+
+}
+
+--- FILE: ./main/java/repository/Repository.java ---
+package repository;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
+
+public interface Repository <T, ID> {
+
+    Optional<T> findById(ID id);
+    List<T> findAll();
+    T save(T entity);
+    void delete(T entity);
+    void deleteById(ID id);
+    boolean existsById(ID id);
+}
+
+--- FILE: ./main/java/repository/AbstractPersonRepository.java ---
+package repository;
+
+import entity.Person;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+public abstract class AbstractPersonRepository <P extends Person> extends AbstractRepositoryByLong<P> implements PersonRepository <P> {
+    public AbstractPersonRepository() {
+    }
+
+    public AbstractPersonRepository(long id) {
+        super(id);
+    }
+
+    public Optional<P> findByUniqueCode(String uniqueCode) {
+        Map<Long, P> data = getData();
+        return data.values().stream().filter(p -> p.getUniqueCode().equals(uniqueCode)).findAny();
+    }
+
+    public boolean existsByUniqueCode(String uniqueCode) {
+        Map<Long, P> data = getData();
+        return data.values().stream().anyMatch(p -> p.getUniqueCode().equals(uniqueCode));
+    }
+
+    public List<P> findByName(String name) {
+        Map<Long, P> data = getData();
+        return data.values().stream().filter(p -> p.getFullName().name().equalsIgnoreCase(name)).toList();
+    }
+
+    public List<P> findBySurname(String surname) {
+        Map<Long, P> data = getData();
+        return data.values().stream().filter(p -> p.getFullName().surname().equalsIgnoreCase(surname)).toList();
+    }
+
+    public List<P> findByPatronymic(String patronymic) {
+        Map<Long, P> data = getData();
+        return data.values().stream().filter(p -> p.getFullName().patronymic().equalsIgnoreCase(patronymic)).toList();
+    }
+
+    public Optional<P> findByEmail(String email) {
+        Map<Long, P> data = getData();
+        return data.values().stream().filter(p -> p.getContact().email().equals(email)).findFirst();
+    }
+
+    public boolean existsByEmail(String email) {
+        Map<Long, P> data = getData();
+        return data.values().stream().anyMatch(p -> p.getContact().email().equals(email));
+    }
+
+    public Optional<P> findByPhone(String phone) {
+        Map<Long, P> data = getData();
+        return data.values().stream().filter(p -> p.getContact().phone().equals(phone)).findFirst();
+    }
+
+    public boolean existsByPhone(String phone) {
+        Map<Long, P> data = getData();
+        return data.values().stream().anyMatch(p -> p.getContact().phone().equals(phone));
+    }
+
+    public List<P> findByBirthDate(LocalDate birthDate) {
+        Map<Long, P> data = getData();
+        return data.values().stream().filter(p -> p.getBirthDate().equals(birthDate)).toList();
+    }
+}
+
+--- FILE: ./main/java/repository/DepartmentRepository.java ---
+package repository;
+
+import entity.Department;
+import entity.Faculty;
+import entity.Teacher;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface DepartmentRepository extends Repository<Department, Long> {
+
+    Optional<Department> findByUniqueCode(String code);
+
+    boolean existsByUniqueCode(String code);
+
+    List<Department> findByName(String name);
+
+    Optional<Department> findByNameAndFaculty(String name, Faculty faculty);
+
+    List<Department> findByFaculty(Faculty faculty);
+
+    Optional<Department> findByHeadOfDepartment(Teacher headOfDepartment);
+
+    boolean existsByHeadOfDepartment(Teacher headOfDepartment);
+}
+
+--- FILE: ./main/java/repository/InMemoryDepartmentRepository.java ---
+package repository;
+
+import entity.Department;
+import entity.Faculty;
+import entity.Teacher;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+
+public class InMemoryDepartmentRepository extends AbstractRepositoryByLong<Department> implements  DepartmentRepository {
+    public InMemoryDepartmentRepository() {}
+
+    public Optional<Department> findByUniqueCode(String code){
+        Map<Long, Department> data = getData();
+        return data.values().stream().filter(d -> d.getUniqueCode().equals(code)).findFirst();
+    }
+
+    public boolean existsByUniqueCode(String code){
+        Map<Long, Department> data = getData();
+        return data.values().stream().anyMatch(d -> d.getUniqueCode().equals(code));
+    }
+
+    public List<Department> findByName(String name){
+        Map<Long, Department> data = getData();
+        return data.values().stream().filter(d -> d.getName().equalsIgnoreCase(name)).toList();
+    }
+
+    public Optional<Department> findByNameAndFaculty(String name, Faculty faculty){
+        Map<Long, Department> data = getData();
+        return data.values().stream().filter(d ->
+                d.getName().equalsIgnoreCase(name) &&
+                        d.getFaculty().equals(faculty)).findFirst();
+    }
+
+    public List<Department> findByFaculty(Faculty faculty){
+        Map<Long, Department> data = getData();
+        return data.values().stream().filter(d -> d.getFaculty().equals(faculty)).toList();
+    }
+
+    public Optional<Department> findByHeadOfDepartment(Teacher headOfDepartment){
+        Map<Long, Department> data = getData();
+        return data.values().stream().filter(d -> Objects.equals(d.getHeadOfDepartment().orElse(null), headOfDepartment)).findFirst();
+    }
+
+    public boolean existsByHeadOfDepartment(Teacher headOfDepartment){
+        Map<Long, Department> data = getData();
+        return data.values().stream().anyMatch(d -> Objects.equals(d.getHeadOfDepartment().orElse(null), headOfDepartment));
+    }
+}
+
+
+--- FILE: ./main/java/repository/InMemoryStudentGroupRepository.java ---
+package repository;
+
+import entity.Department;
+import entity.Student;
+import entity.StudentGroup;
+import entity.Teacher;
+
+import java.util.*;
+
+public class InMemoryStudentGroupRepository extends AbstractRepositoryByLong<StudentGroup> implements  StudentGroupRepository {
+    public InMemoryStudentGroupRepository() {}
+
+    public List<StudentGroup> findByDepartment(Department department) {
+        Map<Long, StudentGroup> data = getData();
+        return data.values().stream().filter(sg -> sg.getDepartment().equals(department)).toList();
+    }
+    public List<StudentGroup> findByName(String name) {
+        Map<Long, StudentGroup> data = getData();
+        return data.values().stream().filter(sg -> sg.getName().equalsIgnoreCase(name)).toList();
+    }
+
+    public Optional<StudentGroup>findByNameAndDepartment(String name, Department department) {
+        Map<Long, StudentGroup> data = getData();
+        return data.values().stream().filter(sg -> sg.getName().equalsIgnoreCase(name)
+                && sg.getDepartment().equals(department)).findFirst();
+    }
+    public Optional<StudentGroup> findByHeadOfGroup(Teacher headOfDepartment) {
+        Map<Long, StudentGroup> data = getData();
+        return data.values().stream().filter(sg ->
+                Objects.equals(sg.getHeadOfGroup().orElse(null), headOfDepartment)).findFirst();
+    }
+
+    public Optional<StudentGroup> findByGroupLeader(Student groupLeader) {
+        Map<Long, StudentGroup> data = getData();
+        return data.values().stream().filter(sg ->
+                Objects.equals(sg.getGroupLeader().orElse(null), groupLeader)).findFirst();
+    }
+}
+
+--- FILE: ./main/java/repository/InMemoryStudentRepository.java ---
+package repository;
+
+import entity.*;
+
+import java.time.Year;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+public class InMemoryStudentRepository extends AbstractPersonRepository<Student> implements StudentRepository {
+    public InMemoryStudentRepository() {
+    }
+
+    public List<Student> findByFormOfEducation(FormOfEducation formOfEducation) {
+        Map<Long, Student> data = getData();
+        return data.values().stream().filter(p -> p.getFormOfEducation().equals(formOfEducation)).toList();
+    }
+
+    public List<Student> findByStudentStatus(StudentStatus studentStatus) {
+        Map<Long, Student> data = getData();
+        return data.values().stream().filter(p -> p.getStudentStatus().equals(studentStatus)).toList();
+    }
+
+    public Optional<Student> findByRecordBookNumber(String recordBookNumber) {
+        Map<Long, Student> data = getData();
+        return data.values().stream().filter(p -> p.getRecordBookNumber().equals(recordBookNumber)).findFirst();
+    }
+
+    public boolean existsByRecordBookNumber(String recordBookNumber) {
+        Map<Long, Student> data = getData();
+        return data.values().stream().anyMatch(p -> p.getRecordBookNumber().equals(recordBookNumber));
+    }
+
+    public List<Student> findByYearOfAdmission(Year yearOfAdmission) {
+        Map<Long, Student> data = getData();
+        return data.values().stream().filter(p -> p.getYearOfAdmission().equals(yearOfAdmission)).toList();
+    }
+
+    public List<Student> findByCourse(int course) {
+        Map<Long, Student> data = getData();
+        return data.values().stream().filter(p -> p.getCourse() == course).toList();
+    }
+
+    public List<Student> findByGroup(StudentGroup studentGroup) {
+        Map<Long, Student> data = getData();
+        return data.values().stream().filter(p -> p.getGroup().equals(studentGroup)).toList();
+    }
+}
+--- FILE: ./main/java/repository/InMemoryTeacherRepository.java ---
+package repository;
+
+import entity.AcademicDegree;
+import entity.AcademicRank;
+import entity.Teacher;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+
+public class InMemoryTeacherRepository extends AbstractPersonRepository<Teacher> implements  TeacherRepository {
+    public InMemoryTeacherRepository() {}
+    public List<Teacher> findByAcademicRank(AcademicRank academicRank) {
+        Map<Long, Teacher> data = getData();
+        return data.values().stream().filter(t -> t.getAcademicRank().equals(academicRank)).toList();
+    }
+
+    public List<Teacher> findByAcademicDegree(AcademicDegree academicDegree) {
+        Map<Long, Teacher> data = getData();
+        return data.values().stream().filter(p -> p.getAcademicDegree().equals(academicDegree)).toList();
+    }
+
+    public List<Teacher> findByDateOfEmployment(LocalDate dateOfEmployment) {
+        Map<Long, Teacher> data = getData();
+        return data.values().stream().filter(p -> p.getDateOfEmployment().equals(dateOfEmployment)).toList();
+    }
+
+    public List<Teacher> findBySalary(BigDecimal salary) {
+        Map<Long, Teacher> data = getData();
+        return data.values().stream().filter(p -> p.getSalary().equals(salary)).toList();
+    }
+}
+
+--- FILE: ./main/java/repository/PersonRepository.java ---
+package repository;
+
+import entity.Person;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
+public interface PersonRepository<P extends Person> extends Repository<P, Long> {
+    Optional<P> findByUniqueCode(String uniqueCode);
+
+    boolean existsByUniqueCode(String uniqueCode);
+
+    List<P> findByName(String name);
+
+    List<P> findBySurname(String surname);
+
+    List<P> findByPatronymic(String patronymic);
+
+    Optional<P> findByEmail(String email);
+
+    boolean existsByEmail(String email);
+
+    Optional<P> findByPhone(String phone);
+
+    boolean existsByPhone(String phone);
+
+    List<P> findByBirthDate(LocalDate birthDate);
+}
+
+--- FILE: ./main/java/repository/StudentGroupRepository.java ---
+package repository;
+
+import entity.Department;
+import entity.Student;
+import entity.StudentGroup;
+import entity.Teacher;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+
+public interface StudentGroupRepository extends Repository<StudentGroup, Long> {
+    List<StudentGroup> findByDepartment(Department department);
+    List<StudentGroup> findByName(String name);
+
+    Optional<StudentGroup> findByNameAndDepartment(String name, Department department);
+    Optional<StudentGroup> findByHeadOfGroup(Teacher headOfDepartment);
+
+    Optional<StudentGroup> findByGroupLeader(Student groupLeader);
+}
+
+--- FILE: ./main/java/repository/StudentRepository.java ---
+package repository;
+
+import entity.*;
+
+import java.time.Year;
+import java.util.List;
+import java.util.Optional;
+
+public interface StudentRepository extends PersonRepository<Student> {
+
+    List<Student> findByFormOfEducation(FormOfEducation formOfEducation);
+
+    List<Student> findByStudentStatus(StudentStatus studentStatus);
+
+    Optional<Student> findByRecordBookNumber(String recordBookNumber);
+
+    boolean existsByRecordBookNumber(String recordBookNumber);
+
+    List<Student> findByYearOfAdmission(Year yearOfAdmission);
+
+    List<Student> findByCourse(int course);
+
+    List<Student> findByGroup(StudentGroup studentGroup);
+
+}
+
+--- FILE: ./main/java/repository/TeacherRepository.java ---
+package repository;
+
+import entity.AcademicDegree;
+import entity.AcademicRank;
+import entity.Teacher;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+
+public interface TeacherRepository extends PersonRepository<Teacher> {
+    List<Teacher> findByAcademicRank(AcademicRank academicRank);
+
+    List<Teacher> findByAcademicDegree(AcademicDegree academicDegree);
+
+    List<Teacher> findByDateOfEmployment(LocalDate dateOfEmployment);
+
+    List<Teacher> findBySalary(BigDecimal salary);
+}
+
+--- FILE: ./main/java/repository/InMemoryUserRepository.java ---
+package repository;
+
+import entity.User;
+
+import java.util.Optional;
+
+public class InMemoryUserRepository extends AbstractRepositoryByLong<User> implements UserRepository{
+
+    @Override
+    public Optional<User> findUserByLogin(String login) {
+        return getData().values().stream().filter(d -> d.getLogin().equals(login)).findFirst();
+    }
+    @Override
+    public boolean existsByLogin(String login) {
+        return getData().values().stream().anyMatch(d -> d.getLogin().equals(login));
+    }
+}
+
+--- FILE: ./main/java/repository/UserRepository.java ---
+package repository;
+
+import entity.User;
+
+import java.util.Optional;
+
+public interface UserRepository extends Repository<User, Long> {
+    Optional<User> findUserByLogin(String login);
+    boolean existsByLogin(String login);
+
+}
+
+--- FILE: ./main/java/repository/InMemoryUniversityRepository.java ---
+package repository;
+
+import entity.University;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+public class InMemoryUniversityRepository extends AbstractRepositoryByLong<University> implements  UniversityRepository {
+    public InMemoryUniversityRepository() {}
+
+    public Optional<University> findByFullName(String fullName) {
+        Map<Long, University> data = getData();
+        return data.values().stream().filter(u -> u.getFullName().equals(fullName)).findFirst();
+    }
+
+    public boolean existsByFullName(String fullName) {
+        Map<Long, University> data = getData();
+        return data.values().stream().anyMatch(u -> u.getFullName().equalsIgnoreCase(fullName));
+    }
+
+    public Optional<University> findByShortName(String shortName) {
+        Map<Long, University> data = getData();
+        return data.values().stream().filter(u -> u.getShortName().equalsIgnoreCase(shortName)).findFirst();
+    }
+
+    @Override
+    public boolean existsByCity(String city) {
+        Map<Long, University> data = getData();
+        return data.values().stream().anyMatch(u -> u.getShortName().equalsIgnoreCase(city));
+    }
+
+    public  boolean existsByShortName(String shortName) {
+        Map<Long, University> data = getData();
+        return data.values().stream().anyMatch(u -> u.getShortName().equalsIgnoreCase(shortName));
+    }
+
+    public List<University> findByCity(String city){
+        Map<Long, University> data = getData();
+        return data.values().stream().filter(u -> u.getAddress().city().equalsIgnoreCase(city)).toList();
+    }
+}
+
+--- FILE: ./main/java/repository/UniversityRepository.java ---
+package repository;
+
+import entity.University;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+public interface UniversityRepository extends Repository<University, Long> {
+    Optional<University> findByFullName(String fullName);
+    boolean existsByFullName(String fullName);
+
+    Optional<University> findByShortName(String shortName);
+    boolean existsByCity(String city);
+    boolean existsByShortName(String shortName);
+
+    List<University> findByCity(String city);
+}
+
+--- FILE: ./main/java/repository/FacultyRepository.java ---
+package repository;
+
+import entity.Faculty;
+import entity.Teacher;
+import entity.University;
+
+import java.util.List;
+
+import java.util.Optional;
+
+public interface FacultyRepository extends  Repository<Faculty, Long> {
+    List<Faculty> findByUniqueCode(String uniqueCode);
+
+    boolean existsByUniqueCode(String uniqueCode);
+
+    List<Faculty> findByName(String name);
+
+    List<Faculty> findByUniversity(University university);
+
+    Optional<Faculty> findByDean(Teacher dean);
+
+    boolean existsByDean(Teacher dean);
+
+    Optional<Faculty> findByPhone(String phone);
+    boolean existsByPhone(String phone);
+    Optional<Faculty> findByEmail(String email);
+
+    boolean existsByEmail(String email);
+
+    List<Faculty> findByShortName(String shortName);
+}
+
+--- FILE: ./main/java/repository/InMemoryFacultyRepository.java ---
+package repository;
+
+import entity.Faculty;
+import entity.Teacher;
+import entity.University;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+
+
+public class InMemoryFacultyRepository extends AbstractRepositoryByLong<Faculty> implements FacultyRepository {
+    public InMemoryFacultyRepository() {}
+
+    public List<Faculty> findByUniqueCode(String uniqueCode) {
+        Map<Long, Faculty> data = getData();
+        return data.values().stream().filter(f -> f.getUniqueCode().equals(uniqueCode)).toList();
+    }
+
+    public boolean existsByUniqueCode(String uniqueCode) {
+        Map<Long, Faculty> data = getData();
+        return data.values().stream().anyMatch(f -> f.getUniqueCode().equals(uniqueCode));
+    }
+
+    public List<Faculty> findByName(String name) {
+        Map<Long, Faculty> data = getData();
+        return data.values().stream().filter(f -> f.getName().equalsIgnoreCase(name)).toList();
+    }
+
+
+    public List<Faculty> findByUniversity(University university) {
+        Map<Long, Faculty> data = getData();
+        return data.values().stream().filter(f -> f.getUniversity().equals(university)).toList();
+    }
+
+    public Optional<Faculty> findByDean(Teacher dean) {
+        Map<Long, Faculty> data = getData();
+        return data.values().stream().filter(f -> Objects.equals(f.getDean().orElse(null), dean)).findFirst();
+    }
+    public boolean existsByDean(Teacher dean) {
+        Map<Long, Faculty> data = getData();
+        return data.values().stream().anyMatch(f ->
+                Objects.equals(f.getDean().orElse(null), dean));
+    }
+
+    public Optional<Faculty> findByPhone(String phone) {
+        Map<Long, Faculty> data = getData();
+        return data.values().stream().filter(f -> f.getContact().phone().equals(phone)).findFirst();
+    }
+
+    public boolean existsByPhone(String phone) {
+        Map<Long, Faculty> data = getData();
+        return data.values().stream().anyMatch(f -> f.getContact().phone().equals(phone));
+    }
+
+    public Optional<Faculty> findByEmail(String email) {
+        Map<Long, Faculty> data = getData();
+        return data.values().stream().filter(f -> f.getContact().email().equals(email)).findFirst();
+    }
+
+    public boolean existsByEmail(String email) {
+        Map<Long, Faculty> data = getData();
+        return data.values().stream().anyMatch(f -> f.getContact().email().equals(email));
+    }
+
+    @Override
+    public List<Faculty> findByShortName(String shortName) {
+        Map<Long, Faculty> data = getData();
+        return data.values().stream().filter(f -> f.getShortName().equals(shortName)).toList();
+    }
+}
+
+--- FILE: ./main/java/ui/MenuTask.java ---
+package ui;
+
+@FunctionalInterface
+public interface MenuTask{
+    Page execute();
+}
+
+--- FILE: ./main/java/ui/MenuItem.java ---
+package ui;
+
+import entity.Right;
+import entity.User;
+
+public class MenuItem {
+    private final String label;
+    private final MenuTask task;
+    private final Right rightNeeded;
+    public MenuItem(String label, Right rightNeeded,  MenuTask task) {
+        this.label = label;
+        this.task = task;
+        this.rightNeeded = rightNeeded;
+    }
+    public String getLabel() {
+        return label;
+    }
+    public Page execute() {
+        return task.execute();
+    }
+    public Right getRightNeeded() {
+        return rightNeeded;
+    }
+}
+
+--- FILE: ./main/java/ui/Page.java ---
+package ui;
+
+import java.util.List;
+
+public interface Page {
+    String getTitle();
+    List<MenuItem> getMenuItems();
+}
+
+--- FILE: ./main/java/ui/pages/DepartmentPage.java ---
+package ui.pages;
+
+import entity.Department;
+import entity.Faculty;
+import entity.Right;
+import entity.Teacher;
+import service.ServiceDepartmentInterface;
+import service.ServiceFacultyInterface;
+import service.ServiceTeacherInterface;
+import ui.*;
+
+import java.util.List;
+import java.util.Optional;
+
+public class DepartmentPage extends BasePage {
+    private final ServiceDepartmentInterface serviceDepartment;
+    private final ServiceFacultyInterface serviceFaculty;
+    private final ServiceTeacherInterface serviceTeacher;
+    public DepartmentPage(ServiceDepartmentInterface serviceDepartment,
+                          ServiceFacultyInterface serviceFaculty, ServiceTeacherInterface serviceTeacher, InputReader inputReader) {
+        super(inputReader);
+        this.serviceDepartment = serviceDepartment;
+        this.serviceFaculty = serviceFaculty;
+        this.serviceTeacher = serviceTeacher;
+    }
+
+    @Override
+    public String getTitle() {
+        return "Department";
+    }
+
+    @Override
+    public List<MenuItem> getMenuItems() {
+        return List.of(
+                new MenuItem("Create department", Right.ADD, this::createDepartment),
+                new MenuItem("Edit department", Right.EDIT, this::editDepartment),
+                new MenuItem("Delete Department", Right.DELETE, this::deleteDepartment),
+                new MenuItem("Show all departments", Right.FIND, this::showAllDepartments)
+        );
+    }
+
+    private Page createDepartment() {
+        String uniqueCode = inputReader.readString("Enter unique code: ");
+        String name = inputReader.readString("Enter department name: ");
+        String shortName = inputReader.readStringWithMaxLengthProbablyBlank("Enter short name",
+                Department.MAX_SHORT_NAME_LENGTH);
+        String cabinet = inputReader.readString("Enter cabinet/location: ");
+        Teacher headOfDepartment = null;
+        Long teacherId;
+        while (true) {
+            teacherId = inputReader.readLong("Enter teacher id(if vacant write -1): ");
+            if (teacherId.equals(Long.valueOf(-1))) break;
+            Optional<Teacher> optionalTeacher = serviceTeacher.findById(teacherId);
+            if (optionalTeacher.isPresent()) {
+                headOfDepartment = optionalTeacher.get();
+                break;
+            } else {
+                System.out.println("Teacher not found!!!");
+            }
+
+        }
+        Faculty faculty;
+        while (true) {
+            Long facultyId = inputReader.readLong("Enter faculty id(-1 to exit): ");
+            if (facultyId.equals(Long.valueOf(-1))) return this;
+            Optional<Faculty> optionalFaculty = serviceFaculty.findById(facultyId);
+            if (optionalFaculty.isPresent()) {
+                faculty = optionalFaculty.get();
+                break;
+            } else {
+                System.out.println("Faculty not found!!!");
+            }
+        }
+
+            Department department = new Department(uniqueCode, name, shortName, faculty, headOfDepartment, cabinet);
+            serviceDepartment.create(department);
+            return this;
+
+    }
+
+    private Page editDepartment() {
+        Long id = inputReader.readLong("Enter department id to edit: ");
+        Optional<Department> optionalDepartment = serviceDepartment.findById(id);
+        if (optionalDepartment.isEmpty()) {
+            System.out.println("Department not found!!!");
+            return this;
+        }
+
+        Department department = optionalDepartment.get();
+        String name = inputReader.readProbablyBlank("Enter department name: ");
+        String shortName = inputReader.readStringWithMaxLengthProbablyBlank(
+                "Enter new short name", Department.MAX_SHORT_NAME_LENGTH);
+
+        String cabinet = inputReader.readProbablyBlank("Enter cabinet/location: ");
+
+        if (!name.isBlank())
+            department.setName(name);
+        if (!shortName.isBlank())
+            department.setShortName(shortName);
+        if (!cabinet.isBlank())
+            department.setCabinet(cabinet);
+
+        serviceDepartment.update(department);
+        return this;
+    }
+
+    private Page deleteDepartment() {
+        Long id = inputReader.readLong("Enter department id to delete: ");
+        Optional<Department> optionalDepartment = serviceDepartment.findById(id);
+        if (optionalDepartment.isEmpty()) {
+            System.out.println("Department not found!!!");
+            return this;
+        }
+        serviceDepartment.delete(id);
+        return this;
+    }
+
+    private Page showAllDepartments() {
+        for (Department department : serviceDepartment.findAll())
+            System.out.println("id -" + department.getId() + ", " + department);
+        return this;
+    }
+}
+
+
+--- FILE: ./main/java/ui/pages/StudentGroupPage.java ---
+package ui.pages;
+
+import entity.Department;
+import entity.Right;
+import entity.StudentGroup;
+import service.ServiceDepartmentInterface;
+import service.ServiceStudentGroupInterface;
+import ui.*;
+
+import java.io.Console;
+import java.util.List;
+import java.util.Optional;
+
+public class StudentGroupPage extends BasePage {
+    private final ServiceDepartmentInterface serviceDepartment;
+    private final ServiceStudentGroupInterface serviceStudentGroup;
+
+    public StudentGroupPage(ServiceDepartmentInterface serviceDepartment,
+                            ServiceStudentGroupInterface serviceStudentGroup, InputReader inputReader) {
+        super(inputReader);
+        this.serviceDepartment = serviceDepartment;
+        this.serviceStudentGroup = serviceStudentGroup;
+    }
+
+    @Override
+    public String getTitle() {
+        return "Student Group";
+    }
+
+    @Override
+    public List<MenuItem> getMenuItems() {
+        return List.of(
+                new MenuItem("Create student group", Right.ADD, this::createStudentGroup),
+                new MenuItem("Edit student group", Right.EDIT, this::editStudentGroup),
+                new MenuItem("Delete student group", Right.DELETE, this::deleteStudentGroup),
+                new MenuItem("Show all student group", Right.FIND, this::showStudentGroup)
+        );
+    }
+    private Page createStudentGroup() {
+        String name = inputReader.readString("Enter group name: ");
+
+        Department department;
+        while (true) {
+            Long id = inputReader.readLong("Enter department id(-1 to exit): ");
+            if (id.equals(-1L)) return this;
+            Optional<Department> optionalDepartment = serviceDepartment.findById(id);
+            if (optionalDepartment.isPresent()) {
+                department = optionalDepartment.get();
+                break;
+            }
+            else{
+                System.out.println("Department not found");
+            }
+        }
+
+
+        StudentGroup group = new StudentGroup(name, department);
+        serviceStudentGroup.create(group);
+        return this;
+    }
+
+    private Page editStudentGroup() {
+        Long id = inputReader.readLong("Enter group id to edit: ");
+        Optional<StudentGroup> optionalGroup = serviceStudentGroup.findById(id);
+
+        if (optionalGroup.isEmpty()) {
+            System.out.println("Group not found!");
+            return this;
+        }
+        StudentGroup group = optionalGroup.get();
+
+        String name = inputReader.readProbablyBlank("Enter group name: ");
+        if (!name.isBlank()) {
+            group.setName(name);
+        }
+
+        serviceStudentGroup.update(group);
+        return this;
+    }
+
+    private Page deleteStudentGroup() {
+        Long id = inputReader.readLong("Enter group id to delete: ");
+        // треба додати перевірку на існування
+        serviceStudentGroup.delete(id);
+        return this;
+    }
+
+    private Page showStudentGroup() {
+        for (StudentGroup group : serviceStudentGroup.findAll()) {
+            System.out.println("ID: " + group.getId() + group);
+        }
+        return this;
+    }
+}
+
+
+--- FILE: ./main/java/ui/pages/StudentPage.java ---
+package ui.pages;
+
+import entity.*;
+import service.ServiceStudentGroupInterface;
+import service.ServiceStudentInterface;
+import ui.*;
+
+import java.io.Console;
+import java.time.LocalDate;
+import java.time.Year;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+public class StudentPage extends BasePage {
+    private final ServiceStudentGroupInterface serviceStudentGroup;
+    private final ServiceStudentInterface serviceStudent;
+
+    public StudentPage(ServiceStudentGroupInterface serviceStudentGroup,
+                       ServiceStudentInterface serviceStudent, InputReader inputReader) {
+        super(inputReader);
+        this.serviceStudentGroup = serviceStudentGroup;
+        this.serviceStudent = serviceStudent;
+    }
+
+    @Override
+    public String getTitle() {
+        return "Student";
+    }
+
+    @Override
+    public List<MenuItem> getMenuItems() {
+        return List.of(
+                new MenuItem("Add student", Right.ADD, this::createStudent),
+                new MenuItem("Edit student", Right.EDIT, this::editStudent),
+                new MenuItem("Delete student", Right.DELETE, this::deleteStudent),
+                new MenuItem("Show all student", Right.FIND, this::showAllStudents)
+        );
+    }
+
+
+    private Page createStudent() {
+        StudentGroup group;
+        while (true) {
+            Long groupId = inputReader.readLong("Enter group id(-1 to exit): ");
+            if (groupId.equals(Long.valueOf(-1))) return this;
+            Optional<StudentGroup> optionalGroup = serviceStudentGroup.findById(groupId);
+            if  (optionalGroup.isPresent()) {
+                group = optionalGroup.get();
+                break;
+            }
+            else {
+                System.out.println("Group not found!!!");
+
+            }
+        }
+
+
+        FullName fullName = inputReader.readfullName();
+        FormOfEducation form = inputReader.readFormOfEducation();
+        LocalDate birthDate = inputReader.readBirthDate();
+        Contact contact = inputReader.readContact();
+
+        String uniqueCode = inputReader.readString("Enter unique code: ");
+        // тут перевірка на унікальність
+        String recordBook = inputReader.readString( "Enter record book number: ");
+        int course = inputReader.readIntInRange("Enter course(1-6)", 1, 6);
+        Year yearOfAdmission = inputReader.readYearOfAdmission();
+        StudentStatus status = StudentStatus.STUDIES;
+
+
+
+        Student student = new Student(uniqueCode, recordBook, fullName, birthDate, contact, form, status, yearOfAdmission, course, group);
+        serviceStudent.create(student);
+        return this;
+    }
+
+    private Page editStudent() {
+        Long id = inputReader.readLong("Enter student id to edit: ");
+        Optional<Student> optionalStudent = serviceStudent.findById(id);
+        if (optionalStudent.isEmpty()) {
+            System.out.println("Student not found!!!");
+            return this;
+        }
+        Student student = optionalStudent.get();
+        String recordBook = inputReader.readProbablyBlank("Enter record book number: ");
+        Integer course = inputReader.readIntInRangeProbablyNull( "Enter course number (1-6)", 1, 6);
+        if (!recordBook.isBlank())
+            student.setRecordBookNumber(recordBook);
+        if (course != null)
+            student.setCourse(course);
+
+        StudentStatus status = inputReader.readChooseProbablyNull(List.of(StudentStatus.values()),
+                "Choose new student status", "not change");
+        if (status != null) {
+            student.setStudentStatus(status);
+        }
+        serviceStudent.update(student);
+        return this;
+    }
+
+    private Page deleteStudent() {
+        Long id = inputReader.readLong("Enter student id to delete: ");
+        Optional<Student> optionalStudent = serviceStudent.findById(id);
+        if (optionalStudent.isEmpty()) {
+            System.out.println("Student not found!!!");
+            return this;
+        }
+
+        Student student = optionalStudent.get();
+        student.getGroup().removeStudent(student);
+        serviceStudent.delete(id);
+        return this;
+    }
+
+    private Page showAllStudents() {
+        for (Student student : serviceStudent.findAll())
+            System.out.println("id - "+ student.getId() + ", " + student);
+        return this;
+    }
+}
+
+--- FILE: ./main/java/ui/pages/TeacherPage.java ---
+package ui.pages;
+
+import entity.*;
+import service.ServiceTeacherInterface;
+import ui.*;
+
+import java.io.Console;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
+public class TeacherPage extends BasePage {
+    private final ServiceTeacherInterface serviceTeacher;
+    public TeacherPage( ServiceTeacherInterface serviceTeacher, InputReader inputReader) {
+        super(inputReader);
+        this.serviceTeacher = serviceTeacher;
+    }
+
+    @Override
+    public String getTitle() {
+        return "Teacher";
+    }
+
+    @Override
+    public List<MenuItem> getMenuItems() {
+        return List.of(
+            new MenuItem("Add teacher", Right.ADD, this::createTeacher),
+            new MenuItem("Edit teacher", Right.EDIT, this::editTeacher),
+            new MenuItem("Delete teacher", Right.DELETE, this::deleteTeacher),
+            new MenuItem("Show all teacher", Right.FIND, this:: showAllTeachers)
+        );
+    }
+    private Page createTeacher() {
+        FullName fullName = inputReader.readfullName();
+        LocalDate birthDate = inputReader.readBirthDate();
+        Contact contact = inputReader.readContact();
+
+        String uniqueCode = inputReader.readString("Enter unique code: ");
+        AcademicDegree degree = inputReader.readAcademicDegree();
+        AcademicRank rank = inputReader.readAcademicRank();
+        LocalDate dateOfEmployment = inputReader.readEmploymentDate();
+        BigDecimal salary = inputReader.readBigDecimal("Enter salary: ");
+        Teacher teacher = new Teacher(uniqueCode, fullName, birthDate, contact, degree, rank, dateOfEmployment, salary);
+        serviceTeacher.create(teacher);
+        return this;
+    }
+
+    private Page editTeacher() {
+        Long id = inputReader.readLong("Enter teacher id: ");
+        Optional<Teacher> optionalTeacher = serviceTeacher.findById(id);
+        if (optionalTeacher.isEmpty()) {
+            System.out.println("Teacher not found!!!");
+            return this;
+        }
+
+        Teacher teacher = optionalTeacher.get();
+        AcademicDegree degree = inputReader.readAcademicDegree();
+        teacher.setAcademicDegree(degree);
+        AcademicRank rank = inputReader.readAcademicRank();
+        teacher.setAcademicRank(rank);
+        BigDecimal salary = inputReader.readBigDecimal("Enter salary: ");
+        teacher.setSalary(salary);
+        serviceTeacher.update(teacher);
+        return this;
+    }
+
+    private Page deleteTeacher() {
+        Long id = inputReader.readLong("Enter teacher id: ");
+        Optional<Teacher> optionalTeacher = serviceTeacher.findById(id);
+        if (optionalTeacher.isEmpty()) {
+            System.out.println("Teacher not found!!!");
+            return this;
+        }
+
+        serviceTeacher.delete(id);
+        return this;
+    }
+
+    private Page showAllTeachers() {
+        for (Teacher teacher : serviceTeacher.findAll()) {
+            System.out.println("id -" + teacher.getId() + ", " + teacher);
+        }
+        return this;
+    }
+}
+
+--- FILE: ./main/java/ui/pages/UserPage.java ---
+package ui.pages;
+
+import entity.Right;
+import entity.Role;
+import entity.User;
+import exception.UserNotFoundException;
+import exception.WrongPasswordException;
+import security.AuthService;
+import service.ServiceUserInterface;
+import ui.*;
+
+import java.io.Console;
+import java.util.List;
+
+public class UserPage extends BasePage {
+    AuthService authService;
+    ServiceUserInterface serviceUser;
+
+    public UserPage(AuthService authService, ServiceUserInterface serviceUser,
+                    InputReader inputReader) {
+        super(inputReader);
+        this.authService = authService;
+        this.serviceUser = serviceUser;
+        this.inputReader = inputReader;
+    }
+
+    /*
+register/login for unlogged user
+logout for logged user
+view all user for admin
+ */
+    @Override
+    public String getTitle() {
+        return "User Page";
+    }
+
+    @Override
+    public List<MenuItem> getMenuItems() {
+        return List.of(
+                new MenuItem("Login", Right.GUEST_ONLY,this :: login ),
+                new MenuItem("Register", Right.GUEST_ONLY,this :: register ),
+                new MenuItem("Logout", Right.LOGGED_IN, this :: logout ),
+                new MenuItem("Show all user", Right.ADMIN_ONLY, this::showAllUsers )
+        );
+    }
+    private Page login(){
+        String username = inputReader.readString("Enter username: ");
+        String password = inputReader.readPassword("Enter password: ");
+        try {
+            authService.login(username, password);
+        }catch (UserNotFoundException e){
+            System.out.println("User not found");
+            return this;
+        }catch (WrongPasswordException e){
+            System.out.println("Wrong password");
+            return this;
+        }
+        System.out.println("Logged in successfully");
+        return this;
+    }
+    private Page register(){
+        String username = inputReader.readString("Enter username: ");
+        String password = inputReader.readPassword("Enter password: ");
+        User user = new User(Role.USER, password, username);
+        try {
+            // або тут або в сервісі(краще в сервісі) додати перевірку ідентичності логіна
+            serviceUser.save(user);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return this;
+        }
+        System.out.println("User registered successfully");
+        return this;
+    }
+    private Page logout(){
+        authService.logout();
+        return this;
+    }
+    private Page showAllUsers(){
+        List<User> users = serviceUser.findAllUsers();
+        for (User user : users){
+            System.out.println("id - " + user.getId() + " " + user);
+        }
+        return this;
+    }
+
+}
+
+--- FILE: ./main/java/ui/pages/MainPage.java ---
+package ui.pages;
+
+import entity.Right;
+import ui.BasePage;
+import ui.InputReader;
+import ui.MenuItem;
+import util.PagerBuilder;
+
+import java.io.Console;
+import java.util.List;
+
+public class MainPage extends BasePage {
+    private final PagerBuilder pagerBuilder;
+    public MainPage(InputReader inputReader, PagerBuilder pagerBuilder) {
+        super(inputReader);
+        this.pagerBuilder = pagerBuilder;
+    }
+
+    @Override
+    public String getTitle() {
+        return "Work With";
+    }
+
+    @Override
+    public List<MenuItem> getMenuItems() {
+        return List.of(
+                new MenuItem("Student", Right.ANY, pagerBuilder::getStudentPage),
+                new MenuItem("Teacher", Right.ANY, pagerBuilder::getTeacherPage),
+                new MenuItem("University", Right.ANY, pagerBuilder::getUniversityPage),
+                new MenuItem("Student group", Right.ANY, pagerBuilder::getStudentGroupPage),
+                new MenuItem("Faculty", Right.ANY, pagerBuilder::getFacultyPage),
+                new MenuItem("Department", Right.ANY, pagerBuilder::getDepartmentPage),
+                new MenuItem("User", Right.ANY, pagerBuilder::getUserPage)
+        );
+    }
+}
+
+--- FILE: ./main/java/ui/pages/UniversityPage.java ---
+package ui.pages;
+
+import entity.*;
+import service.ServiceUniversityInterface;
+import ui.*;
+import util.PagerBuilder;
+
+import java.io.Console;
+import java.util.List;
+
+public class UniversityPage extends BasePage {
+    private final ServiceUniversityInterface serviceUniversity;
+    private final PagerBuilder pagerBuilder;
+    public UniversityPage(ServiceUniversityInterface serviceUniversity,
+                          InputReader inputReader, PagerBuilder pagerBuilder) {
+        super(inputReader);
+        this.serviceUniversity = serviceUniversity;
+        this.pagerBuilder = pagerBuilder;
+    }
+
+    @Override
+    public String getTitle() {
+        return "University";
+    }
+
+    @Override
+    public List<MenuItem> getMenuItems() {
+        return List.of(
+            new MenuItem("Create university", Right.ADD, this::createUniversity),
+            new MenuItem("Find university", Right.FIND, pagerBuilder::getFindUniversityPage),
+            new MenuItem("Show all university", Right.FIND,this::showAllUniversity)
+        );
+    }
+
+    private Page createUniversity() {
+        String fullName = inputReader.readString("Enter full name");
+        String shortName = inputReader.readStringWithMaxLengthProbablyBlank("Enter short name",
+                University.MAX_SHORT_NAME_LENGTH);
+        String city = inputReader.readString("Enter city: ");
+        String street = inputReader.readString("Enter street: ");
+        String buildNumber = inputReader.readString("Enter building number: ");
+
+        Address address = new Address(city, street, buildNumber);
+        University university = new University(fullName, shortName, address);
+
+        serviceUniversity.create(university);
+        return this;
+    }
+    private Page showAllUniversity(){
+        for (University university : serviceUniversity.findAll()) {
+            System.out.println("id - "+ university.getId() + ", " + university);
+        }
+        return this;
+    }
+}
+--- FILE: ./main/java/ui/pages/FacultyPage.java ---
+package ui.pages;
+
+import entity.*;
+import service.ServiceFacultyInterface;
+import service.ServiceTeacherInterface;
+import service.ServiceUniversityInterface;
+import ui.*;
+import ui.finders.FacultyFinderInterface;
+import ui.finders.UniversityFinderInterface;
+import util.PagerBuilder;
+
+import java.io.Console;
+import java.util.List;
+import java.util.Optional;
+
+public class FacultyPage extends BasePage {
+    private final ServiceFacultyInterface serviceFaculty;
+    private final ServiceTeacherInterface serviceTeacher;
+    private final UniversityFinderInterface universityFinder;
+    private final PagerBuilder pagerBuilder;
+
+    public FacultyPage(ServiceFacultyInterface serviceFaculty, ServiceTeacherInterface serviceTeacher,
+                       InputReader inputReader, UniversityFinderInterface universityFinder,
+                       PagerBuilder pagerBuilder) {
+        super(inputReader);
+        this.serviceFaculty = serviceFaculty;
+        this.serviceTeacher = serviceTeacher;
+        this.universityFinder = universityFinder;
+        this.pagerBuilder = pagerBuilder;
+    }
+
+    @Override
+    public String getTitle() {
+        return "Faculty";
+    }
+
+    @Override
+    public List<MenuItem> getMenuItems() {
+        return List.of(
+                new MenuItem("Create faculty", Right.ADD, this::createFaculty),
+                new MenuItem("Edit faculty", Right.EDIT, this::editFaculty),
+                new MenuItem("Delete faculty", Right.DELETE, this::deleteFaculty),
+                new MenuItem("Find faculty", Right.FIND, pagerBuilder::getFindFacultyPage),
+                new MenuItem("Show all faculties", Right.FIND, this::showAllFaculties)
+        );
+    }
+
+    private Page createFaculty() {
+        String uniqueCode = inputReader.readString( "Enter unique code: ");
+        String name = inputReader.readString("Enter faculty name: ");
+        String shortName = inputReader.readStringWithMaxLengthProbablyBlank("Enter short name", Faculty.MAX_SHORT_NAME_LENGTH);
+        Contact contact = inputReader.readContact();
+        Teacher dean = null;
+        Long teacherId;
+        while (true) {
+            teacherId = inputReader.readLong("Enter teacher id(if vacant write -1): ");
+            if (teacherId.equals(Long.valueOf(-1))) break;
+            Optional<Teacher> optionalTeacher = serviceTeacher.findById(teacherId);
+            if (optionalTeacher.isPresent()) {
+                dean = optionalTeacher.get();
+                break;
+            } else {
+                System.out.println("Teacher not found!!!");
+            }
+
+        }
+        Optional<University> optionalUniversity = universityFinder.findAndSelect();
+        if (optionalUniversity.isEmpty()){
+            System.out.println("Faculty not created!");
+            return this;
+        }
+        University university = optionalUniversity.get();
+        Faculty faculty = new Faculty(uniqueCode, name, shortName, dean, contact, university);
+
+        serviceFaculty.create(faculty);
+        return this;
+    }
+
+    private Page editFaculty() {
+        Long id = inputReader.readLong("Enter faculty id to edit: ");
+        Optional<Faculty> optionalFaculty = serviceFaculty.findById(id);
+        if (optionalFaculty.isEmpty()) {
+            System.out.println("Faculty not found");
+            return this;
+        }
+        Faculty faculty = optionalFaculty.get();
+
+        String name = inputReader.readProbablyBlank("Enter new name: ");
+        String shortName = inputReader.readStringWithMaxLengthProbablyBlank(
+                "Enter new short name", Faculty.MAX_SHORT_NAME_LENGTH);
+        if (!name.isBlank())
+            faculty.setName(name);
+        if (!shortName.isBlank())
+            faculty.setShortName(shortName);
+        Contact newContact = inputReader.readContactProbablyNull();
+        if (newContact != null) faculty.setContact(newContact);
+
+        serviceFaculty.update(faculty);
+        return this;
+    }
+
+    private Page deleteFaculty() {
+        Long id = inputReader.readLong("Enter faculty id to delete ");
+        Optional<Faculty> optionalFaculty = serviceFaculty.findById(id);
+        if (optionalFaculty.isEmpty()) {
+            System.out.println("Faculty not found!!!");
+            return this;
+        }
+
+        serviceFaculty.delete(id);
+        return this;
+    }
+
+    private Page showAllFaculties() {
+        for (Faculty faculty : serviceFaculty.findAll())
+            System.out.println("id -" + faculty.getId() + ", " +faculty);
+        return this;
+    }
+
+}
+
+--- FILE: ./main/java/ui/pages/FindFacultyPage.java ---
+package ui.pages;
+
+import entity.Faculty;
+import entity.Right;
+import ui.*;
+import ui.finders.FacultyFinder;
+import ui.finders.FacultyFinderInterface;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+public class FindFacultyPage extends BasePage {
+    private final FacultyFinderInterface facultyFinder;
+
+    public FindFacultyPage(InputReader inputReader, FacultyFinderInterface facultyFinder) {
+        super(inputReader);
+        this.facultyFinder = facultyFinder;
+    }
+
+    @Override
+    public String getTitle() {
+        return "Faculty Finder";
+    }
+
+    @Override
+    public List<MenuItem> getMenuItems() {
+        return List.of(
+                new MenuItem("Find by unique code", Right.FIND, this::findByUniqueCode ),
+                new MenuItem("Find by Name", Right.FIND, this::findByName ),
+                new MenuItem("Find by short name", Right.FIND, this::findByShortName ),
+                new MenuItem("Find by email", Right.FIND,this::findByEmail),
+                new MenuItem("Find by number", Right.FIND, this::findByNumber),
+                new MenuItem("Find by university", Right.FIND, this::findByUniversity),
+                new MenuItem("Advanced search", Right.FIND, this::advancedSearch)
+
+        );
+    }
+    private Page findByUniqueCode() {
+        List<Faculty> faculties = facultyFinder.findByUniqueCode();
+        if  (faculties.isEmpty()) {
+            System.out.println("No faculties found");
+        }
+        else{
+            System.out.println(faculties);
+        }
+        //тут теж можна переходити на сторінку з сортуваннями
+        return this;
+    }
+    private Page findByName(){
+        List<Faculty> faculties = facultyFinder.findByName();
+        if(faculties.isEmpty()) {
+            System.out.println("No faculties found");
+        }
+        else{
+            faculties.forEach(System.out::println);
+        }
+        return this;
+    }
+    private Page findByShortName(){
+        List<Faculty> faculties = facultyFinder.findByShortName();
+        if(faculties.isEmpty()) {
+            System.out.println("No faculties found");
+        }
+        else{
+            faculties.forEach(System.out::println);
+        }
+        return this;
+    }
+    private Page findByEmail(){
+        Optional<Faculty> faculty = facultyFinder.findByEmail();
+        if(faculty.isEmpty()) {
+            System.out.println("No faculties found");
+        }
+        else{
+            System.out.println(faculty);
+        }
+        return this;
+    }
+    private Page findByNumber(){
+        Optional<Faculty> faculty = facultyFinder.findByPhoneNumber();
+        if(faculty.isEmpty()) {
+            System.out.println("No faculties found");
+        }
+        else{
+            System.out.println(faculty);
+        }
+        return this;
+    }
+    private Page findByUniversity(){
+        List<Faculty> faculties = facultyFinder.findByUniversity();
+        if(faculties.isEmpty()) {
+            System.out.println("No faculties found");
+        }
+        else{
+            faculties.forEach(System.out::println);
+        }
+        return this;
+    }
+    private Page advancedSearch(){
+        List<Faculty> faculties = new ArrayList<>();
+        faculties = facultyFinder.advancedSearch();
+        if(faculties.isEmpty()) {
+            System.out.println("No faculties found");
+        }
+        else{
+            faculties.forEach(System.out::println);
+        }
+        return this;
+    }
+}
+
+--- FILE: ./main/java/ui/pages/FindUniversityPage.java ---
+package ui.pages;
+
+import entity.Right;
+import entity.University;
+import service.ServiceUniversityInterface;
+import ui.BasePage;
+import ui.InputReader;
+import ui.MenuItem;
+import ui.Page;
+import ui.finders.UniversityFinderInterface;
+
+import java.util.List;
+import java.util.Optional;
+
+public class FindUniversityPage extends BasePage {
+    private final UniversityFinderInterface universityFinder;
+    public FindUniversityPage(InputReader inputReader,
+                              UniversityFinderInterface universityFinder) {
+        super(inputReader);
+        this.universityFinder = universityFinder;
+    }
+
+    @Override
+    public String getTitle() {
+        return "Find University";
+    }
+
+    @Override
+    public List<MenuItem> getMenuItems() {
+        return List.of(
+                new MenuItem("By name", Right.FIND,this::findUniversityByCity),
+                new MenuItem("By short name", Right.FIND,this::findUniversityByShortName ),
+                new MenuItem("By city", Right.FIND,this::findUniversityByCity)
+        );
+    }
+    public Page findUniversityByName() {
+       Optional<University> university = universityFinder.findByFullName();
+        if (university.isEmpty()){
+            System.out.println("There is no university with that name");
+        }
+        else{
+            System.out.println(university.get());
+        }
+        return this;
+    }
+    public Page findUniversityByShortName() {
+        Optional<University> university = universityFinder.findByShortName();
+        if (university.isEmpty()){
+            System.out.println("There is no university with that name");
+        }
+        else{
+            System.out.println(university.get());
+        }
+        return this;
+    }
+    public Page findUniversityByCity() {
+        List<University> universityList = universityFinder.findByCity();
+        if (universityList.isEmpty()){
+            System.out.println("There is no university with that name");
+        }
+        else{
+            //тут можна зробити перехід на сторінку сортування
+            universityList.forEach(System.out::println);
+        }
+        return this;
+    }
+}
+
+--- FILE: ./main/java/ui/ConsoleMenu.java ---
+package ui;
+import java.io.Console;
+
+import repository.*;
+import service.*;
+
+public class ConsoleMenu {
+    private final UniversityRepository universityRepository = new InMemoryUniversityRepository();
+    private final ServiceUniversityInterface serviceUniversity = new ServiceUniversity(universityRepository);
+    private final UniversityMenu universityMenu = new UniversityMenu(serviceUniversity);
+
+    TeacherRepository teacherRepository = new InMemoryTeacherRepository();
+    ServiceTeacherInterface serviceTeacher = new ServiceTeacher(teacherRepository);
+    private final TeacherMenu teacherMenu = new TeacherMenu(serviceTeacher);
+
+    private final FacultyRepository facultyRepository = new InMemoryFacultyRepository();
+    private final ServiceFacultyInterface serviceFaculty = new ServiceFaculty(facultyRepository);
+    private final FacultyMenu facultyMenu = new FacultyMenu(serviceFaculty, serviceUniversity, serviceTeacher);
+
+    private final DepartmentRepository departmentRepository = new InMemoryDepartmentRepository();
+    private final ServiceDepartmentInterface serviceDepartment = new ServiceDepartment(departmentRepository);
+    private final DepartmentMenu departmentMenu = new DepartmentMenu(serviceDepartment, serviceFaculty, serviceTeacher);
+
+    StudentRepository studentRepository = new InMemoryStudentRepository();
+    StudentGroupRepository studentGroupRepository = new InMemoryStudentGroupRepository();
+    ServiceStudentInterface serviceStudent = new ServiceStudent(studentRepository);
+    ServiceStudentGroupInterface serviceStudentGroup = new ServiceStudentGroup(studentGroupRepository);
+    private final StudentGroupMenu studentGroupMenu = new StudentGroupMenu(serviceStudentGroup, serviceDepartment);
+    private final StudentMenu studentMenu = new StudentMenu(serviceStudent, serviceStudentGroup);
+
+    public void main() {
+        var console = System.console();
+
+        while (true) {
+            System.out.println(
+                    "MainMenu\n 1 - University\n 2 - Faculty\n 3 - Department\n 4 - Student\n 5 - Teacher\n 6 - Student Group\n 0 - Exit"
+            );
+
+            int userSelect = readInt(console);
+
+            switch (userSelect) {
+                case 1:
+                    universityMenu.main(console);
+                    break;
+                case 2:
+                    facultyMenu.main(console);
+                    break;
+                case 3:
+                    departmentMenu.main(console);
+                    break;
+                case 4:
+                    studentMenu.main(console);
+                    break;
+                case 5:
+                    teacherMenu.main(console);
+                    break;
+                case 6:
+                    studentGroupMenu.main(console);
+                    break;
+                case 0:
+                    System.out.println("Exit");
+                    return;
+                default:
+                    System.out.println("Invalid choice!");
+            }
+        }
+    }
+    private int readInt(Console console) {
+        try {
+            return Integer.parseInt(console.readLine("Your choice: "));
+        } catch (NumberFormatException e){
+            return -1;
+        }
+    }
+
+    public static String readRequiredString(Console console, String prompt) {
+        while (true) {
+            String input = console.readLine(prompt);
+            if (input != null && !input.isBlank()) {
+                return input;
+            }
+            System.out.println("This input cannot be blank");
+        }
+    }
+    public static Long readRequiredLong(Console console, String prompt) {
+        while (true) {
+            try {
+
+                String input = console.readLine(prompt);
+                if (input != null && !input.isBlank()) {
+                    return Long.parseLong(input);
+                }
+                else{
+                    System.out.println("This input cannot be blank");
+                }
+            }catch (NumberFormatException e){
+                System.out.println("Use only number");
+            }
+        }
+    }
+}
+
+--- FILE: ./main/java/ui/DepartmentMenu.java ---
+package ui;
+
+import service.ServiceDepartmentInterface;
+import service.ServiceFacultyInterface;
+import java.io.Console;
+import entity.Department;
+import entity.Faculty;
+import entity.Teacher;
+import service.ServiceTeacherInterface;
+import java.util.Optional;
+
+public class DepartmentMenu {
+
+    private final ServiceDepartmentInterface serviceDepartment;
+    private final ServiceFacultyInterface serviceFaculty;
+    private final ServiceTeacherInterface serviceTeacher;
+
+    public DepartmentMenu(ServiceDepartmentInterface serviceDepartment, ServiceFacultyInterface serviceFaculty, ServiceTeacherInterface serviceTeacher) {
+        this.serviceDepartment = serviceDepartment;
+        this.serviceFaculty = serviceFaculty;
+        this.serviceTeacher = serviceTeacher;
+    }
+
+    public void main(Console console) {
+        while (true) {
+            System.out.println(
+                    "Departments \n 1 - Create Department\n 2 - Edit Department\n 3 - Delete Department\n 4 - Show All Departments\n 0 - Back"
+            );
+
+            int userSelect = readInt(console);
+
+            switch (userSelect) {
+                case 1:
+                    createDepartment(console);
+                    break;
+                case 2:
+                    editDepartment(console);
+                    break;
+                case 3:
+                    deleteDepartment(console);
+                    break;
+                case 4:
+                    showAllDepartments();
+                    break;
+                case 0:
+                    return;
+                default:
+                    System.out.println("Invalid input");
+            }
+        }
+    }
+
+    private int readInt(Console console) {
+        try {
+            return Integer.parseInt(console.readLine("Your choice: "));
+        } catch (NumberFormatException e){
+            return -1;
+        }
+    }
+
+    private void createDepartment(Console console) {
+        String uniqueCode = ConsoleMenu.readRequiredString(console, "Enter unique code: ");
+        String name = ConsoleMenu.readRequiredString(console, "Enter department name: ");
+        String shortName;
+        while (true) {
+            shortName = console.readLine("Enter short name: ");
+            if (shortName.length() <= Department.MAX_SHORT_NAME_LENGTH) break;
+            else {
+                System.out.println("Short name must be shorter than " + Department.MAX_SHORT_NAME_LENGTH);
+            }
+        }
+        String cabinet = ConsoleMenu.readRequiredString(console, "Enter cabinet/location: ");
+        Teacher headOfDepartment = null;
+        Long teacherId;
+        while (true) {
+            teacherId = ConsoleMenu.readRequiredLong(console, "Enter teacher id(if vacant write -1): ");
+            if (teacherId.equals(Long.valueOf(-1))) break;
+            Optional<Teacher> optionalTeacher = serviceTeacher.findById(teacherId);
+            if (optionalTeacher.isPresent()) {
+                headOfDepartment = optionalTeacher.get();
+                break;
+            } else {
+                System.out.println("Teacher not found!!!");
+            }
+
+        }
+        Faculty faculty;
+        while (true) {
+            Long facultyId = ConsoleMenu.readRequiredLong(console, "Enter faculty id(-1 to exit): ");
+            if (facultyId.equals(Long.valueOf(-1))) return;
+            Optional<Faculty> optionalFaculty = serviceFaculty.findById(facultyId);
+            if (optionalFaculty.isPresent()) {
+                faculty = optionalFaculty.get();
+                break;
+            } else {
+                System.out.println("Faculty not found!!!");
+            }
+        }
+
+            Department department = new Department(uniqueCode, name, shortName, faculty, headOfDepartment, cabinet);
+            serviceDepartment.create(department);
+
+    }
+
+    private void editDepartment(Console console) {
+        Long id =ConsoleMenu.readRequiredLong(console, "Enter department id to edit: ");
+        Optional<Department> optionalDepartment = serviceDepartment.findById(id);
+        if (optionalDepartment.isEmpty()) {
+            System.out.println("Department not found!!!");
+            return;
+        }
+
+        Department department = optionalDepartment.get();
+        String name = console.readLine("Enter department name: ");
+        String shortName;
+        while (true) {
+            shortName = console.readLine("Enter short name: ");
+            if (shortName.length() <= Department.MAX_SHORT_NAME_LENGTH) break;
+            else{
+                System.out.println("Short name must be shorter than " + Department.MAX_SHORT_NAME_LENGTH);
+            }
+        }
+        String cabinet = console.readLine("Enter cabinet/location: ");
+
+        if (!name.isBlank())
+            department.setName(name);
+        if (!shortName.isBlank())
+            department.setShortName(shortName);
+        if (!cabinet.isBlank())
+            department.setCabinet(cabinet);
+
+        serviceDepartment.update(department);
+    }
+
+    private void deleteDepartment(Console console) {
+        Long id = ConsoleMenu.readRequiredLong(console, "Enter department id to delete: ");
+        Optional<Department> optionalDepartment = serviceDepartment.findById(id);
+        if (optionalDepartment.isEmpty()) {
+            System.out.println("Department not found!!!");
+            return;
+        }
+        serviceDepartment.delete(id);
+    }
+
+    private void showAllDepartments() {
+        for (Department department : serviceDepartment.findAll())
+            System.out.println("id -" + department.getId() + ", " + department);
+    }
+}
+
+--- FILE: ./main/java/ui/FacultyMenu.java ---
+package ui;
+
+import entity.Faculty;
+import entity.Contact;
+import entity.University;
+import entity.Teacher;
+import service.ServiceFacultyInterface;
+import service.ServiceUniversityInterface;
+import service.ServiceTeacherInterface;
+import java.io.Console;
+import java.util.Optional;
+
+public class FacultyMenu {
+
+    private final ServiceFacultyInterface serviceFaculty;
+    private final ServiceUniversityInterface serviceUniversity;
+    private final ServiceTeacherInterface serviceTeacher;
+
+    public FacultyMenu(ServiceFacultyInterface serviceFaculty, ServiceUniversityInterface serviceUniversity, ServiceTeacherInterface serviceTeacher) {
+        this.serviceFaculty = serviceFaculty;
+        this.serviceUniversity = serviceUniversity;
+        this.serviceTeacher = serviceTeacher;
+    }
+
+    public void main(Console console) {
+        while (true) {
+            System.out.println(
+                    "Faculties \n 1 - Create Faculty\n 2 - Edit Faculty\n 3 - Delete Faculty\n 4 - Show All Faculties\n 0 - Back"
+            );
+
+            int userSelect = readInt(console);
+
+            switch (userSelect) {
+                case 1:
+                    createFaculty(console);
+                    break;
+                case 2:
+                    editFaculty(console);
+                    break;
+                case 3:
+                    deleteFaculty(console);
+                    break;
+                case 4:
+                    showAllFaculties();
+                    break;
+                case 0:
+                    return;
+                default:
+                    System.out.println("Invalid input");
+            }
+        }
+    }
+    private int readInt(Console console) {
+        try {
+            return Integer.parseInt(console.readLine("Your choice: "));
+        } catch (NumberFormatException e){
+            return -1;
+        }
+    }
+
+    private void createFaculty(Console console) {
+        String uniqueCode = ConsoleMenu.readRequiredString(console, "Enter unique code: ");
+        String name = ConsoleMenu.readRequiredString(console,"Enter faculty name: ");
+        String shortName;
+        while (true) {
+            shortName = ConsoleMenu.readRequiredString(console,"Enter short name: ");
+            if (shortName.length() <= Faculty.MAX_SHORT_NAME_LENGTH) break;
+            else {
+                System.out.println("Short name must be shorter than "+ Faculty.MAX_SHORT_NAME_LENGTH);
+            }
+        }
+        Contact contact;
+        while (true) {
+            try {
+                String phone = console.readLine("Enter phone(10-13 numbers with optional +): ");
+                String email = console.readLine("Enter email(in format text@text.text): ");
+                contact = new Contact(phone, email);
+                break;
+            }catch ( IllegalArgumentException e) {
+                System.out.println("Invalid email or phone format, use text.text@text for email and 10-13 numbers for phone");
+            }
+        }
+        Teacher dean = null;
+        Long teacherId;
+        while (true) {
+            teacherId = ConsoleMenu.readRequiredLong(console, "Enter teacher id(if vacant write -1): ");
+            if (teacherId.equals(Long.valueOf(-1))) break;
+            Optional<Teacher> optionalTeacher = serviceTeacher.findById(teacherId);
+            if (optionalTeacher.isPresent()) {
+                dean = optionalTeacher.get();
+                break;
+            } else {
+                System.out.println("Teacher not found!!!");
+            }
+
+        }
+        University university;
+        while (true) {
+            Long universityId = ConsoleMenu.readRequiredLong(console, "Enter university id(-1 to exit): ");
+            if (universityId.equals(Long.valueOf(-1))) return;
+            Optional<University> optionalUniversity = serviceUniversity.findById(universityId);
+            if  (optionalUniversity.isPresent()) {
+                university = optionalUniversity.get();
+                break;
+            }
+            else {
+                System.out.println("University not found");
+            }
+        }
+        Faculty faculty = new Faculty(uniqueCode, name, shortName, dean, contact, university);
+
+        serviceFaculty.create(faculty);
+    }
+
+    private void editFaculty(Console console) {
+        Long id = ConsoleMenu.readRequiredLong(console, "Enter faculty id to edit: ");
+        Optional<Faculty> optionalFaculty = serviceFaculty.findById(id);
+        if (optionalFaculty.isEmpty()) {
+            System.out.println("Faculty not found");
+            return;
+        }
+        Faculty faculty = optionalFaculty.get();
+
+        String name = console.readLine("Enter new name: ");
+        String shortName;
+        while (true) {
+            shortName = console.readLine("Enter new short name: ");
+            if (shortName.length() <= Faculty.MAX_SHORT_NAME_LENGTH) break;
+            else {
+                System.out.println("Short name must  be shorter than "+ Faculty.MAX_SHORT_NAME_LENGTH);
+            }
+        }
+        if (!name.isBlank())
+            faculty.setName(name);
+        if (!shortName.isBlank())
+            faculty.setShortName(shortName);
+        while (true) {
+            try {
+                String phone = console.readLine("Enter new phone(10-13 numbers with optional +): ");
+                String email = console.readLine("Enter new email(in format text@text.text): ");
+                Contact old = faculty.getContact();
+                String newPhone = old.phone();
+                String newEmail = old.email();
+                if (!phone.isBlank())
+                    newPhone = phone;
+                if (!email.isBlank())
+                    newEmail = email;
+                faculty.setContact(new Contact(newPhone, newEmail));
+                break;
+            }catch (IllegalArgumentException e) {
+                System.out.println("Invalid phone or email");
+            }
+        }
+
+        serviceFaculty.update(faculty);
+    }
+
+    private void deleteFaculty(Console console) {
+        Long id = ConsoleMenu.readRequiredLong(console, "Enter faculty id to delete ");
+        Optional<Faculty> optionalFaculty = serviceFaculty.findById(id);
+        if (optionalFaculty.isEmpty()) {
+            System.out.println("Faculty not found!!!");
+            return;
+        }
+
+        serviceFaculty.delete(id);
+    }
+
+    private void showAllFaculties() {
+        for (Faculty faculty : serviceFaculty.findAll())
+            System.out.println("id -" + faculty.getId() + ", " +faculty);
+    }
+}
+
+--- FILE: ./main/java/ui/FindByStudent.java ---
+package ui;
+
+import entity.Student;
+import entity.StudentGroup;
+import entity.FullName;
+import service.ServiceStudentInterface;
+import service.ServiceStudentGroupInterface;
+import java.io.Console;
+
+public class FindByStudent {
+    private final ServiceStudentInterface serviceStudent;
+    private final ServiceStudentGroupInterface serviceStudentGroup;
+
+    public FindByStudent(ServiceStudentInterface serviceStudent, ServiceStudentGroupInterface serviceStudentGroup) {
+        this.serviceStudent = serviceStudent;
+        this.serviceStudentGroup = serviceStudentGroup;
+    }
+
+    public void main(Console console) {
+        while (true) {
+            System.out.println("Find students by \n 1 - Full Name\n 2 - Course\n 3 - Group\n 0 - Back");
+            int choice = readInt(console);
+
+            switch (choice) {
+                case 1:
+                    findByFullName(console);
+                    break;
+                case 2:
+                    findByCourse(console);
+                    break;
+                case 3:
+                    findByGroup(console);
+                    break;
+                case 0:
+                    return;
+                default:
+                    System.out.println("Invalid input!"); }
+        }
+    }
+
+    private  void findByFullName(Console console){
+        FullName fullName = PersonMenu.fullName(console);
+        boolean found = false;
+        for (Student student : serviceStudent.findAll()) {
+            if (student.getFullName().equals(fullName)) {
+                System.out.println(student);
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("Student with this name not found!");
+        }
+    }
+
+    private void findByCourse(Console console){
+        System.out.print("Enter course: ");
+        int course = readInt(console);
+
+        boolean found = false;
+        for (Student student : serviceStudent.findAll()) {
+            if (student.getCourse() == course) {
+                System.out.println(student);
+                found = true;
+            }
+        }
+        if (!found)
+            System.out.println("Students not found!");
+    }
+
+    private void findByGroup(Console console){
+        String groupName = console.readLine("Enter group name: ");
+        var groups = serviceStudentGroup.findByName(groupName);
+
+        if (groups.isEmpty()) {
+            System.out.println("Group not found!");
+            return;
+        }
+
+        for (StudentGroup group : groups) {
+            System.out.println("Group: " + group.getName());
+
+            var students = group.getStudents();
+            if (students.isEmpty()) {
+                System.out.println("No students in this group!");
+                continue;
+            }
+            for (Student student : students)
+                System.out.println(student);
+        }
+    }
+
+    private int readInt(Console console) {
+        try {
+            return Integer.parseInt(console.readLine("Your choice: "));
+        } catch (NumberFormatException e){
+            return -1;
+        }
+    }
+}
+
+--- FILE: ./main/java/ui/PersonMenu.java ---
+package ui;
+
+import entity.Contact;
+import entity.FullName;
+import entity.Person;
+
+import java.io.Console;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+
+public class PersonMenu {
+    public static FullName fullName(Console console) {
+        String name = console.readLine("Enter name: ");
+        while (name.isBlank()) {
+            System.out.println("name cannot be blank");
+            name = console.readLine("Enter name: ");
+        }
+        String surname = console.readLine("Enter surname: ");
+        while (surname.isBlank()) {
+            System.out.println("surname cannot be blank");
+            surname = console.readLine("Enter surname: ");
+        }
+        String patronymic = console.readLine("Enter patronymic: ");
+        return new FullName(name, surname, patronymic);
+    }
+
+    public static LocalDate birthDate(Console console) {
+        while (true) {
+            try {
+
+                String birth = console.readLine("Enter birth date(yyyy-mm-dd): ");
+                LocalDate birthDate = LocalDate.parse(birth);
+                if (birthDate.getYear() >= Person.MINIUM_AGE)
+                    return birthDate;
+                else{
+                    System.out.println("Invalid birth date, person must be "+Person.MINIUM_AGE+"+ years old");
+                }
+            }catch ( DateTimeParseException e) {
+                System.out.println("Invalid date format, use  yyyy-mm-dd");
+            }
+        }
+    }
+
+    public static Contact contact(Console console) {
+        while (true) {
+            try {
+                String phone = console.readLine("Enter phone(10-13 numbers with optional +): ");
+                String email = console.readLine("Enter email(in format text@text.text): ");
+                return new Contact(phone, email);
+            }catch ( IllegalArgumentException e) {
+                System.out.println("Invalid email or phone format, use text@text.text for email and 10-13 numbers for phone");
+            }
+        }
+    }
+}
+
+--- FILE: ./main/java/ui/StudentGroupMenu.java ---
+package ui;
+
+import entity.Department;
+import entity.StudentGroup;
+import service.ServiceDepartmentInterface;
+import service.ServiceStudentGroupInterface;
+import java.util.Optional;
+import java.io.Console;
+
+public class StudentGroupMenu {
+    private final ServiceDepartmentInterface serviceDepartment;
+    private final ServiceStudentGroupInterface serviceStudentGroup;
+
+    public StudentGroupMenu(ServiceStudentGroupInterface serviceStudentGroup, ServiceDepartmentInterface serviceDepartment){
+        this.serviceStudentGroup = serviceStudentGroup;
+        this.serviceDepartment = serviceDepartment;
+    }
+
+    public void main(Console console) {
+        while (true) {
+            System.out.println(
+                    "Student Group \n 1 - Create Student Group\n 2 - Edit Student Group\n 3 - Delete Student Group\n 4 - Show All Student Group\n 0 - Back"
+            );
+
+            int userSelect = readInt(console);
+
+            switch (userSelect) {
+                case 1:
+                    createStudentGroup(console);
+                    break;
+                case 2:
+                    editStudentGroup(console);
+                    break;
+                case 3:
+                    deleteStudentGroup(console);
+                    break;
+                case 4:
+                    showStudentGroup();
+                    break;
+                case 0:
+                    return;
+                default:
+                    System.out.println("Invalid input");
+            }
+        }
+    }
+
+    private int readInt(Console console) {
+        try {
+            return Integer.parseInt(console.readLine("Your choice: "));
+        } catch (NumberFormatException e){
+            return -1;
+        }
+    }
+    private void createStudentGroup(Console console) {
+        String name = ConsoleMenu.readRequiredString(console, "Enter group name: ");
+
+        Department department;
+        while (true) {
+            Long id = ConsoleMenu.readRequiredLong(console, "Enter department id(-1 to exit): ");
+            if (id.equals(-1L)) return;
+            Optional<Department> optionalDepartment = serviceDepartment.findById(id);
+            if (optionalDepartment.isPresent()) {
+                department = optionalDepartment.get();
+                break;
+            }
+            else{
+                System.out.println("Department not found");
+            }
+        }
+
+
+        StudentGroup group = new StudentGroup(name, department);
+        serviceStudentGroup.create(group);
+    }
+
+    private void editStudentGroup(Console console) {
+        Long id = ConsoleMenu.readRequiredLong(console, "Enter group id to edit: ");
+        Optional<StudentGroup> optionalGroup = serviceStudentGroup.findById(id);
+
+        if (optionalGroup.isEmpty()) {
+            System.out.println("Group not found!");
+            return;
+        }
+        StudentGroup group = optionalGroup.get();
+
+        String name = console.readLine("Enter group name: ");
+        if (!name.isBlank()) {
+            group.setName(name);
+        }
+
+        serviceStudentGroup.update(group);
+    }
+
+    private void deleteStudentGroup(Console console) {
+        Long id = ConsoleMenu.readRequiredLong(console, "Enter group id to delete: ");
+        serviceStudentGroup.delete(id);
+    }
+
+    private void showStudentGroup() {
+        for (StudentGroup group : serviceStudentGroup.findAll()) {
+            System.out.println("ID: " + group.getId() + group);
+        }
+    }
+}
+
+--- FILE: ./main/java/ui/StudentMenu.java ---
+package ui;
+
+import entity.*;
+import service.ServiceStudentInterface;
+import service.ServiceStudentGroupInterface;
+import java.io.Console;
+import java.time.LocalDate;
+import java.time.Year;
+import java.util.Optional;
+
+public class StudentMenu {
+    private final ServiceStudentInterface serviceStudent;
+    private final ServiceStudentGroupInterface serviceStudentGroup;
+    private final FindByStudent findByStudent;
+
+    public StudentMenu(ServiceStudentInterface serviceStudent, ServiceStudentGroupInterface serviceStudentGroup) {
+        this.serviceStudent = serviceStudent;
+        this.serviceStudentGroup = serviceStudentGroup;
+        this.findByStudent = new FindByStudent(serviceStudent, serviceStudentGroup);
+    }
+    public void main(Console console) {
+        while (true) {
+            System.out.println("Student \n 1 - Add student \n 2 - Edit student\n 3 - Delete student \n 4 - Show all students\n 5 - Find students\n 0 - Back");
+
+            int userSelect = readInt(console);
+
+            switch (userSelect) {
+                case 1:
+                    createStudent(console);
+                    break;
+                case 2:
+                    editStudent(console);
+                    break;
+                case 3:
+                    deleteStudent(console);
+                    break;
+                case 4:
+                    showAllStudents();
+                    break;
+                case 5:
+                    findByStudent.main(console);
+                    break;
+                case 0:
+                    return;
+                default:
+                    System.out.println("Invalid input!");
+            }
+        }
+    }
+
+    private int readInt(Console console) {
+        try {
+            return Integer.parseInt(console.readLine("Your choice: "));
+        } catch (NumberFormatException e){
+            return -1;
+        }
+    }
+
+    private void createStudent(Console console) {
+        StudentGroup group;
+        while (true) {
+            Long groupId = ConsoleMenu.readRequiredLong(console, "Enter group id(-1 to exit): ");
+            if (groupId.equals(Long.valueOf(-1))) return;
+            Optional<StudentGroup> optionalGroup = serviceStudentGroup.findById(groupId);
+            if  (optionalGroup.isPresent()) {
+                group = optionalGroup.get();
+                break;
+            }
+            else {
+                System.out.println("Group not found!!!");
+
+            }
+        }
+
+
+        FullName fullName = PersonMenu.fullName(console);
+        LocalDate birthDate = PersonMenu.birthDate(console);
+        Contact contact = PersonMenu.contact(console);
+
+        String uniqueCode = ConsoleMenu.readRequiredString(console, "Enter unique code: ");
+        String recordBook = ConsoleMenu.readRequiredString(console, "Enter record book number: ");
+        int course;
+        while (true) {
+            try {
+            course = Math.toIntExact(ConsoleMenu.readRequiredLong(console, "Enter course (1-6): "));
+            if (course >=1  && course <= 6) break;
+            else System.out.println("course must be between 1 and 6");
+
+            }catch (NumberFormatException e){
+                System.out.println("Invalid input, use numbers only!");
+            }
+        }
+        Year yearOfAdmission;
+        while (true) {
+            try {
+                int year = Math.toIntExact(ConsoleMenu.readRequiredLong(console, "Enter year of admission: "));
+                yearOfAdmission = Year.of(year);
+                if (!yearOfAdmission.isAfter(Year.now()) && !yearOfAdmission.isBefore(Year.of(Student.MINIUM_YEAR_OF_ADMISSION))){
+                    break;
+                }
+                else{
+                    System.out.println("Invalid year of admission, cannot be in future and cannot be too past");
+                }
+            }catch (NumberFormatException e){
+                System.out.println("Use only numbers only!");
+            }
+        }
+        FormOfEducation form = null;
+        while (form == null) {
+        System.out.println("Form of education: 1 - Budget, 2 - Contract");
+        int userChoiceFormOfEducation = readInt(console);
+
+            switch (userChoiceFormOfEducation) {
+                case 1:
+                    form = FormOfEducation.BUDGET;
+                    break;
+                case 2:
+                    form = FormOfEducation.CONTRACT;
+                    break;
+                default:
+                    System.out.println("Invalid input!");
+            }
+        }
+
+        StudentStatus status = StudentStatus.STUDIES;
+
+
+
+        Student student = new Student(uniqueCode, recordBook, fullName, birthDate, contact, form, status, yearOfAdmission, course, group);
+        group.addStudent(student);
+        serviceStudent.create(student);
+    }
+
+    private void editStudent(Console console) {
+        Long id = ConsoleMenu.readRequiredLong(console, "Enter student id to edit: ");
+        Optional<Student> optionalStudent = serviceStudent.findById(id);
+        if (optionalStudent.isEmpty()) {
+            System.out.println("Student not found!!!");
+            return;
+        }
+        Student student = optionalStudent.get();
+        String recordBook = console.readLine("Enter record book number: ");
+        Integer course = null;
+        while (true) {
+            String stringCourse = console.readLine("Enter course (1-6): ");
+            if (stringCourse.isBlank()) break;
+            else{
+                try {
+                    course = Integer.valueOf(stringCourse);
+                    if (course >=1  && course <= 6) break;
+                    else{
+                        System.out.println("Invalid course must be between 1 and 6");
+                    }
+                }catch (NumberFormatException e){
+                    System.out.println("Invalid input, use numbers only!");
+                }
+            }
+        }
+        if (!recordBook.isBlank())
+            student.setRecordBookNumber(recordBook);
+        if (course != null)
+            student.setCourse(course);
+
+        System.out.println("Student status: 1 - Studies, 2 - Academic leave, 3 - Expelled");
+        int statusChoice = readInt(console);
+
+        switch (statusChoice) {
+            case 1:
+                student.setStudentStatus(StudentStatus.STUDIES);
+                break;
+            case 2:
+                student.setStudentStatus(StudentStatus.ACADEMIC_LEAVE);
+                break;
+            case 3:
+                student.setStudentStatus(StudentStatus.EXPELLED);
+                break;
+            default:
+                System.out.println("Status not changed!");
+        }
+
+        serviceStudent.update(student);
+    }
+
+    private void deleteStudent(Console console) {
+        Long id = ConsoleMenu.readRequiredLong(console, "Enter student id to delete: ");
+        Optional<Student> optionalStudent = serviceStudent.findById(id);
+        if (optionalStudent.isEmpty()) {
+            System.out.println("Student not found!!!");
+            return;
+        }
+
+        Student student = optionalStudent.get();
+        student.getGroup().removeStudent(student);
+        serviceStudent.delete(id);
+    }
+
+    private void showAllStudents() {
+        for (Student student : serviceStudent.findAll())
+            System.out.println("id - "+ student.getId() + ", " + student);
+    }
+}
+
+--- FILE: ./main/java/ui/TeacherMenu.java ---
+package ui;
+
+import java.io.Console;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.Optional;
+import java.math.BigDecimal;
+
+import entity.*;
+import service.ServiceTeacherInterface;
+
+public class TeacherMenu {
+    private final ServiceTeacherInterface serviceTeacher;
+
+    public TeacherMenu(ServiceTeacherInterface serviceTeacher) {
+        this.serviceTeacher = serviceTeacher;
+    }
+
+    public void main(Console console) {
+        while (true) {
+            System.out.println(
+                    "Teachers \n 1 - Add teacher\n 2 - Edit teacher\n 3 - Delete teacher\n 4 - Show all teachers\n 0 - Back"
+            );
+
+            int userSelect = readInt(console);
+
+            switch (userSelect) {
+                case 1:
+                    createTeacher(console);
+                    break;
+                case 2:
+                    editTeacher(console);
+                    break;
+                case 3:
+                    deleteTeacher(console);
+                    break;
+                case 4:
+                    showAllTeachers();
+                    break;
+                case 0:
+                    return;
+                default:
+                    System.out.println("Invalid input");
+            }
+        }
+    }
+
+    private int readInt(Console console) {
+        try {
+            return Integer.parseInt(console.readLine("Your choice: "));
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    private void createTeacher(Console console) {
+        FullName fullName = PersonMenu.fullName(console);
+        LocalDate birthDate = PersonMenu.birthDate(console);
+        Contact contact = PersonMenu.contact(console);
+
+        String uniqueCode = ConsoleMenu.readRequiredString(console, "Enter unique code: ");
+        AcademicDegree degree = null;
+        while (degree == null) {
+
+            System.out.println("Academic degree: 1 - Candidate of sciences, 2 - Doctor of philosophy, 3 - Doctor of sciences, 4 - None");
+            int degreeChoice = readInt(console);
+
+            switch (degreeChoice) {
+                case 1:
+                    degree = AcademicDegree.CANDIDATE_OF_SCIENCES;
+                    break;
+                case 2:
+                    degree = AcademicDegree.DOCTOR_OF_PHILOSOPHY;
+                    break;
+                case 3:
+                    degree = AcademicDegree.DOCTOR_OF_SCIENCES;
+                    break;
+                case 4:
+                    degree = AcademicDegree.NONE;
+                    break;
+                default:
+                    System.out.println("Invalid academic degree!");
+            }
+        }
+        AcademicRank rank = null;
+        while (rank == null) {
+            System.out.println("Academic rank: 1 - Associate professor, 2 - Senior researcher, 3 - Professor, 4 - None");
+            int rankChoice = readInt(console);
+
+            switch (rankChoice) {
+                case 1:
+                    rank = AcademicRank.ASSOCIATE_PROFESSOR;
+                    break;
+                case 2:
+                    rank = AcademicRank.SENIOR_RESEARCHER;
+                    break;
+                case 3:
+                    rank = AcademicRank.PROFESSOR;
+                    break;
+                case 4:
+                    rank = AcademicRank.NONE;
+                    break;
+                default:
+                    System.out.println("Invalid academic rank!");
+            }
+        }
+        LocalDate dateOfEmployment;
+        while (true) {
+            try {
+
+                dateOfEmployment = LocalDate.parse(console.readLine("Enter date of employment: "));
+                if (!dateOfEmployment.isAfter(LocalDate.now())) {
+                    break;
+                } else {
+                    System.out.println("date of employment cannot be in future");
+                }
+            }catch (DateTimeParseException e){
+                System.out.println("Use format yyyy-mm-dd");
+            }
+        }
+        BigDecimal salary = null;
+        while (salary == null) {
+            try {
+                salary = new BigDecimal(console.readLine("Enter salary: "));
+            }catch (NumberFormatException e) {
+                System.out.println("Invalid salary! Use number and dot only");
+            }
+        }
+
+        Teacher teacher = new Teacher(uniqueCode, fullName, birthDate, contact, degree, rank, dateOfEmployment, salary);
+        serviceTeacher.create(teacher);
+    }
+
+    private void editTeacher(Console console) {
+        Long id = ConsoleMenu.readRequiredLong(console, "Enter teacher id: ");
+        Optional<Teacher> optionalTeacher = serviceTeacher.findById(id);
+        if (optionalTeacher.isEmpty()) {
+            System.out.println("Teacher not found!!!");
+            return;
+        }
+
+        Teacher teacher = optionalTeacher.get();
+        AcademicDegree degree = null;
+        while (degree == null) {
+
+            System.out.println("Academic degree: 1 - Candidate of sciences, 2 - Doctor of philosophy, 3 - Doctor of sciences, 4 - None");
+            int degreeChoice = readInt(console);
+
+            switch (degreeChoice) {
+                case 1:
+                    degree = AcademicDegree.CANDIDATE_OF_SCIENCES;
+                    break;
+                case 2:
+                    degree = AcademicDegree.DOCTOR_OF_PHILOSOPHY;
+                    break;
+                case 3:
+                    degree = AcademicDegree.DOCTOR_OF_SCIENCES;
+                    break;
+                case 4:
+                    degree = AcademicDegree.NONE;
+                    break;
+                default:
+                    System.out.println("Invalid academic degree!");
+            }
+        }
+        teacher.setAcademicDegree(degree);
+        AcademicRank rank = null;
+        while (rank == null) {
+            System.out.println("Academic rank: 1 - Associate professor, 2 - Senior researcher, 3 - Professor, 4 - None");
+            int rankChoice = readInt(console);
+
+            switch (rankChoice) {
+                case 1:
+                    rank = AcademicRank.ASSOCIATE_PROFESSOR;
+                    break;
+                case 2:
+                    rank = AcademicRank.SENIOR_RESEARCHER;
+                    break;
+                case 3:
+                    rank = AcademicRank.PROFESSOR;
+                    break;
+                case 4:
+                    rank = AcademicRank.NONE;
+                    break;
+                default:
+                    System.out.println("Invalid academic rank!");
+            }
+        }
+        teacher.setAcademicRank(rank);
+        BigDecimal salary = null;
+        while (salary == null) {
+            try {
+                salary = new BigDecimal(console.readLine("Enter salary: "));
+            }catch (NumberFormatException e) {
+                System.out.println("Invalid salary! Use number and dot only");
+            }
+        }
+        teacher.setSalary(salary);
+        serviceTeacher.update(teacher);
+    }
+
+    private void deleteTeacher(Console console) {
+        Long id = ConsoleMenu.readRequiredLong(console, "Enter teacher id: ");
+        Optional<Teacher> optionalTeacher = serviceTeacher.findById(id);
+        if (optionalTeacher.isEmpty()) {
+            System.out.println("Teacher not found!!!");
+            return;
+        }
+
+        serviceTeacher.delete(id);
+    }
+
+    private void showAllTeachers() {
+        for (Teacher teacher : serviceTeacher.findAll()) {
+            System.out.println("id -" + teacher.getId() + ", " + teacher);
+        }
+    }
+}
+
+--- FILE: ./main/java/ui/UniversityMenu.java ---
+package ui;
+
+import entity.Address;
+import entity.University;
+import service.ServiceUniversityInterface;
+import java.io.Console;
+
+public class UniversityMenu {
+    private final ServiceUniversityInterface serviceUniversity;
+
+    public UniversityMenu(ServiceUniversityInterface serviceUniversity) {
+        this.serviceUniversity = serviceUniversity;
+    }
+
+    public void main(Console console){
+        System.out.println("Universities \n 1 - Create University \n 2 - Show all university \n 0 - Back");
+
+        int userSelect = readInt(console);
+        switch (userSelect) {
+            case 1:
+                createUniversity(console);
+                break;
+            case 2:
+                showAllUniversity();
+            case 0:
+                return;
+            default:
+                System.out.println("Invalid input");
+        }
+    }
+
+    private int readInt(Console console) {
+        try {
+            return Integer.parseInt(console.readLine("Your choice: "));
+        } catch (NumberFormatException e){
+            return -1;
+        }
+    }
+
+    private void createUniversity(Console console) {
+        String fullName = ConsoleMenu.readRequiredString(console, "Enter full name: ");
+        String shortName;
+        while (true) {
+            shortName = ConsoleMenu.readRequiredString(console, "Enter short name: ");
+            if (shortName.length() <= University.MAX_SHORT_NAME_LENGTH) break;
+            else{
+                System.out.println("Short name must be shorter than "+ University.MAX_SHORT_NAME_LENGTH);
+            }
+        }
+        String city = ConsoleMenu.readRequiredString(console,"Enter city: ");
+        String street = ConsoleMenu.readRequiredString(console,"Enter street: ");
+        String buildNumber = ConsoleMenu.readRequiredString(console,"Enter building number: ");
+
+        Address address = new Address(city, street, buildNumber);
+        University university = new University(fullName, shortName, address);
+
+        serviceUniversity.create(university);
+    }
+    private void showAllUniversity(){
+        for (University university : serviceUniversity.findAll()) {
+            System.out.println("id - "+ university.getId() + ", " + university);
+        }
+    }
+}
+
+--- FILE: ./main/java/ui/PageDisplay.java ---
+package ui;
+
+import security.AuthService;
+import security.MethodFilter;
+import util.Pretier;
+
+import java.io.Console;
+import java.util.List;
+import java.util.Stack;
+
+public class PageDisplay {
+    // потім це перенести в sessionInfo(клас де зарашній юзер і стан логіна)
+    private final AuthService authService;
+    private final Console console;
+    private final InputReader inputReader;
+    Stack<Page> history = new Stack<>();
+    public PageDisplay(Console console, AuthService authService, InputReader inputReader) {
+        this.console = console;
+        this.authService = authService;
+        this.inputReader = inputReader;
+    }
+    public void start(Page startPage){
+        System.out.println(Pretier.printLogo());
+        history.push(startPage);
+        display();
+    }
+    private void display() {
+        while (true) {
+            if (history.isEmpty()) break;
+            Page currentPage = history.peek();
+            List<MenuItem> itemToShow = MethodFilter.filterItems(currentPage,
+                    authService.getCurrentUser());
+            System.out.println(Pretier.wrapInFrame(currentPage.getTitle()));
+            for (int i = 1; i <= itemToShow.size(); i++) {
+                System.out.println(i + " - " + itemToShow.get(i - 1).getLabel());
+            }
+            System.out.println("0 - exit");
+            int choose;
+            while (true) {
+                choose = inputReader.readInt("choose :");
+                if (choose >= 0 && choose <= itemToShow.size()) break;
+            }
+            if (choose == 0)
+                history.pop();
+            else{
+                Page newPage = (itemToShow.get(choose-1).execute());
+                if (!newPage.equals(history.peek())) {
+                    history.push(newPage);
+                }
+                else{
+                    console.readLine("Continue");
+                }
+            }
+
+        }
+        System.out.println("Goodbye!");
+    }
+}
+
+--- FILE: ./main/java/ui/BasePage.java ---
+package ui;
+
+import java.io.Console;
+import java.util.List;
+
+public abstract class BasePage implements Page {
+    protected InputReader inputReader;
+    public BasePage(InputReader inputReader) {
+        this.inputReader = inputReader;
+    }
+    public abstract List<MenuItem> getMenuItems();
+}
+
+--- FILE: ./main/java/ui/ConsoleReader.java ---
+package ui;
+
+import entity.*;
+
+import java.io.Console;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Year;
+import java.time.format.DateTimeParseException;
+import java.util.List;
+
+public class ConsoleReader implements InputReader {
+    private final Console console;
+    public ConsoleReader(Console console){
+        this.console = console;
+    }
+     public String readString(String prompt) {
+        while (true) {
+            String input = console.readLine(prompt);
+            if (input != null && !input.isBlank()) return input;
+            System.out.println("Input cannot be blank!");
+        }
+    }
+    public String readPassword( String prompt) {
+         while (true) {
+             char[] password = console.readPassword(prompt);
+             String input =  new String(password);
+             if (input != null && !input.isBlank()) {
+                 return input;
+             }
+             else  {
+                 System.out.println("Password cannot be blank!");
+             }
+         }
+    }
+
+    public String readStringWithMaxLengthProbablyBlank(String prompt, int maxLength) {
+        while (true) {
+            String input = readString(prompt);
+            if (input.length() <= maxLength) return input;
+            System.out.println("Input must be shorter than or equal to " + maxLength + " characters.");
+        }
+    }
+    public String readStringWithMaxLength(String prompt, int maxLength) {
+        while (true) {
+            String input = readString(prompt);
+            if (input.isBlank()) System.out.println("Input cannot be blank!");
+            else if (input.length() >  maxLength) System.out.println("Input must be less than or equal to " + maxLength + " characters.");
+            else return input;
+        }
+    }
+
+
+    public int readInt(String prompt) {
+        while (true) {
+            try {
+                return Integer.parseInt(console.readLine(prompt));
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input! Please enter a valid integer number.");
+            }
+        }
+    }
+    public int readIntInRange(String prompt, int min, int max) {
+        int input;
+         while (true) {
+            try {
+                input = Integer.parseInt(console.readLine(prompt));
+                if (input >= min && input <=max)return input;
+                else System.out.println("Invalid input! Input must be between " + min + " and " + max);
+            }catch (NumberFormatException e) {
+                System.out.println("Invalid input! Please enter a valid integer number.");
+            }
+
+        }
+    }
+    public Integer readIntInRangeProbablyNull(String prompt,Integer min, Integer max) {
+        String string;
+        while (true) {
+            try {
+                string = console.readLine(prompt);
+                if (string.isBlank()) return null;
+                int number =  Integer.parseInt(string);
+                if (number >= min && number <= max) return number;
+                else System.out.println("Number must be between "+min+" and "+max);
+            }catch (NumberFormatException e) {
+                System.out.println("Invalid input! Please enter a valid integer number.");
+            }
+        }
+    }
+
+    public Long readLong(String prompt) {
+        while (true) {
+            try {
+                return Long.parseLong(console.readLine(prompt));
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input! Please enter a valid number.");
+            }
+        }
+    }
+
+    public BigDecimal readBigDecimal(String prompt) {
+        while (true) {
+            try {
+                return new BigDecimal(console.readLine(prompt));
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid salary! Use numbers and a dot only.");
+            }
+        }
+    }
+    public Contact readContact() {
+        while (true) {
+            try {
+                String phone = console.readLine("Enter phone (10-13 numbers with optional +): ");
+                String email = console.readLine("Enter email (format text@text.text): ");
+                return new Contact(phone, email);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid email or phone format!");
+            }
+        }
+
+    }
+    public Contact readContactProbablyNull() {
+        while (true) {
+            try {
+                String phone = console.readLine("Enter phone (10-13 numbers with optional +): ");
+                String email = console.readLine("Enter email (format text@text.text): ");
+                if (phone.isBlank() && email.isBlank()) return null;
+                return new Contact(phone, email);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid email or phone format!");
+            }
+        }
+    }
+
+    public LocalDate readBirthDate() {
+        while (true) {
+            try {
+                LocalDate birthDate = LocalDate.parse(console.readLine("Enter birth date (yyyy-mm-dd): "));
+                if (birthDate.getYear() >= Person.MINIUM_AGE) {
+                    return birthDate;
+                }
+                System.out.println("Invalid birth date, person must be " + Person.MINIUM_AGE + "+ years old.");
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid date format, use yyyy-mm-dd.");
+            }
+        }
+    }
+
+    public LocalDate readEmploymentDate() {
+        while (true) {
+            try {
+                LocalDate date = LocalDate.parse(console.readLine("Enter date of employment (yyyy-mm-dd): "));
+                if (!date.isAfter(LocalDate.now())) return date;
+                System.out.println("Date of employment cannot be in the future.");
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid date format, use yyyy-mm-dd.");
+            }
+        }
+    }
+
+    public Year readYearOfAdmission() {
+        while (true) {
+            try {
+                int yearValue = readInt( "Enter year of admission: ");
+                Year year = Year.of(yearValue);
+                if (!year.isAfter(Year.now()) && !year.isBefore(Year.of(Student.MINIUM_YEAR_OF_ADMISSION))) {
+                    return year;
+                }
+                System.out.println("Invalid year: cannot be in the future or too far in the past.");
+            } catch (Exception e) {
+                System.out.println("Use numbers only!");
+            }
+        }
+    }
+
+    public int readCourse() {
+        while (true) {
+            int course = readInt("Enter course (1-6): ");
+            if (course >= 1 && course <= 6) return course;
+            System.out.println("Course must be between 1 and 6.");
+        }
+    }
+    public FormOfEducation readFormOfEducation() {
+
+         FormOfEducation form = null;
+         while (form == null) {
+            System.out.println("Form of education: 1 - Budget, 2 - Contract");
+            int userChoiceFormOfEducation = readInt("Choose a form of education: ");
+
+            switch (userChoiceFormOfEducation) {
+                case 1:
+                    form = FormOfEducation.BUDGET;
+                    break;
+                case 2:
+                    form = FormOfEducation.CONTRACT;
+                    break;
+                default:
+                    System.out.println("Invalid input!");
+            }
+        }
+         return form;
+    }
+    public FullName readfullName() {
+        String name = console.readLine("Enter name: ");
+        while (name.isBlank()) {
+            System.out.println("name cannot be blank");
+            name = console.readLine("Enter name: ");
+        }
+        String surname = console.readLine("Enter surname: ");
+        while (surname.isBlank()) {
+            System.out.println("surname cannot be blank");
+            surname = console.readLine("Enter surname: ");
+        }
+        String patronymic = console.readLine("Enter patronymic: ");
+        return new FullName(name, surname, patronymic);
+    }
+    public AcademicDegree readAcademicDegree() {
+        AcademicDegree degree = null;
+        while (degree == null) {
+
+            System.out.println("Academic degree: 1 - Candidate of sciences, 2 - Doctor of philosophy, 3 - Doctor of sciences, 4 - None");
+            int degreeChoice = readInt("Choose academic degree: ");
+
+            switch (degreeChoice) {
+                case 1:
+                    degree = AcademicDegree.CANDIDATE_OF_SCIENCES;
+                    break;
+                case 2:
+                    degree = AcademicDegree.DOCTOR_OF_PHILOSOPHY;
+                    break;
+                case 3:
+                    degree = AcademicDegree.DOCTOR_OF_SCIENCES;
+                    break;
+                case 4:
+                    degree = AcademicDegree.NONE;
+                    break;
+                default:
+                    System.out.println("Invalid academic degree!");
+            }
+        }
+        return degree;
+    }
+    public AcademicRank readAcademicRank() {
+        AcademicRank rank = null;
+        while (rank == null) {
+            System.out.println("Academic rank: 1 - Associate professor, 2 - Senior researcher, 3 - Professor, 4 - None");
+            int rankChoice = readInt("Choose academic rank: ");
+
+            switch (rankChoice) {
+                case 1:
+                    rank = AcademicRank.ASSOCIATE_PROFESSOR;
+                    break;
+                case 2:
+                    rank = AcademicRank.SENIOR_RESEARCHER;
+                    break;
+                case 3:
+                    rank = AcademicRank.PROFESSOR;
+                    break;
+                case 4:
+                    rank = AcademicRank.NONE;
+                    break;
+                default:
+                    System.out.println("Invalid academic rank!");
+            }
+        }
+        return rank;
+    }
+    public <T> T readChoose(List<T> list, String promt){
+         if (list == null || list.isEmpty()) return null;
+         int i = 1;
+         for (T t : list) {
+             System.out.println(i++ + " - " + t);
+         }
+         int choose = readIntInRange(promt, 1, list.size());
+         return list.get(choose - 1);
+    }
+    public <T> T readChooseProbablyNull(List<T> list, String promt, String promptForZero) {
+        if (list == null || list.isEmpty()) return null;
+         int i = 1;
+         System.out.println("0" + promptForZero);
+         for (T t : list) {
+             System.out.println(i++ + " - " + t);
+         }
+         int choose = readIntInRange(promt, 0, list.size());
+         if (choose == 0) return null;
+         return list.get(choose);
+    }
+    @Override
+    public String readProbablyBlank(String prompt) {
+        return console.readLine(prompt);
+    }
+}
+--- FILE: ./main/java/ui/InputReader.java ---
+package ui;
+
+import entity.*;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Year;
+import java.util.List;
+
+public interface InputReader {
+    public String readString(String prompt);
+    public String readPassword( String prompt);
+    public String readStringWithMaxLengthProbablyBlank(String prompt, int maxLength);
+
+    public int readInt(String prompt);
+    public int readIntInRange(String prompt, int min, int max) ;
+    public Integer readIntInRangeProbablyNull(String prompt,Integer min, Integer max);
+    public Long readLong(String prompt);
+
+    public BigDecimal readBigDecimal(String prompt);
+    public Contact readContact();
+    public Contact readContactProbablyNull();
+    public LocalDate readBirthDate();
+
+    public LocalDate readEmploymentDate();
+
+    public Year readYearOfAdmission();
+    public FormOfEducation readFormOfEducation();
+    public FullName readfullName();
+    public AcademicDegree readAcademicDegree() ;
+    public AcademicRank readAcademicRank() ;
+    public <T> T readChoose(List<T> list, String promt);
+    public <T> T readChooseProbablyNull(List<T> list, String promt, String promptForZero);
+    public String readProbablyBlank(String prompt);
+    public String readStringWithMaxLength(String prompt, int maxLength);
+}
+
+--- FILE: ./main/java/ui/finders/UniversityFinderInterface.java ---
+package ui.finders;
+
+
+import entity.University;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface UniversityFinderInterface {
+    public Optional<University> findByFullName();
+    public List<University> findByCity() ;
+    public Optional<University> findByShortName() ;
+    public Optional<University> chooseUniversity(List<University> universityList) ;
+    public Optional<University> findAndSelect();
+}
+
+--- FILE: ./main/java/ui/finders/FacultyFinderInterface.java ---
+package ui.finders;
+
+import entity.Faculty;
+import entity.University;
+import entity.find_criteria.FacultyFind;
+import entity.find_criteria.FacultyForAdvancedFind;
+import service.ServiceFacultyInterface;
+import ui.InputReader;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+public interface FacultyFinderInterface {
+
+    public List<Faculty> findByUniqueCode() ;
+
+    public List<Faculty> findByName() ;
+    public List<Faculty> findByShortName() ;
+    public Optional<Faculty> findByPhoneNumber() ;
+    public Optional<Faculty> findByEmail() ;
+    public List<Faculty> findByUniversity() ;
+
+    public Optional<Faculty> chooseFaculty(List<Faculty> faculties);
+    public Optional<Faculty> findAndSelect();
+
+    public List<Faculty> advancedSearch() ;
+}
+
+--- FILE: ./main/java/ui/finders/UniversityFinder.java ---
+package ui.finders;
+
+import entity.University;
+import entity.find_criteria.UniversityFind;
+import service.ServiceUniversityInterface;
+import ui.InputReader;
+
+import java.util.List;
+import java.util.Optional;
+
+public class UniversityFinder implements  UniversityFinderInterface {
+    private final ServiceUniversityInterface serviceUniversity;
+    private final InputReader inputReader;
+    public UniversityFinder(ServiceUniversityInterface serviceUniversity,InputReader inputReader) {
+        this.serviceUniversity = serviceUniversity;
+        this.inputReader = inputReader;
+    }
+    public Optional<University> findByFullName() {
+        String name = inputReader.readString("Enter name: ");
+        return serviceUniversity.findByFullName(name);
+    }
+    public List<University> findByCity() {
+        String city = inputReader.readString("Enter city: ");
+        return serviceUniversity.findByCity(city);
+    }
+    public Optional<University> findByShortName() {
+        String name = inputReader.readString("Enter name: ");
+        return serviceUniversity.findByShortName(name);
+    }
+    public Optional<University> chooseUniversity(List<University> universityList) {
+        if  (universityList.isEmpty()) {
+            System.out.println("No university found");
+            return Optional.empty();
+        }
+
+        return Optional.of(inputReader.readChoose(universityList, "Choose university: "));
+    }
+    public Optional<University> findAndSelect(){
+        while (true) {
+            System.out.println("Select an university");
+            List<UniversityFind>  universityFinds = List.of(UniversityFind.values());
+            UniversityFind find = inputReader.readChoose(universityFinds, "Choose criteria: ");
+            Optional<University> university;
+            switch (find) {
+                case ALL:
+                    university = chooseUniversity(serviceUniversity.findAll());
+                    if (university.isPresent()) return  university;
+                    else System.out.println("No university found");
+                    break;
+                case CANCEL:
+                    return Optional.empty();
+                case NAME:
+                    university = findByFullName();
+                    if (university.isPresent()) return  university;
+                    else System.out.println("No university found");
+                    break;
+                case SHORT_NAME:
+                    university = findByShortName();
+                    if (university.isPresent()) return  university;
+                    else System.out.println("No university found");
+                    break;
+                case CITY:
+                    List<University> universities = findByCity();
+                    if (universities.isEmpty()) {
+                        System.out.println("No university found");
+                        break;
+                    }
+                    else return chooseUniversity(universities);
+                default:
+                    System.out.println("Invalid selection");
+                    return Optional.empty();
+            }
+        }
+
+
+    }
+
+}
+
+--- FILE: ./main/java/ui/finders/FacultyFinder.java ---
+package ui.finders;
+
+import entity.Faculty;
+import entity.University;
+import entity.find_criteria.FacultyFind;
+import entity.find_criteria.FacultyForAdvancedFind;
+import service.ServiceFacultyInterface;
+import ui.InputReader;
+
+import java.util.*;
+
+public class FacultyFinder implements FacultyFinderInterface {
+    private final InputReader inputReader;
+    private final ServiceFacultyInterface serviceFaculty;
+    private final UniversityFinderInterface universityFinder;
+
+    public FacultyFinder(ServiceFacultyInterface serviceFaculty, InputReader inputReader,
+                         UniversityFinderInterface universityFinder) {
+        this.inputReader = inputReader;
+        this.serviceFaculty = serviceFaculty;
+        this.universityFinder = universityFinder;
+    }
+
+    public List<Faculty> findByUniqueCode() {
+        String uniqueCode = inputReader.readString("Enter unique code");
+        return serviceFaculty.findByUniqueCode(uniqueCode);
+    }
+
+    public List<Faculty> findByName() {
+        String name = inputReader.readString("Enter name");
+        return serviceFaculty.findByName(name);
+    }
+
+    public List<Faculty> findByShortName() {
+        String shortName = inputReader.readString("Enter short name");
+        return serviceFaculty.findByShortName(shortName);
+    }
+
+    public Optional<Faculty> findByPhoneNumber() {
+        String phoneNumber = inputReader.readString("Enter phone number");
+        return serviceFaculty.findByPhoneNumber(phoneNumber);
+    }
+
+    public Optional<Faculty> findByEmail() {
+        String email = inputReader.readString("Enter email");
+        return serviceFaculty.findByEmail(email);
+    }
+
+    public List<Faculty> findByUniversity() {
+        Optional<University> optionalUniversity = universityFinder.findAndSelect();
+        if (optionalUniversity.isEmpty()) return List.of();
+        return serviceFaculty.findByUniversity(optionalUniversity.get());
+    }
+
+    private List<Faculty> advancedFilter(List<FacultyForAdvancedFind> facultyFinds) {
+        List<Faculty> faculties = serviceFaculty.findAll();
+        for (FacultyForAdvancedFind facultyFind : facultyFinds) {
+            switch (facultyFind) {
+                case UNIVERSITY -> faculties = filterByUniversity(faculties);
+                case NAME -> faculties = filterByName(faculties);
+                case SHORT_NAME -> faculties = filterByShortName(faculties);
+                case UNIQUE_CODE -> faculties = filterByUniqueCode(faculties);
+                case null -> {
+                    return List.of();
+                }
+            }
+        }
+        return faculties;
+    }
+
+    private List<Faculty> filterByUniqueCode(List<Faculty> faculties) {
+        String uniqueCode = inputReader.readString("Enter unique code");
+        return faculties.stream().filter(f -> f.getUniqueCode().equals(uniqueCode)).toList();
+    }
+
+    private List<Faculty> filterByName(List<Faculty> faculties) {
+        String name = inputReader.readString("Enter name");
+        return faculties.stream().filter(f -> f.getName().equals(name)).toList();
+    }
+
+    private List<Faculty> filterByShortName(List<Faculty> faculties) {
+        String shortName = inputReader.readString("Enter short name");
+        return faculties.stream().filter(f -> f.getShortName().equals(shortName)).toList();
+    }
+
+    private List<Faculty> filterByUniversity(List<Faculty> faculties) {
+        Optional<University> optionalUniversity = universityFinder.findAndSelect();
+        if (optionalUniversity.isEmpty()) return List.of();
+        else {
+            return faculties.stream().filter(f ->
+                    f.getUniversity().equals(optionalUniversity.get())).toList();
+        }
+    }
+
+    public Optional<Faculty> chooseFaculty(List<Faculty> faculties) {
+        if (faculties.isEmpty()) {
+            System.out.println("No faculty found");
+            return Optional.empty();
+        } else {
+            return Optional.ofNullable(
+                    inputReader.readChoose(faculties, "Choose faculty")
+            );
+        }
+
+    }
+
+    public Optional<Faculty> findAndSelect() {
+        FacultyFind facultyFind;
+        Optional<Faculty> result = Optional.empty();
+        while (true) {
+            facultyFind = inputReader.readChoose(List.of(FacultyFind.values()),
+                    "Choose criteria");
+            switch (facultyFind) {
+                case UNIVERSITY -> {
+                    result = chooseFaculty(findByUniversity());
+                }
+                case UNIQUE_CODE -> {
+                    result = chooseFaculty(findByUniqueCode());
+                }
+                case PHONE -> {
+                    result = findByPhoneNumber();
+                }
+                case EMAIL -> {
+                    result = findByEmail();
+                }
+                case NAME -> {
+                    result = chooseFaculty(findByName());
+                }
+                case SHORT_NAME -> {
+                    result = chooseFaculty(findByShortName());
+                }
+                case CANCEL -> {
+                    return Optional.empty();
+                }
+                case SHOW_ALL -> {
+                    result = chooseFaculty(serviceFaculty.findAll());
+                }
+                case ADVANCED -> {
+                    result = chooseFaculty(advancedSearch());
+                }
+            }
+            if (result.isPresent()) {
+                return result;
+            } else {
+                System.out.println("No faculty found, try again");
+            }
+        }
+    }
+
+    public List<Faculty> advancedSearch() {
+        Set<FacultyForAdvancedFind> facultyForAdvancedFinds = new LinkedHashSet<>();
+        while (true) {
+            int i = 1;
+            for (FacultyForAdvancedFind facultyForAdvancedFind : FacultyForAdvancedFind.values()) {
+                System.out.println(i++ + ": " + facultyForAdvancedFind);
+            }
+            System.out.println(i++ + ": Reset setting");
+            System.out.println(i++ + ": Searching for faculty");
+            System.out.println(i + ": Cancel");
+            System.out.println("Active filters: " + facultyForAdvancedFinds);
+            int choose = inputReader.readIntInRange("Choose param or start search",
+                    1, i);
+            if (choose <= i - 3) {
+                facultyForAdvancedFinds.add(FacultyForAdvancedFind.values()[choose - 1]);
+            } else if (choose == i - 2) {
+                facultyForAdvancedFinds = new LinkedHashSet<>();
+            } else if (choose == i - 1) {
+                return advancedFilter(facultyForAdvancedFinds.stream().toList());
+            } else {
+                return new ArrayList<>();
+            }
+        }
+    }
+}
+
+
+--- FILE: ./main/java/util/IdGenerator.java ---
+package util;
+
+import java.util.concurrent.atomic.AtomicLong;
+
+public class IdGenerator {
+    private final AtomicLong idGenerator;
+
+    public IdGenerator(){
+        idGenerator = new AtomicLong(0);
+    }
+    public Long nextId(){
+        return idGenerator.getAndIncrement();
+    }
+    public void setCurrentId(Long id){
+        idGenerator.set(id);
+    }
+}
+
+--- FILE: ./main/java/util/Pretier.java ---
+package util;
+
+public class Pretier {
+    public static String printLogo(){
+        return "____  _       _ __  __      _          ____             _      __\n" +
+                "   / __ \\(_)___ _(_) / / /___  (_)____    / __ \\___  ____ _(_)____/ /________  __\n" +
+                "  / / / / / __ `/ / / / / __ \\/ / ___/   / /_/ / _ \\/ __ `/ / ___/ __/ ___/ / / /\n" +
+                " / /_/ / / /_/ / / /_/ / / / / (__  )   / _, _/  __/ /_/ / (__  ) /_/ /  / /_/ /\n" +
+                "/_____/_/\\__, /_/\\____/_/ /_/_/____/   /_/ |_|\\___/\\__, /_/____/\\__/_/   \\__, /\n" +
+                "        /____/                                    /____/                /____/\n" +
+                "\n" +
+                "                                   >>> welcome <<<"
+                ;
+    }
+    /* another varian
+      ____  _       _ _   _       _        ____            _     _
+ |  _ \(_) __ _(_) | | |_ __ (_)_     |  _ \ ___  __ _(_)___| |_ _ __ _   _
+ | | | | |/ _` | | | | | '_ \| (_)    | |_) / _ \/ _` | / __| __| '__| | | |
+ | |_| | | (_| | | |_| | | | | |_     |  _ <  __/ (_| | \__ \ |_| |  | |_| |
+ |____/|_|\__, |_|\___/|_| |_|_(_)    |_| \_\___|\__, |_|___/\__|_|   \__, |
+          |___/                                  |___/                |___/
+
+                                welcome!
+
+
++==============================================================================+
+|   ___  _     _ _   _      _ ___            _     _                           |
+|  |   \(_)__ (_) | | |_ _ (_)| _ \___ __ _ (_)___| |_ _ _ _  _                |
+|  | |) | / _`| | |_| | ' \| ||   / -_) _` || (_-<|  _| '_| || |               |
+|  |___/|_\__, |_|\___/_||_|_||_|_\___\__, ||_/__/ \__|_|  \_, |               |
+|         |___/                       |___/              |___/                 |
+|                                                                              |
+|                             > welcome <                                      |
++==============================================================================+
+
+     */
+    public static String wrapInFrame(String text){
+        int width = text.length() + 6;
+        return "   ╔" + "═".repeat(width) +"╗\n" +
+               "   ║   " + text + "   ║\n" +
+               "   ╚" + "═".repeat(width)  +"╝";
+
+    }
+}
+
+--- FILE: ./main/java/util/PagerBuilder.java ---
+package util;
+
+import security.AuthService;
+import service.*;
+import ui.InputReader;
+import ui.Page;
+import ui.finders.FacultyFinderInterface;
+import ui.finders.UniversityFinderInterface;
+import ui.pages.*;
+
+import java.io.Console;
+
+public class PagerBuilder {
+    private final ServiceTeacherInterface serviceTeacher;
+    private final ServiceStudentInterface serviceStudent;
+    private final ServiceStudentGroupInterface serviceStudentGroup;
+    private final ServiceDepartmentInterface serviceDepartment;
+    private final ServiceFacultyInterface serviceFaculty;
+    private final ServiceUniversityInterface serviceUniversity;
+    private final AuthService authService;
+    private final ServiceUserInterface serviceUser;
+    private final InputReader inputReader;
+    private final UniversityFinderInterface universityFinder;
+    private final FacultyFinderInterface facultyFinder;
+    public PagerBuilder(ServiceTeacherInterface serviceTeacher, ServiceStudentInterface serviceStudent, ServiceStudentGroupInterface serviceStudentGroup,
+                        ServiceDepartmentInterface serviceDepartment, ServiceFacultyInterface serviceFaculty,
+                        ServiceUniversityInterface serviceUniversity, AuthService authService,
+                        ServiceUserInterface serviceUser, InputReader inputReader,
+                        UniversityFinderInterface universityFinder, FacultyFinderInterface facultyFinder) {
+        this.serviceTeacher = serviceTeacher;
+        this.serviceStudent = serviceStudent;
+        this.serviceStudentGroup = serviceStudentGroup;
+        this.serviceDepartment = serviceDepartment;
+        this.serviceFaculty = serviceFaculty;
+        this.serviceUniversity = serviceUniversity;
+        this.authService = authService;
+        this.serviceUser = serviceUser;
+        this.inputReader = inputReader;
+        this.universityFinder = universityFinder;
+        this.facultyFinder = facultyFinder;
+    }
+
+    public Page getDepartmentPage(){
+        return new DepartmentPage(serviceDepartment, serviceFaculty,
+                serviceTeacher, inputReader);
+    }
+    public Page getFacultyPage(){
+        return new FacultyPage(serviceFaculty, serviceTeacher, inputReader,
+                universityFinder, this);
+    }
+    public Page getUniversityPage(){
+        return new UniversityPage(serviceUniversity, inputReader, this);
+    }
+    public Page getTeacherPage(){
+        return new TeacherPage(serviceTeacher, inputReader);
+    }
+    public  Page getStudentPage(){
+        return new StudentPage(serviceStudentGroup,
+                serviceStudent, inputReader);
+    }
+    public Page getStudentGroupPage(){
+        return new StudentGroupPage(serviceDepartment,
+                serviceStudentGroup, inputReader);
+    }
+    public Page getUserPage(){
+        return new UserPage(authService,
+                serviceUser, inputReader);
+    }
+    public Page getFindUniversityPage(){
+        return new FindUniversityPage(inputReader, universityFinder);
+    }
+    public  Page getFindFacultyPage(){
+        return new FindFacultyPage(inputReader, facultyFinder);
+    }
+
+
+
+
+
+}
+
+--- FILE: ./main/java/service/ServiceDepartment.java ---
+package service;
+
+import entity.Department;
+import repository.DepartmentRepository;
+
+import java.util.List;
+import java.util.Optional;
+
+public class ServiceDepartment implements ServiceDepartmentInterface {
+
+    private final DepartmentRepository departmentRepository;
+
+    public ServiceDepartment(DepartmentRepository departmentRepository) {
+        this.departmentRepository = departmentRepository;
+    }
+
+    public Department create(Department department) {
+        if (departmentRepository.existsByUniqueCode(department.getUniqueCode())) {
+            throw new IllegalArgumentException(
+                    "Department with this unique code already exists"
+            );
+        }
+        return departmentRepository.save(department);
+    }
+
+
+    public Department update(Department department) {
+        return departmentRepository.save(department);
+    }
+
+
+    public void delete(Long id) {
+        departmentRepository.deleteById(id);
+    }
+
+
+    public List<Department> findAll() {
+        return departmentRepository.findAll();
+    }
+
+
+    public Optional<Department> findByUniqueCode(String code) {
+        return departmentRepository.findByUniqueCode(code);
+    }
+
+    public Optional<Department> findById(Long id) {
+        return departmentRepository.findById(id);
+    }
+}
+--- FILE: ./main/java/service/ServiceDepartmentInterface.java ---
+package service;
+
+import entity.Department;
+import java.util.List;
+import java.util.Optional;
+
+public interface ServiceDepartmentInterface {
+
+    Department create(Department department);
+
+    Department update(Department department);
+
+    void delete(Long id);
+
+    List<Department> findAll();
+
+    Optional<Department> findByUniqueCode(String code);
+
+    Optional<Department> findById(Long id);
+}
+
+--- FILE: ./main/java/service/ServiceStudent.java ---
+package service;
+
+import entity.Student;
+import entity.StudentGroup;
+import repository.StudentRepository;
+import java.util.List;
+import java.util.Optional;
+
+public class ServiceStudent implements ServiceStudentInterface{
+    private final StudentRepository studentRepository;
+
+    public ServiceStudent(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
+
+    public Student create(Student student) {
+        if (studentRepository.existsByRecordBookNumber(student.getRecordBookNumber())) {
+            throw new IllegalArgumentException("Student already exists!!!");
+        }
+        Student student1 = studentRepository.save(student);
+        student1.getGroup().addStudent(student1);
+        return student1;
+    }
+
+    public Student update(Student student) {
+        return studentRepository.save(student);
+    }
+
+
+    public void delete(Long studentId) {
+        studentRepository.deleteById(studentId);
+    }
+
+
+    public List<Student> findAll() {
+        return studentRepository.findAll();
+    }
+
+
+    public Optional<Student> findByRecordBookNumber(String recordBookNumber) {
+        return studentRepository.findByRecordBookNumber(recordBookNumber);
+    }
+
+
+    public void transferStudent(Long studentId, StudentGroup newGroup, int newCourse) {
+        Student student = studentRepository.findById(studentId).orElseThrow(() -> new IllegalArgumentException("Student not found!!!"));
+
+        student.setGroup(newGroup);
+        student.getGroup().addStudent(student);
+        student.setCourse(newCourse);
+
+        studentRepository.save(student);
+    }
+
+    public Optional<Student> findById(Long id) {
+        return studentRepository.findById(id);
+    }
+}
+
+--- FILE: ./main/java/service/ServiceStudentGroup.java ---
+package service;
+
+import entity.Student;
+import entity.StudentGroup;
+import entity.Department;
+import entity.Teacher;
+import repository.StudentGroupRepository;
+import java.util.List;
+import java.util.Optional;
+
+public class ServiceStudentGroup implements ServiceStudentGroupInterface{
+    private final StudentGroupRepository studentGroupRepository;
+
+    public ServiceStudentGroup(StudentGroupRepository studentGroupRepository) {
+        this.studentGroupRepository = studentGroupRepository;
+    }
+
+    public StudentGroup create(StudentGroup group) {
+        if (group == null)
+            throw new IllegalArgumentException("Group can't be null");
+
+        if (group.getName() == null || group.getName().isBlank())
+            throw new IllegalArgumentException("Group name can't be empty!!!");
+
+        return studentGroupRepository.save(group);
+    }
+
+    public StudentGroup update(StudentGroup group) {
+        return studentGroupRepository.save(group);
+    }
+
+    public void delete(Long id) {
+        studentGroupRepository.deleteById(id);
+    }
+
+    public List<StudentGroup> findAll() {
+        return studentGroupRepository.findAll();
+    }
+
+    public List<StudentGroup> findByDepartment(Department department) {
+        return studentGroupRepository.findByDepartment(department);
+    }
+
+    public List<StudentGroup> findByName(String name) {
+        if (name == null || name.isBlank())
+            throw new IllegalArgumentException("Group name can't be empty!!!");
+
+        return studentGroupRepository.findByName(name);
+    }
+
+    public Optional<StudentGroup> findByNameAndDepartment(String name, Department department) {
+        return studentGroupRepository.findByNameAndDepartment(name, department);
+    }
+
+    public Optional<StudentGroup> findByHeadOfGroup(Teacher head) {
+        return studentGroupRepository.findByHeadOfGroup(head);
+    }
+
+    public Optional<StudentGroup> findByGroupLeader(Student leader) {
+        return studentGroupRepository.findByGroupLeader(leader);
+    }
+
+    public Optional<StudentGroup> findById(Long id) {
+        return studentGroupRepository.findById(id);
+    }
+}
+
+--- FILE: ./main/java/service/ServiceStudentGroupInterface.java ---
+package service;
+
+import entity.Department;
+import entity.Student;
+import entity.StudentGroup;
+import entity.Teacher;
+import java.util.List;
+import java.util.Optional;
+
+public interface ServiceStudentGroupInterface {
+    StudentGroup create(StudentGroup group);
+
+    StudentGroup update(StudentGroup group);
+
+    void delete(Long id);
+
+    List<StudentGroup> findAll();
+
+    List<StudentGroup> findByDepartment(Department department);
+
+    List<StudentGroup> findByName(String name);
+
+    Optional<StudentGroup> findByNameAndDepartment(String name, Department department);
+
+    Optional<StudentGroup> findByHeadOfGroup(Teacher head);
+
+    Optional<StudentGroup> findByGroupLeader(Student leader);
+
+    Optional<StudentGroup> findById(Long id);
+}
+
+--- FILE: ./main/java/service/ServiceStudentInterface.java ---
+package service;
+
+import entity.Student;
+import entity.StudentGroup;
+import java.util.List;
+import java.util.Optional;
+
+public interface ServiceStudentInterface {
+    Student create(Student student);
+
+    Student update(Student student);
+
+    void delete(Long studentId);
+
+    List<Student> findAll();
+
+    Optional<Student> findByRecordBookNumber(String recordBookNumber);
+
+    void transferStudent(Long studentId, StudentGroup newGroup, int newCourse);
+
+    Optional<Student> findById(Long id);
+}
+
+--- FILE: ./main/java/service/ServiceTeacher.java ---
+package service;
+
+import entity.Teacher;
+import repository.TeacherRepository;
+import java.util.List;
+import java.util.Optional;
+
+public class ServiceTeacher implements ServiceTeacherInterface {
+    private final TeacherRepository teacherRepository;
+
+    public ServiceTeacher(TeacherRepository teacherRepository) {
+        this.teacherRepository = teacherRepository;
+    }
+
+    public Teacher create(Teacher teacher) {
+        return teacherRepository.save(teacher);
+    }
+
+    public Teacher update(Teacher teacher) {
+        return teacherRepository.save(teacher);
+    }
+
+    public void delete(Long id) {
+        teacherRepository.deleteById(id);
+    }
+
+    public List<Teacher> findAll() {
+        return teacherRepository.findAll();
+    }
+
+    public Optional<Teacher> findById(Long id) {
+        return teacherRepository.findById(id);
+    }
+}
+
+--- FILE: ./main/java/service/ServiceTeacherInterface.java ---
+package service;
+
+import entity.Teacher;
+import java.util.List;
+import java.util.Optional;
+
+public interface ServiceTeacherInterface {
+    Teacher create(Teacher teacher);
+
+    Teacher update(Teacher teacher);
+
+    void delete(Long id);
+
+    List<Teacher> findAll();
+
+    Optional<Teacher> findById(Long id);
+}
+
+--- FILE: ./main/java/service/ServiceUserInterface.java ---
+package service;
+
+import entity.User;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface ServiceUserInterface {
+    Optional<User> findUserByLogin(String username);
+    Optional<User> findUserById(Long id);
+    User save(User user);
+    User update(User user);
+    void delete(User user);
+    List<User> findAllUsers();
+
+
+}
+
+--- FILE: ./main/java/service/ServiceUser.java ---
+package service;
+
+import entity.User;
+import repository.UserRepository;
+import security.PasswordCoder;
+
+import java.util.List;
+import java.util.Optional;
+
+public class ServiceUser implements ServiceUserInterface {
+    private final UserRepository userRepository;
+    PasswordCoder passwordCoder;
+    public ServiceUser(UserRepository userRepository, PasswordCoder passwordCoder) {
+        this.userRepository = userRepository;
+        this.passwordCoder = passwordCoder;
+    }
+    @Override
+    public Optional<User> findUserByLogin(String username) {
+        return userRepository.findUserByLogin(username);
+    }
+
+    @Override
+    public Optional<User> findUserById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    @Override
+    public User save(User user) {
+        user.setPassword(passwordCoder.encodePassword(user.getPassword()));
+        return  userRepository.save(user);
+    }
+    @Override
+    public User update(User user){
+        return userRepository.save(user);
+    }
+    @Override
+    public void delete(User user) {
+        userRepository.delete(user);
+    }
+
+    @Override
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
+    }
+}
+
+--- FILE: ./main/java/service/ServiceUniversity.java ---
+package service;
+
+import entity.Faculty;
+import entity.University;
+import repository.UniversityRepository;
+import java.util.List;
+import java.util.Optional;
+
+public class ServiceUniversity implements ServiceUniversityInterface{
+
+    private final UniversityRepository universityRepository;
+
+    public ServiceUniversity(UniversityRepository universityRepository) {
+        this.universityRepository = universityRepository;
+    }
+
+    public University create(University university) {
+
+        if (universityRepository.existsByFullName(university.getFullName())) {
+            throw new IllegalArgumentException("This full name already exists!!!");
+        }
+
+        if (universityRepository.existsByShortName(university.getShortName())) {
+            throw new IllegalArgumentException("This short name already exists!!!");
+        }
+
+        return universityRepository.save(university);
+    }
+
+    public University update(University university) {
+        return universityRepository.save(university);
+    }
+
+    public void delete(Long id) {
+        universityRepository.deleteById(id);
+    }
+
+    public List<University> findAll() {
+        return universityRepository.findAll();
+    }
+
+    public Optional<University> findByFullName(String fullName) {
+        return universityRepository.findByFullName(fullName);
+    }
+
+    public Optional<University> findByShortName(String shortName) {
+        return universityRepository.findByShortName(shortName);
+    }
+
+    public List<University> findByCity(String city) {
+        return universityRepository.findByCity(city);
+    }
+
+    public Optional<University> findById(Long id) {
+        return universityRepository.findById(id);
+    }
+
+    @Override
+    public boolean existsByFullName(String fullName) {
+        return universityRepository.existsByFullName(fullName);
+    }
+
+    @Override
+    public boolean existsByShortName(String shortName) {
+        return universityRepository.existsByShortName(shortName);
+    }
+
+    @Override
+    public boolean existsByCity(String city) {
+        return universityRepository.existsByCity(city);
+    }
+}
+
+--- FILE: ./main/java/service/ServiceUniversityInterface.java ---
+package service;
+
+import entity.Faculty;
+import entity.University;
+import java.util.List;
+import java.util.Optional;
+
+public interface ServiceUniversityInterface {
+    University create(University university);
+
+    University update(University university);
+
+    void delete(Long id);
+
+    List<University> findAll();
+
+    Optional<University> findByFullName(String fullName);
+
+    Optional<University> findByShortName(String shortName);
+
+    List<University> findByCity(String city);
+
+    Optional<University> findById(Long id);
+
+    boolean existsByFullName(String fullName);
+    boolean existsByShortName(String shortName);
+    boolean existsByCity(String city);
+}
+
+--- FILE: ./main/java/service/ServiceFacultyInterface.java ---
+package service;
+
+import entity.Faculty;
+import entity.University;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface ServiceFacultyInterface {
+    Faculty create(Faculty faculty);
+
+    Faculty update(Faculty faculty);
+
+    void delete(Long id);
+
+    List<Faculty> findAll();
+
+    Optional<Faculty> findById(Long id);
+    
+    List<Faculty> findByUniqueCode(String uniqueCode);
+
+
+    List<Faculty> findByName(String name);
+
+    List<Faculty> findByShortName(String shortName);
+
+    Optional<Faculty> findByEmail(String email);
+
+    Optional<Faculty> findByPhoneNumber(String phoneNumber);
+
+    List<Faculty> findByUniversity(University university);
+}
+
+--- FILE: ./main/java/service/ServiceFaculty.java ---
+package service;
+
+import entity.Faculty;
+import entity.University;
+import repository.FacultyRepository;
+import java.util.List;
+import java.util.Optional;
+
+public class ServiceFaculty implements ServiceFacultyInterface{
+    private final FacultyRepository facultyRepository;
+
+    public ServiceFaculty(FacultyRepository facultyRepository) {
+        this.facultyRepository = facultyRepository;
+    }
+
+    public Faculty create(Faculty faculty) {
+        if (facultyRepository.existsByUniqueCode(faculty.getUniqueCode())) {
+            throw new IllegalArgumentException(
+                    "Faculty already exists!!!"
+            );
+        }
+        return facultyRepository.save(faculty);
+    }
+
+    public Faculty update(Faculty faculty) {
+        return facultyRepository.save(faculty);
+    }
+
+    public void delete(Long id) {
+        facultyRepository.deleteById(id);
+    }
+
+    public List<Faculty> findAll() {
+        return facultyRepository.findAll();
+    }
+
+    public Optional<Faculty> findById(Long id) {
+        return facultyRepository.findById(id);
+    }
+
+    public List<Faculty> findByUniqueCode(String uniqueCode) {
+        return facultyRepository.findByUniqueCode(uniqueCode);
+    }
+
+    @Override
+    public List<Faculty> findByName(String name) {
+        return facultyRepository.findByName(name);
+    }
+
+    @Override
+    public List<Faculty> findByShortName(String shortName) {
+        return facultyRepository.findByShortName(shortName);
+    }
+
+    @Override
+    public Optional<Faculty> findByEmail(String email) {
+        return facultyRepository.findByEmail(email);
+    }
+
+    @Override
+    public Optional<Faculty> findByPhoneNumber(String phoneNumber) {
+        return facultyRepository.findByPhone(phoneNumber);
+    }
+
+    @Override
+    public List<Faculty> findByUniversity(University university) {
+        return facultyRepository.findByUniversity(university);
+    }
+}
+
+--- FILE: ./main/java/exception/UserNotFoundException.java ---
+package exception;
+
+public class UserNotFoundException extends RuntimeException {
+    public UserNotFoundException(String message) {
+        super(message);
+    }
+}
+
+--- FILE: ./main/java/exception/WrongPasswordException.java ---
+package exception;
+
+public class WrongPasswordException extends RuntimeException {
+    public WrongPasswordException(String message) {
+        super(message);
+    }
+}
+
+--- FILE: ./main/java/security/AuthService.java ---
+package security;
+
+import entity.User;
+
+public interface AuthService {
+    void logout();
+    User getCurrentUser();
+    User login(String username, String password);
+}
+
+--- FILE: ./main/java/security/BCryptPasswordEncoder.java ---
+package security;
+
+import com.password4j.Password;
+
+public class BCryptPasswordEncoder implements PasswordCoder {
+    @Override
+    public String encodePassword(String password) {
+        return Password.hash(password).withBcrypt().getResult();
+    }
+    @Override
+    public boolean matches(String password, String encodedPassword) {
+        return Password.check(password, encodedPassword).withBcrypt();
+    }
+}
+
+--- FILE: ./main/java/security/LocalAuthService.java ---
+package security;
+
+import entity.User;
+import exception.UserNotFoundException;
+import exception.WrongPasswordException;
+import service.ServiceUserInterface;
+
+import java.util.Optional;
+
+public class LocalAuthService implements  AuthService {
+    private final PasswordCoder passwordCoder;
+    private final ServiceUserInterface serviceUser;
+    private final SessionInfo sessionInfo;
+
+    public LocalAuthService(PasswordCoder passwordCoder, ServiceUserInterface serviceUser, SessionInfo sessionInfo) {
+        this.passwordCoder = passwordCoder;
+        this.serviceUser = serviceUser;
+        this.sessionInfo = sessionInfo;
+    }
+
+    @Override
+    public void logout() {
+        sessionInfo.logout();
+    }
+
+    @Override
+    public User getCurrentUser() {
+        return sessionInfo.getCurrentUser();
+    }
+
+    @Override
+    public User login(String username, String password) {
+        Optional<User> userOpt = serviceUser.findUserByLogin(username);
+        if (userOpt.isEmpty()) throw new UserNotFoundException("User not found");
+        User user = userOpt.get();
+        boolean passwordMatch = passwordCoder.matches(password, user.getPassword());
+        if (!passwordMatch) throw new WrongPasswordException("Wrong password");
+        sessionInfo.login(user);
+        return user;
+    }
+}
+
+--- FILE: ./main/java/security/LocalSessionInfo.java ---
+package security;
+
+import entity.Role;
+import entity.User;
+
+public class LocalSessionInfo implements  SessionInfo {
+    User currentUser;
+    User guestUser = new User(Role.GUEST, "none", "none");
+    @Override
+    public User getCurrentUser() {
+        return currentUser == null ? guestUser : currentUser;
+    }
+
+    @Override
+    public void logout() {
+        currentUser = null;
+    }
+
+    @Override
+    public void login(User user) {
+        currentUser = user;
+    }
+}
+
+--- FILE: ./main/java/security/MethodFilter.java ---
+package security;
+
+import ui.MenuItem;
+import ui.Page;
+
+import java.util.ArrayList;
+import java.util.List;
+import entity.User;
+public class MethodFilter {
+    public static List<MenuItem> filterItems(Page page, User user){
+        List<MenuItem> allMenuItems = page.getMenuItems();
+        List<MenuItem> filteredMenuItems = new ArrayList<>();
+        for (MenuItem menuItem : allMenuItems) {
+            if (user.canDo(menuItem.getRightNeeded()))
+                filteredMenuItems.add(menuItem);
+        }
+        return filteredMenuItems;
+    }
+}
+
+--- FILE: ./main/java/security/PasswordCoder.java ---
+package security;
+
+public interface PasswordCoder {
+    String encodePassword(String password);
+    boolean matches(String password, String encodedPassword);
+}
+
+--- FILE: ./main/java/security/SessionInfo.java ---
+package security;
+
+import entity.User;
+
+public interface SessionInfo {
+    User getCurrentUser();
+    void logout();
+    void login(User user);
+}
+
+--- FILE: ./main/java/Main.java ---
+import entity.Role;
+import entity.User;
+import entity.find_criteria.UniversityFind;
+import repository.*;
+import security.*;
+import service.*;
+import ui.*;
+import ui.finders.FacultyFinder;
+import ui.finders.FacultyFinderInterface;
+import ui.finders.UniversityFinder;
+import ui.finders.UniversityFinderInterface;
+import ui.pages.MainPage;
+import util.PagerBuilder;
+
+import java.io.Console;
+
+public class Main {
+    public static void main(String[] args) {
+        DepartmentRepository departmentRepository = new InMemoryDepartmentRepository();
+        FacultyRepository  facultyRepository = new InMemoryFacultyRepository();
+        StudentRepository studentRepository = new InMemoryStudentRepository();
+        StudentGroupRepository studentGroupRepository = new InMemoryStudentGroupRepository();
+        TeacherRepository teacherRepository = new InMemoryTeacherRepository();
+        UniversityRepository universityRepository = new InMemoryUniversityRepository();
+        UserRepository userRepository = new InMemoryUserRepository();
+
+
+
+        ServiceDepartmentInterface serviceDepartmentInterface = new ServiceDepartment(departmentRepository);
+        ServiceFacultyInterface serviceFacultyInterface = new ServiceFaculty(facultyRepository);
+        ServiceStudentInterface serviceStudentInterface = new ServiceStudent(studentRepository);
+        ServiceTeacherInterface serviceTeacherInterface = new ServiceTeacher(teacherRepository);
+        ServiceUniversityInterface serviceUniversityInterface = new ServiceUniversity(universityRepository);
+        ServiceStudentGroupInterface serviceStudentGroupInterface = new ServiceStudentGroup(studentGroupRepository);
+
+        PasswordCoder coder = new BCryptPasswordEncoder();
+
+        ServiceUserInterface serviceUserInterface = new ServiceUser(userRepository, coder);
+        serviceUserInterface.save(new User(Role.ADMIN, "admin", "admin"));
+        serviceUserInterface.save(new User(Role.USER, "user", "user"));
+        serviceUserInterface.save(new User(Role.MODERATOR, "moderator", "moderator"));
+
+
+        SessionInfo sessionInfo = new LocalSessionInfo();
+
+
+        AuthService authService = new LocalAuthService(coder, serviceUserInterface, sessionInfo);
+
+        Console console = System.console();
+        InputReader inputReader = new ConsoleReader(console);
+
+        UniversityFinderInterface universityFinderInterface = new UniversityFinder(serviceUniversityInterface, inputReader);
+        FacultyFinderInterface facultyFinder = new FacultyFinder(serviceFacultyInterface, inputReader, universityFinderInterface);
+
+
+        PagerBuilder pagerBuilder = new PagerBuilder(serviceTeacherInterface, serviceStudentInterface,
+                serviceStudentGroupInterface, serviceDepartmentInterface,
+                serviceFacultyInterface, serviceUniversityInterface,
+                authService, serviceUserInterface, inputReader,
+                universityFinderInterface,  facultyFinder);
+
+        Page mainPage = new MainPage(inputReader, pagerBuilder);
+        PageDisplay pageDisplay = new PageDisplay(console, authService, inputReader);
+        pageDisplay.start(mainPage);
+
+    }
+}
