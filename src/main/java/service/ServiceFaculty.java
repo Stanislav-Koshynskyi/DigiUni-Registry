@@ -59,7 +59,7 @@ public class ServiceFaculty implements ServiceFacultyInterface{
 
     @Override
     public Optional<Faculty> findByPhoneNumber(String phoneNumber) {
-        return findByPhoneNumber(phoneNumber);
+        return facultyRepository.findByPhone(phoneNumber);
     }
 
     @Override
