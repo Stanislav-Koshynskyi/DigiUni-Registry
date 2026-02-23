@@ -42,7 +42,7 @@ public class PagerBuilder {
 
     public Page getDepartmentPage(){
         return new DepartmentPage(serviceDepartment, serviceFaculty,
-                serviceTeacher, inputReader);
+                serviceTeacher, inputReader, facultyFinder);
     }
     public Page getFacultyPage(){
         return new FacultyPage(serviceFaculty, serviceTeacher, inputReader,

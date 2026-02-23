@@ -105,6 +105,7 @@ public class FacultyFinder implements FacultyFinderInterface {
     }
 
     public Optional<Faculty> findAndSelect() {
+        System.out.println("Choose faculty");
         FacultyFind facultyFind;
         Optional<Faculty> result = Optional.empty();
         while (true) {
