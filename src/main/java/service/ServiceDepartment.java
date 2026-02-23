@@ -1,6 +1,8 @@
 package service;
 
 import entity.Department;
+import entity.Faculty;
+import entity.University;
 import repository.DepartmentRepository;
 
 import java.util.List;
@@ -39,8 +41,28 @@ public class ServiceDepartment implements ServiceDepartmentInterface {
     }
 
 
-    public Optional<Department> findByUniqueCode(String code) {
+    public List<Department> findByUniqueCode(String code) {
         return departmentRepository.findByUniqueCode(code);
+    }
+
+    @Override
+    public List<Department> findByName(String name) {
+        return departmentRepository.findByName(name);
+    }
+
+    @Override
+    public List<Department> findByFaculty(Faculty faculty) {
+        return departmentRepository.findByFaculty(faculty);
+    }
+
+    @Override
+    public List<Department> findByUniversity(University university) {
+        return departmentRepository.findByUniversity(university);
+    }
+
+    @Override
+    public List<Department> findByShortName(String shortName) {
+        return departmentRepository.findByShortName(shortName);
     }
 
     public Optional<Department> findById(Long id) {

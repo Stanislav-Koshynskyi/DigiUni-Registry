@@ -3,14 +3,18 @@ package repository;
 import entity.Department;
 import entity.Faculty;
 import entity.Teacher;
+import entity.University;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface DepartmentRepository extends Repository<Department, Long> {
 
-    Optional<Department> findByUniqueCode(String code);
-
+    List<Department> findByUniqueCode(String code);
+    
+    
+    
+    
     boolean existsByUniqueCode(String code);
 
     List<Department> findByName(String name);
@@ -22,4 +26,8 @@ public interface DepartmentRepository extends Repository<Department, Long> {
     Optional<Department> findByHeadOfDepartment(Teacher headOfDepartment);
 
     boolean existsByHeadOfDepartment(Teacher headOfDepartment);
+
+    List<Department> findByUniversity(University university);
+
+    List<Department> findByShortName(String shortName);
 }
