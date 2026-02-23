@@ -29,7 +29,7 @@ public class LocalAuthService implements  AuthService {
     }
 
     @Override
-    public User login(String username, String password) {
+    public User login(String username, String password)throws UserNotFoundException, WrongPasswordException {
         Optional<User> userOpt = serviceUser.findUserByLogin(username);
         if (userOpt.isEmpty()) throw new UserNotFoundException("User not found");
         User user = userOpt.get();

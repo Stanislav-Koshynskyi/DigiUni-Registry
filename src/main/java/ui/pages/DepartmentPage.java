@@ -8,6 +8,7 @@ import service.ServiceDepartmentInterface;
 import service.ServiceFacultyInterface;
 import service.ServiceTeacherInterface;
 import ui.*;
+import ui.finders.FacultyFinderInterface;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,12 +17,15 @@ public class DepartmentPage extends BasePage {
     private final ServiceDepartmentInterface serviceDepartment;
     private final ServiceFacultyInterface serviceFaculty;
     private final ServiceTeacherInterface serviceTeacher;
+    private final FacultyFinderInterface facultyFinder;
     public DepartmentPage(ServiceDepartmentInterface serviceDepartment,
-                          ServiceFacultyInterface serviceFaculty, ServiceTeacherInterface serviceTeacher, InputReader inputReader) {
+                          ServiceFacultyInterface serviceFaculty, ServiceTeacherInterface serviceTeacher,
+                          InputReader inputReader, FacultyFinderInterface facultyFinder) {
         super(inputReader);
         this.serviceDepartment = serviceDepartment;
         this.serviceFaculty = serviceFaculty;
         this.serviceTeacher = serviceTeacher;
+        this.facultyFinder = facultyFinder;
     }
 
     @Override
@@ -40,6 +44,7 @@ public class DepartmentPage extends BasePage {
     }
 
     private Page createDepartment() {
+
         String uniqueCode = inputReader.readString("Enter unique code: ");
         String name = inputReader.readString("Enter department name: ");
         String shortName = inputReader.readStringWithMaxLengthProbablyBlank("Enter short name",
@@ -59,23 +64,17 @@ public class DepartmentPage extends BasePage {
             }
 
         }
-        Faculty faculty;
-        while (true) {
-            Long facultyId = inputReader.readLong("Enter faculty id(-1 to exit): ");
-            if (facultyId.equals(Long.valueOf(-1))) return this;
-            Optional<Faculty> optionalFaculty = serviceFaculty.findById(facultyId);
-            if (optionalFaculty.isPresent()) {
-                faculty = optionalFaculty.get();
-                break;
-            } else {
-                System.out.println("Faculty not found!!!");
-            }
-        }
-
-            Department department = new Department(uniqueCode, name, shortName, faculty, headOfDepartment, cabinet);
-            serviceDepartment.create(department);
+        Optional<Faculty> optFaculty = facultyFinder.findAndSelect();
+        if (optFaculty.isEmpty()) {
+            System.out.println("Faculty not found");
+            System.out.println("Department not created");
             return this;
+        }
+        Faculty faculty = optFaculty.get();
 
+        Department department = new Department(uniqueCode, name, shortName, faculty, headOfDepartment, cabinet);
+        serviceDepartment.create(department);
+        return this;
     }
 
     private Page editDepartment() {
