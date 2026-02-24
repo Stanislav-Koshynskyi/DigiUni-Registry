@@ -11,7 +11,7 @@ import ui.InputReader;
 
 import java.util.*;
 
-public class DepartmentFinder {
+public class DepartmentFinder implements DepartmentFinderInterface{
     private final InputReader inputReader;
     private final UniversityFinderInterface universityFinder;
     private final FacultyFinderInterface facultyFinder;
@@ -23,7 +23,7 @@ public class DepartmentFinder {
         this.facultyFinder = facultyFinder;
         this.serviceDepartment = serviceDepartment;
     }
-    Optional<Department> chooseDepartment(List<Department> departments) {
+    public Optional<Department> chooseDepartment(List<Department> departments) {
         if (departments == null || departments.isEmpty()) {
             System.out.println("No Department found");
             return Optional.empty();
@@ -32,33 +32,33 @@ public class DepartmentFinder {
             return Optional.of(inputReader.readChoose(departments, "Choose department"));
         }
     }
-    List<Department> findByUniqueCode() {
+    public List<Department> findByUniqueCode() {
         String code = inputReader.readString("Enter unique code");
         return serviceDepartment.findByUniqueCode(code);
     }
-    List<Department> findByName() {
+    public List<Department> findByName() {
         String name = inputReader.readString("Enter name");
         return serviceDepartment.findByName(name);
     }
-    List<Department> findByShortName() {
+    public List<Department> findByShortName() {
         String shortName = inputReader.readString("Enter short name");
         return serviceDepartment.findByShortName(shortName);
     }
-    List<Department> findByFaculty() {
+    public List<Department> findByFaculty() {
         Optional<Faculty> faculty = facultyFinder.findAndSelect();
         if (faculty.isEmpty()) {
             return Collections.emptyList();
         }
         return serviceDepartment.findByFaculty(faculty.get());
     }
-    List<Department> findByUniversity() {
+    public List<Department> findByUniversity() {
         Optional<University> university = universityFinder.findAndSelect();
         if (university.isEmpty()) {
             return Collections.emptyList();
         }
         return serviceDepartment.findByUniversity(university.get());
     }
-    Optional<Department> findAndSelect() {
+    public Optional<Department> findAndSelect() {
         Optional<Department> departmentOptional;
         while (true) {
             System.out.println("Choose department");
@@ -100,7 +100,7 @@ public class DepartmentFinder {
             }
         }
     }
-    List<Department> advancedSearch() {
+    public List<Department> advancedSearch() {
         Set<DepartmentForAdvancedFind> activeFilters = new LinkedHashSet<>();
         while (true) {
             int i = 1;
@@ -124,7 +124,7 @@ public class DepartmentFinder {
             }
         }
     }
-    List<Department> advancedFilter(List<DepartmentForAdvancedFind> filters) {
+    private List<Department> advancedFilter(List<DepartmentForAdvancedFind> filters) {
         List<Department> departments = serviceDepartment.findAll();
         for (DepartmentForAdvancedFind find : filters) {
             if (departments.isEmpty()) return departments;
@@ -151,25 +151,25 @@ public class DepartmentFinder {
         }
         return departments;
     }
-    List<Department> filterByUniqueCode(List<Department> departments) {
+    private List<Department> filterByUniqueCode(List<Department> departments) {
         String uniqueCode = inputReader.readString("Enter unique code");
         return departments.stream().filter(
                 d -> d.getUniqueCode().equals(uniqueCode)
         ).toList();
     }
-    List<Department> filterByName(List<Department> departments) {
+    private List<Department> filterByName(List<Department> departments) {
         String name = inputReader.readString("Enter name");
         return departments.stream().filter(
                 d -> d.getName().equals(name)
         ).toList();
     }
-    List<Department> filterByShortName(List<Department> departments) {
+    private List<Department> filterByShortName(List<Department> departments) {
         String shortName = inputReader.readString("Enter short name");
         return departments.stream()
                 .filter(d -> d.getShortName().equals(shortName))
                 .toList();
     }
-    List<Department> filterByFaculty(List<Department> departments) {
+    private List<Department> filterByFaculty(List<Department> departments) {
         Optional<Faculty> facultyOptional = facultyFinder.findAndSelect();
         if (facultyOptional.isEmpty()) {
             return Collections.emptyList();
@@ -179,7 +179,7 @@ public class DepartmentFinder {
                 f -> f.getFaculty().equals(faculty)
         ).toList();
     }
-    List<Department> filterByUniversity(List<Department> departments) {
+    private List<Department> filterByUniversity(List<Department> departments) {
         Optional<University> optionalUniversity = universityFinder.findAndSelect();
         if (optionalUniversity.isEmpty()) {
             return Collections.emptyList();
@@ -189,5 +189,4 @@ public class DepartmentFinder {
                 f -> f.getFaculty().getUniversity().equals(university)
         ).toList();
     }
-
 }
