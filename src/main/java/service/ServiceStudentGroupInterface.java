@@ -1,9 +1,7 @@
 package service;
 
-import entity.Department;
-import entity.Student;
-import entity.StudentGroup;
-import entity.Teacher;
+import entity.*;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -27,4 +25,8 @@ public interface ServiceStudentGroupInterface {
     Optional<StudentGroup> findByGroupLeader(Student leader);
 
     Optional<StudentGroup> findById(Long id);
+
+    List<StudentGroup> findByUniversity(University university);
+
+    List<StudentGroup> findByFaculty(Faculty faculty);
 }
