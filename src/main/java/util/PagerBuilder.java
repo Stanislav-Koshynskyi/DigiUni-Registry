@@ -4,11 +4,8 @@ import security.AuthService;
 import service.*;
 import ui.InputReader;
 import ui.Page;
-import ui.finders.FacultyFinderInterface;
-import ui.finders.UniversityFinderInterface;
+import ui.finders.*;
 import ui.pages.*;
-
-import java.io.Console;
 
 public class PagerBuilder {
     private final ServiceTeacherInterface serviceTeacher;
@@ -22,11 +19,17 @@ public class PagerBuilder {
     private final InputReader inputReader;
     private final UniversityFinderInterface universityFinder;
     private final FacultyFinderInterface facultyFinder;
+    private final DepartmentFinderInterface departmentFinder;
+    private final StudentGroupFinderInterface studentGroupFinder;
+    private final StudentFinderInterface studentFinder;
+    private final TeacherFinderInterface teacherFinder;
     public PagerBuilder(ServiceTeacherInterface serviceTeacher, ServiceStudentInterface serviceStudent, ServiceStudentGroupInterface serviceStudentGroup,
                         ServiceDepartmentInterface serviceDepartment, ServiceFacultyInterface serviceFaculty,
                         ServiceUniversityInterface serviceUniversity, AuthService authService,
                         ServiceUserInterface serviceUser, InputReader inputReader,
-                        UniversityFinderInterface universityFinder, FacultyFinderInterface facultyFinder) {
+                        UniversityFinderInterface universityFinder, FacultyFinderInterface facultyFinder,
+                        DepartmentFinderInterface departmentFinder, StudentGroupFinderInterface studentGroupFinder, StudentFinderInterface studentFinder,
+                        TeacherFinderInterface teacherFinder) {
         this.serviceTeacher = serviceTeacher;
         this.serviceStudent = serviceStudent;
         this.serviceStudentGroup = serviceStudentGroup;
@@ -38,11 +41,14 @@ public class PagerBuilder {
         this.inputReader = inputReader;
         this.universityFinder = universityFinder;
         this.facultyFinder = facultyFinder;
+        this.departmentFinder = departmentFinder;
+        this.studentGroupFinder = studentGroupFinder;
+        this.studentFinder = studentFinder;
+        this.teacherFinder = teacherFinder;
     }
 
     public Page getDepartmentPage(){
-        return new DepartmentPage(serviceDepartment, serviceFaculty,
-                serviceTeacher, inputReader, facultyFinder);
+        return new DepartmentPage(serviceDepartment,  serviceTeacher, inputReader, facultyFinder, this);
     }
     public Page getFacultyPage(){
         return new FacultyPage(serviceFaculty, serviceTeacher, inputReader,
@@ -72,9 +78,7 @@ public class PagerBuilder {
     public  Page getFindFacultyPage(){
         return new FindFacultyPage(inputReader, facultyFinder);
     }
-
-
-
-
-
+    public Page getDepartmentFindmentPage() {
+        return new FindDepartmentPage(inputReader, departmentFinder);
+    }
 }

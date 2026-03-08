@@ -12,6 +12,7 @@ public enum DepartmentFind {
     FACULTY("By faculty"),
     UNIVERSITY("By university"),
     SHOW_ALL("Show all"),
+    ADVANCED("Advanced"),
     CANCEL("Cancel");
 
 

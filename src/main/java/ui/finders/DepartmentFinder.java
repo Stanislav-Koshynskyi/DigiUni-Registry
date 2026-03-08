@@ -88,6 +88,9 @@ public class DepartmentFinder implements DepartmentFinderInterface{
                 case SHORT_NAME -> {
                     departmentOptional = chooseDepartment(findByShortName());
                 }
+                case ADVANCED -> {
+                    departmentOptional = chooseDepartment(advancedSearch());
+                }
                 case null, default -> {
                     departmentOptional = Optional.empty();
                 }
@@ -109,7 +112,7 @@ public class DepartmentFinder implements DepartmentFinderInterface{
                 System.out.println(i++ + ": " + find);
             }
             System.out.println(i++ + ": Reset setting");
-            System.out.println(i++ + ": Searching for faculty");
+            System.out.println(i++ + ": Start searching");
             System.out.println(i + ": Cancel");
             System.out.println("Active filters: " + activeFilters);
             int choose = inputReader.readIntInRange("Choose param or start search", 1, i);

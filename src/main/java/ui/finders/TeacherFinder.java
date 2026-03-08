@@ -11,7 +11,7 @@ import ui.InputReader;
 
 import java.util.*;
 
-public class TeacherFinder {
+public class TeacherFinder implements  TeacherFinderInterface {
     private ServiceTeacherInterface serviceTeacher;
     private InputReader inputReader;
 

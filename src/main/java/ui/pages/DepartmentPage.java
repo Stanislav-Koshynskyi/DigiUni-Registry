@@ -5,27 +5,28 @@ import entity.Faculty;
 import entity.Right;
 import entity.Teacher;
 import service.ServiceDepartmentInterface;
-import service.ServiceFacultyInterface;
 import service.ServiceTeacherInterface;
 import ui.*;
 import ui.finders.FacultyFinderInterface;
+import util.PagerBuilder;
 
 import java.util.List;
 import java.util.Optional;
 
 public class DepartmentPage extends BasePage {
     private final ServiceDepartmentInterface serviceDepartment;
-    private final ServiceFacultyInterface serviceFaculty;
     private final ServiceTeacherInterface serviceTeacher;
     private final FacultyFinderInterface facultyFinder;
-    public DepartmentPage(ServiceDepartmentInterface serviceDepartment,
-                          ServiceFacultyInterface serviceFaculty, ServiceTeacherInterface serviceTeacher,
-                          InputReader inputReader, FacultyFinderInterface facultyFinder) {
+    private final PagerBuilder pagerBuilder;
+    public DepartmentPage(ServiceDepartmentInterface serviceDepartment
+            , ServiceTeacherInterface serviceTeacher,
+                          InputReader inputReader, FacultyFinderInterface facultyFinder,
+                          PagerBuilder pagerBuilder) {
         super(inputReader);
         this.serviceDepartment = serviceDepartment;
-        this.serviceFaculty = serviceFaculty;
         this.serviceTeacher = serviceTeacher;
         this.facultyFinder = facultyFinder;
+        this.pagerBuilder = pagerBuilder;
     }
 
     @Override
@@ -39,7 +40,8 @@ public class DepartmentPage extends BasePage {
                 new MenuItem("Create department", Right.ADD, this::createDepartment),
                 new MenuItem("Edit department", Right.EDIT, this::editDepartment),
                 new MenuItem("Delete Department", Right.DELETE, this::deleteDepartment),
-                new MenuItem("Show all departments", Right.FIND, this::showAllDepartments)
+                new MenuItem("Show all departments", Right.FIND, this::showAllDepartments),
+                new MenuItem("Find departments", Right.FIND, pagerBuilder::getDepartmentFindmentPage)
         );
     }
 

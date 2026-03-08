@@ -156,7 +156,7 @@ public class FacultyFinder implements FacultyFinderInterface {
                 System.out.println(i++ + ": " + facultyForAdvancedFind);
             }
             System.out.println(i++ + ": Reset setting");
-            System.out.println(i++ + ": Searching for faculty");
+            System.out.println(i++ + ": Start searching");
             System.out.println(i + ": Cancel");
             System.out.println("Active filters: " + facultyForAdvancedFinds);
             int choose = inputReader.readIntInRange("Choose param or start search",
