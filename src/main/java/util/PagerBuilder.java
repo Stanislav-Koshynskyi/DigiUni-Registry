@@ -48,10 +48,10 @@ public class PagerBuilder {
     }
 
     public Page getDepartmentPage(){
-        return new DepartmentPage(serviceDepartment,  serviceTeacher, inputReader, facultyFinder, this);
+        return new DepartmentPage(serviceDepartment,  teacherFinder, inputReader, facultyFinder, this);
     }
     public Page getFacultyPage(){
-        return new FacultyPage(serviceFaculty, serviceTeacher, inputReader,
+        return new FacultyPage(serviceFaculty, teacherFinder, inputReader,
                 universityFinder, this);
     }
     public Page getUniversityPage(){
