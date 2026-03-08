@@ -5,7 +5,6 @@ import entity.Faculty;
 import entity.Right;
 import entity.Teacher;
 import service.ServiceDepartmentInterface;
-import service.ServiceTeacherInterface;
 import ui.*;
 import ui.finders.FacultyFinderInterface;
 import ui.finders.TeacherFinderInterface;
@@ -42,7 +41,7 @@ public class DepartmentPage extends BasePage {
                 new MenuItem("Edit department", Right.EDIT, this::editDepartment),
                 new MenuItem("Delete Department", Right.DELETE, this::deleteDepartment),
                 new MenuItem("Show all departments", Right.FIND, this::showAllDepartments),
-                new MenuItem("Find departments", Right.FIND, pagerBuilder::getDepartmentFindmentPage)
+                new MenuItem("Find departments", Right.FIND, pagerBuilder::getDepartmentFindPage)
         );
     }
 

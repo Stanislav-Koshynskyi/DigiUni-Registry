@@ -7,23 +7,23 @@ import service.ServiceDepartmentInterface;
 import service.ServiceStudentGroupInterface;
 import ui.*;
 import ui.finders.DepartmentFinderInterface;
+import util.PagerBuilder;
 
 import java.io.Console;
 import java.util.List;
 import java.util.Optional;
 
 public class StudentGroupPage extends BasePage {
-    private final ServiceDepartmentInterface serviceDepartment;
     private final ServiceStudentGroupInterface serviceStudentGroup;
     private final DepartmentFinderInterface departmentFinder;
+    private final PagerBuilder pagerBuilder;
 
-    public StudentGroupPage(ServiceDepartmentInterface serviceDepartment,
-                            ServiceStudentGroupInterface serviceStudentGroup, InputReader inputReader,
-                            DepartmentFinderInterface departmentFinder) {
+    public StudentGroupPage(ServiceStudentGroupInterface serviceStudentGroup, InputReader inputReader,
+                            DepartmentFinderInterface departmentFinder, PagerBuilder pagerBuilder) {
         super(inputReader);
-        this.serviceDepartment = serviceDepartment;
         this.serviceStudentGroup = serviceStudentGroup;
         this.departmentFinder = departmentFinder;
+        this.pagerBuilder = pagerBuilder;
     }
 
     @Override
@@ -37,7 +37,8 @@ public class StudentGroupPage extends BasePage {
                 new MenuItem("Create student group", Right.ADD, this::createStudentGroup),
                 new MenuItem("Edit student group", Right.EDIT, this::editStudentGroup),
                 new MenuItem("Delete student group", Right.DELETE, this::deleteStudentGroup),
-                new MenuItem("Show all student group", Right.FIND, this::showStudentGroup)
+                new MenuItem("Show all student group", Right.FIND, this::showStudentGroup),
+                new MenuItem("Find student group", Right.FIND, pagerBuilder::getStudentGroupFindPage)
         );
     }
     private Page createStudentGroup() {

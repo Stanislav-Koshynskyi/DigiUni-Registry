@@ -65,8 +65,7 @@ public class PagerBuilder {
                 serviceStudent, inputReader);
     }
     public Page getStudentGroupPage(){
-        return new StudentGroupPage(serviceDepartment,
-                serviceStudentGroup, inputReader, departmentFinder);
+        return new StudentGroupPage( serviceStudentGroup, inputReader, departmentFinder, this);
     }
     public Page getUserPage(){
         return new UserPage(authService,
@@ -78,7 +77,11 @@ public class PagerBuilder {
     public  Page getFindFacultyPage(){
         return new FindFacultyPage(inputReader, facultyFinder);
     }
-    public Page getDepartmentFindmentPage() {
+    public Page getDepartmentFindPage() {
         return new FindDepartmentPage(inputReader, departmentFinder);
     }
+    public Page getStudentGroupFindPage() {
+        return new FindStudentGroupPage(inputReader, studentGroupFinder);
+    }
+
 }
