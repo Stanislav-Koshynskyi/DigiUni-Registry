@@ -61,7 +61,7 @@ public class PagerBuilder {
         return new TeacherPage(serviceTeacher, inputReader);
     }
     public  Page getStudentPage(){
-        return new StudentPage(serviceStudentGroup,
+        return new StudentPage(studentGroupFinder,
                 serviceStudent, inputReader);
     }
     public Page getStudentGroupPage(){
