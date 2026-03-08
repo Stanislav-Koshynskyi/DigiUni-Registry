@@ -17,4 +17,6 @@ public interface StudentGroupFinderInterface {
     public List<StudentGroup> findByFaculty();
     public List<StudentGroup> findByDepartment();
     public Optional<StudentGroup> findAndSelect();
+
+    List<StudentGroup> findByUniversity();
 }
