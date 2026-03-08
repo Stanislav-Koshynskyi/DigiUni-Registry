@@ -9,6 +9,7 @@ import ui.Page;
 import ui.finders.StudentFinderInterface;
 
 import java.util.List;
+import java.util.Optional;
 
 public class FindStudentPage extends BasePage {
     private final StudentFinderInterface studentFinder;
@@ -72,7 +73,13 @@ public class FindStudentPage extends BasePage {
         return this;
     }
     private Page findByContact(){
-        printStudents(List.of(studentFinder.findByContact().orElse(null)));
+        Optional<Student> student = studentFinder.findByContact();
+        if (student.isPresent()) {
+            printStudents(List.of(student.get()));
+        }
+        else{
+            printStudents(List.of());
+        }
         return this;
     }
     private Page advancedSearch(){

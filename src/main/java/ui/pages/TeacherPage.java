@@ -3,6 +3,7 @@ package ui.pages;
 import entity.*;
 import service.ServiceTeacherInterface;
 import ui.*;
+import util.PagerBuilder;
 
 import java.io.Console;
 import java.math.BigDecimal;
@@ -12,9 +13,12 @@ import java.util.Optional;
 
 public class TeacherPage extends BasePage {
     private final ServiceTeacherInterface serviceTeacher;
-    public TeacherPage( ServiceTeacherInterface serviceTeacher, InputReader inputReader) {
+    private final PagerBuilder pagerBuilder;
+    public TeacherPage( ServiceTeacherInterface serviceTeacher, InputReader inputReader,
+                        PagerBuilder pagerBuilder) {
         super(inputReader);
         this.serviceTeacher = serviceTeacher;
+        this.pagerBuilder = pagerBuilder;
     }
 
     @Override
@@ -28,7 +32,8 @@ public class TeacherPage extends BasePage {
             new MenuItem("Add teacher", Right.ADD, this::createTeacher),
             new MenuItem("Edit teacher", Right.EDIT, this::editTeacher),
             new MenuItem("Delete teacher", Right.DELETE, this::deleteTeacher),
-            new MenuItem("Show all teacher", Right.FIND, this:: showAllTeachers)
+            new MenuItem("Show all teacher", Right.FIND, this:: showAllTeachers),
+            new MenuItem("Find teachers", Right.FIND, pagerBuilder::getTeacherFindPage)
         );
     }
     private Page createTeacher() {
