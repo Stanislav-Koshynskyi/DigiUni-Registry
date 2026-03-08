@@ -1,7 +1,7 @@
 package service;
 
-import entity.Student;
-import entity.StudentGroup;
+import entity.*;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -14,9 +14,35 @@ public interface ServiceStudentInterface {
 
     List<Student> findAll();
 
-    Optional<Student> findByRecordBookNumber(String recordBookNumber);
+    List<Student> findByRecordBookNumber(String recordBookNumber);
 
     void transferStudent(Long studentId, StudentGroup newGroup, int newCourse);
 
     Optional<Student> findById(Long id);
+
+    List<Student> findByFormOfEducation(FormOfEducation formOfEducation);
+
+    List<Student> findByStudentStatus(StudentStatus status);
+
+    List<Student> findByCourse(int courseMin, int courseMax);
+
+    List<Student> findByStudentGroup(StudentGroup studentGroup);
+
+    List<Student> findByUniqueCode(String uniqueCode);
+
+    List<Student> findByName(String name);
+
+    List<Student> findBySurname(String surname);
+
+    List<Student> findByPatronymic(String patronymic);
+
+    List<Student> findByUniversity(University university);
+
+    List<Student> findByDepartment(Department department);
+
+    List<Student> findByFaculty(Faculty faculty);
+
+    Optional<Student> findByEmail(String email);
+
+    Optional<Student> findByPhone(String phone);
 }

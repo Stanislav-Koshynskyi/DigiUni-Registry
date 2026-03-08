@@ -4,7 +4,6 @@ import entity.*;
 
 import java.time.Year;
 import java.util.List;
-import java.util.Optional;
 
 public interface StudentRepository extends PersonRepository<Student> {
 
@@ -12,14 +11,19 @@ public interface StudentRepository extends PersonRepository<Student> {
 
     List<Student> findByStudentStatus(StudentStatus studentStatus);
 
-    Optional<Student> findByRecordBookNumber(String recordBookNumber);
+    List<Student> findByRecordBookNumber(String recordBookNumber);
 
     boolean existsByRecordBookNumber(String recordBookNumber);
 
     List<Student> findByYearOfAdmission(Year yearOfAdmission);
 
-    List<Student> findByCourse(int course);
+    List<Student> findByCourse(int courseMin, int courseMax);
 
     List<Student> findByGroup(StudentGroup studentGroup);
 
+    List<Student> findByUniversity(University university);
+
+    List<Student> findByDepartment(Department department);
+
+    List<Student> findByFaculty(Faculty faculty);
 }

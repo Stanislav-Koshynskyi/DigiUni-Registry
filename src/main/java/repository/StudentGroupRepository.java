@@ -1,13 +1,8 @@
 package repository;
 
-import entity.Department;
-import entity.Student;
-import entity.StudentGroup;
-import entity.Teacher;
+import entity.*;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 public interface StudentGroupRepository extends Repository<StudentGroup, Long> {
@@ -18,4 +13,8 @@ public interface StudentGroupRepository extends Repository<StudentGroup, Long> {
     Optional<StudentGroup> findByHeadOfGroup(Teacher headOfDepartment);
 
     Optional<StudentGroup> findByGroupLeader(Student groupLeader);
+
+    List<StudentGroup> findByUniversity(University university);
+
+    List<StudentGroup> findByFaculty(Faculty faculty);
 }

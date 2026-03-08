@@ -1,9 +1,6 @@
 package repository;
 
-import entity.Department;
-import entity.Student;
-import entity.StudentGroup;
-import entity.Teacher;
+import entity.*;
 
 import java.util.*;
 
@@ -34,5 +31,21 @@ public class InMemoryStudentGroupRepository extends AbstractRepositoryByLong<Stu
         Map<Long, StudentGroup> data = getData();
         return data.values().stream().filter(sg ->
                 Objects.equals(sg.getGroupLeader().orElse(null), groupLeader)).findFirst();
+    }
+
+    @Override
+    public List<StudentGroup> findByUniversity(University university) {
+        Map<Long, StudentGroup> data = getData();
+        return data.values().stream().filter(
+                sg -> sg.getDepartment().getFaculty().getUniversity().equals(university)
+        ).toList();
+    }
+
+    @Override
+    public List<StudentGroup> findByFaculty(Faculty faculty) {
+        Map<Long, StudentGroup> data = getData();
+        return data.values().stream().filter(
+                sg -> sg.getDepartment().getFaculty().equals(faculty)
+        ).toList();
     }
 }
