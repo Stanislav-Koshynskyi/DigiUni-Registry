@@ -7,7 +7,7 @@ import ui.InputReader;
 
 import java.util.*;
 
-public class StudentFinder {
+public class StudentFinder implements StudentFinderInterface {
     private final UniversityFinderInterface universityFinder;
     private final FacultyFinderInterface facultyFinder;
     private final DepartmentFinderInterface departmentFinder;
@@ -291,7 +291,7 @@ public class StudentFinder {
         }
     }
 
-    public List<Student> filterByFaculty(List<Student> students) {
+    private List<Student> filterByFaculty(List<Student> students) {
         Optional<Faculty> optionalFaculty = facultyFinder.findAndSelect();
         if (optionalFaculty.isEmpty()) {
             return Collections.emptyList();
@@ -303,7 +303,7 @@ public class StudentFinder {
         }
     }
 
-    public List<Student> filterByDepartment(List<Student> students) {
+    private List<Student> filterByDepartment(List<Student> students) {
         Optional<Department> optionalDepartment = departmentFinder.findAndSelect();
         if (optionalDepartment.isEmpty()) {
             return Collections.emptyList();
@@ -314,7 +314,7 @@ public class StudentFinder {
         }
     }
 
-    public List<Student> filterByStudentGroup(List<Student> students) {
+    private List<Student> filterByStudentGroup(List<Student> students) {
         Optional<StudentGroup> optionalStudentGroup = studentGroupFinder.findAndSelect();
         if (optionalStudentGroup.isEmpty()) {
             return Collections.emptyList();
