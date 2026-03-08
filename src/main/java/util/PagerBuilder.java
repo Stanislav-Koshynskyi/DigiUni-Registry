@@ -58,7 +58,7 @@ public class PagerBuilder {
         return new UniversityPage(serviceUniversity, inputReader, this);
     }
     public Page getTeacherPage(){
-        return new TeacherPage(serviceTeacher, inputReader);
+        return new TeacherPage(serviceTeacher, inputReader, this);
     }
     public  Page getStudentPage(){
         return new StudentPage(studentGroupFinder,
@@ -85,6 +85,9 @@ public class PagerBuilder {
     }
     public Page getStudentFindPage() {
         return new FindStudentPage(inputReader, studentFinder);
+    }
+    public Page getTeacherFindPage() {
+        return new FindTeacherPage(inputReader, teacherFinder);
     }
 
 }
