@@ -6,6 +6,7 @@ import service.ServiceTeacherInterface;
 import service.ServiceUniversityInterface;
 import ui.*;
 import ui.finders.FacultyFinderInterface;
+import ui.finders.TeacherFinderInterface;
 import ui.finders.UniversityFinderInterface;
 import util.PagerBuilder;
 
@@ -15,16 +16,16 @@ import java.util.Optional;
 
 public class FacultyPage extends BasePage {
     private final ServiceFacultyInterface serviceFaculty;
-    private final ServiceTeacherInterface serviceTeacher;
+    private final TeacherFinderInterface teacherFinder;
     private final UniversityFinderInterface universityFinder;
     private final PagerBuilder pagerBuilder;
 
-    public FacultyPage(ServiceFacultyInterface serviceFaculty, ServiceTeacherInterface serviceTeacher,
+    public FacultyPage(ServiceFacultyInterface serviceFaculty, TeacherFinderInterface teacherFinder,
                        InputReader inputReader, UniversityFinderInterface universityFinder,
                        PagerBuilder pagerBuilder) {
         super(inputReader);
         this.serviceFaculty = serviceFaculty;
-        this.serviceTeacher = serviceTeacher;
+        this.teacherFinder = teacherFinder;
         this.universityFinder = universityFinder;
         this.pagerBuilder = pagerBuilder;
     }
@@ -50,20 +51,11 @@ public class FacultyPage extends BasePage {
         String name = inputReader.readString("Enter faculty name: ");
         String shortName = inputReader.readStringWithMaxLengthProbablyBlank("Enter short name", Faculty.MAX_SHORT_NAME_LENGTH);
         Contact contact = inputReader.readContact();
-        Teacher dean = null;
-        Long teacherId;
-        while (true) {
-            teacherId = inputReader.readLong("Enter teacher id(if vacant write -1): ");
-            if (teacherId.equals(Long.valueOf(-1))) break;
-            Optional<Teacher> optionalTeacher = serviceTeacher.findById(teacherId);
-            if (optionalTeacher.isPresent()) {
-                dean = optionalTeacher.get();
-                break;
-            } else {
-                System.out.println("Teacher not found!!!");
-            }
+        System.out.println("Select dean (cansel if vacant)");
+        Optional<Teacher> optionalTeacher = teacherFinder.findAndSelect();
+        Teacher dean;
+        dean = optionalTeacher.orElse(null);
 
-        }
         Optional<University> optionalUniversity = universityFinder.findAndSelect();
         if (optionalUniversity.isEmpty()){
             System.out.println("Faculty not created!");
