@@ -4,6 +4,8 @@ import entity.*;
 import service.ServiceStudentGroupInterface;
 import service.ServiceStudentInterface;
 import ui.*;
+import ui.finders.StudentFinderInterface;
+import ui.finders.StudentGroupFinderInterface;
 
 import java.io.Console;
 import java.time.LocalDate;
@@ -13,13 +15,13 @@ import java.util.List;
 import java.util.Optional;
 
 public class StudentPage extends BasePage {
-    private final ServiceStudentGroupInterface serviceStudentGroup;
+    private final StudentGroupFinderInterface studentGroupFinder;
     private final ServiceStudentInterface serviceStudent;
 
-    public StudentPage(ServiceStudentGroupInterface serviceStudentGroup,
+    public StudentPage(StudentGroupFinderInterface studentGroupFinder,
                        ServiceStudentInterface serviceStudent, InputReader inputReader) {
         super(inputReader);
-        this.serviceStudentGroup = serviceStudentGroup;
+        this.studentGroupFinder = studentGroupFinder;
         this.serviceStudent = serviceStudent;
     }
 
@@ -40,20 +42,13 @@ public class StudentPage extends BasePage {
 
 
     private Page createStudent() {
-        StudentGroup group;
-        while (true) {
-            Long groupId = inputReader.readLong("Enter group id(-1 to exit): ");
-            if (groupId.equals(Long.valueOf(-1))) return this;
-            Optional<StudentGroup> optionalGroup = serviceStudentGroup.findById(groupId);
-            if  (optionalGroup.isPresent()) {
-                group = optionalGroup.get();
-                break;
-            }
-            else {
-                System.out.println("Group not found!!!");
-
-            }
+        Optional<StudentGroup> optionalStudentGroup = studentGroupFinder.findAndSelect();
+        if (optionalStudentGroup.isEmpty()){
+            System.out.println("No student group selected");
+            System.out.println("Student not created");
+            return this;
         }
+        StudentGroup studentGroup = optionalStudentGroup.get();
 
 
         FullName fullName = inputReader.readfullName();
@@ -70,7 +65,7 @@ public class StudentPage extends BasePage {
 
 
 
-        Student student = new Student(uniqueCode, recordBook, fullName, birthDate, contact, form, status, yearOfAdmission, course, group);
+        Student student = new Student(uniqueCode, recordBook, fullName, birthDate, contact, form, status, yearOfAdmission, course, studentGroup);
         serviceStudent.create(student);
         return this;
     }
