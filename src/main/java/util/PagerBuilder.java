@@ -66,7 +66,7 @@ public class PagerBuilder {
     }
     public Page getStudentGroupPage(){
         return new StudentGroupPage(serviceDepartment,
-                serviceStudentGroup, inputReader);
+                serviceStudentGroup, inputReader, departmentFinder);
     }
     public Page getUserPage(){
         return new UserPage(authService,
