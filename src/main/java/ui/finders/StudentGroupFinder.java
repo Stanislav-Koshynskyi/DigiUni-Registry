@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class StudentGroupFinder {
+public class StudentGroupFinder implements  StudentGroupFinderInterface {
     private final InputReader inputReader;
     private final UniversityFinderInterface universityFinder;
     private final FacultyFinderInterface facultyFinder;

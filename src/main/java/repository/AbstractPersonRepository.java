@@ -1,6 +1,7 @@
 package repository;
 
 import entity.Person;
+import entity.Student;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,9 +16,9 @@ public abstract class AbstractPersonRepository <P extends Person> extends Abstra
         super(id);
     }
 
-    public Optional<P> findByUniqueCode(String uniqueCode) {
+    public List<P> findByUniqueCode(String uniqueCode) {
         Map<Long, P> data = getData();
-        return data.values().stream().filter(p -> p.getUniqueCode().equals(uniqueCode)).findAny();
+        return data.values().stream().filter(p -> p.getUniqueCode().equals(uniqueCode)).toList();
     }
 
     public boolean existsByUniqueCode(String uniqueCode) {

@@ -1,13 +1,14 @@
 package repository;
 
 import entity.Person;
+import entity.Student;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 public interface PersonRepository<P extends Person> extends Repository<P, Long> {
-    Optional<P> findByUniqueCode(String uniqueCode);
+    List<P> findByUniqueCode(String uniqueCode);
 
     boolean existsByUniqueCode(String uniqueCode);
 

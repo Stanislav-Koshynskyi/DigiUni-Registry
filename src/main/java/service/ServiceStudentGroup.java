@@ -1,9 +1,6 @@
 package service;
 
-import entity.Student;
-import entity.StudentGroup;
-import entity.Department;
-import entity.Teacher;
+import entity.*;
 import repository.StudentGroupRepository;
 import java.util.List;
 import java.util.Optional;
@@ -62,5 +59,15 @@ public class ServiceStudentGroup implements ServiceStudentGroupInterface{
 
     public Optional<StudentGroup> findById(Long id) {
         return studentGroupRepository.findById(id);
+    }
+
+    @Override
+    public List<StudentGroup> findByUniversity(University university) {
+        return studentGroupRepository.findByUniversity(university);
+    }
+
+    @Override
+    public List<StudentGroup> findByFaculty(Faculty faculty) {
+        return studentGroupRepository.findByFaculty(faculty);
     }
 }
