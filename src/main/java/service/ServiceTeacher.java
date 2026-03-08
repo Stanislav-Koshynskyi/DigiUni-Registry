@@ -1,5 +1,7 @@
 package service;
 
+import entity.AcademicDegree;
+import entity.AcademicRank;
 import entity.Teacher;
 import repository.TeacherRepository;
 import java.util.List;
@@ -30,5 +32,50 @@ public class ServiceTeacher implements ServiceTeacherInterface {
 
     public Optional<Teacher> findById(Long id) {
         return teacherRepository.findById(id);
+    }
+
+    @Override
+    public List<Teacher> findByName(String name) {
+        return teacherRepository.findByName(name);
+    }
+
+    @Override
+    public List<Teacher> findBySurname(String surname) {
+        return teacherRepository.findBySurname(surname);
+    }
+
+    @Override
+    public Optional<Teacher> findByEmail(String email) {
+        return teacherRepository.findByEmail(email);
+    }
+
+    @Override
+    public Optional<Teacher> findByPhone(String phone) {
+        return teacherRepository.findByPhone(phone);
+    }
+
+    @Override
+    public List<Teacher> findByPatronymic(String patronymic) {
+        return teacherRepository.findByPatronymic(patronymic);
+    }
+
+    @Override
+    public List<Teacher> findByAcademicRank(AcademicRank rank) {
+        return teacherRepository.findByAcademicRank(rank);
+    }
+
+    @Override
+    public List<Teacher> findByAcademicDegree(AcademicDegree degree) {
+        return teacherRepository.findByAcademicDegree(degree);
+    }
+
+    @Override
+    public Optional<Teacher> findByUniqueCode(String uniqueCode) {
+        return teacherRepository.findByUniqueCode(uniqueCode).stream().findFirst();
+    }
+
+    @Override
+    public List<Teacher> findBySalary(Integer salaryMin, Integer salaryMax) {
+        return teacherRepository.findBySalary(salaryMin,salaryMax);
     }
 }
