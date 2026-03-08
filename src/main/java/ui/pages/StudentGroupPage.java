@@ -6,6 +6,7 @@ import entity.StudentGroup;
 import service.ServiceDepartmentInterface;
 import service.ServiceStudentGroupInterface;
 import ui.*;
+import ui.finders.DepartmentFinderInterface;
 
 import java.io.Console;
 import java.util.List;
@@ -14,12 +15,15 @@ import java.util.Optional;
 public class StudentGroupPage extends BasePage {
     private final ServiceDepartmentInterface serviceDepartment;
     private final ServiceStudentGroupInterface serviceStudentGroup;
+    private final DepartmentFinderInterface departmentFinder;
 
     public StudentGroupPage(ServiceDepartmentInterface serviceDepartment,
-                            ServiceStudentGroupInterface serviceStudentGroup, InputReader inputReader) {
+                            ServiceStudentGroupInterface serviceStudentGroup, InputReader inputReader,
+                            DepartmentFinderInterface departmentFinder) {
         super(inputReader);
         this.serviceDepartment = serviceDepartment;
         this.serviceStudentGroup = serviceStudentGroup;
+        this.departmentFinder = departmentFinder;
     }
 
     @Override
@@ -39,22 +43,14 @@ public class StudentGroupPage extends BasePage {
     private Page createStudentGroup() {
         String name = inputReader.readString("Enter group name: ");
 
-        Department department;
-        while (true) {
-            Long id = inputReader.readLong("Enter department id(-1 to exit): ");
-            if (id.equals(-1L)) return this;
-            Optional<Department> optionalDepartment = serviceDepartment.findById(id);
-            if (optionalDepartment.isPresent()) {
-                department = optionalDepartment.get();
-                break;
-            }
-            else{
-                System.out.println("Department not found");
-            }
+        Optional<Department> department = departmentFinder.findAndSelect();
+        if (department.isEmpty()) {
+            System.out.println("Department not found");
+            System.out.println("Group not created");
         }
 
 
-        StudentGroup group = new StudentGroup(name, department);
+        StudentGroup group = new StudentGroup(name, department.get());
         serviceStudentGroup.create(group);
         return this;
     }
