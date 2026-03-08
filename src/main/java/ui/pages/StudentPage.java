@@ -6,6 +6,7 @@ import service.ServiceStudentInterface;
 import ui.*;
 import ui.finders.StudentFinderInterface;
 import ui.finders.StudentGroupFinderInterface;
+import util.PagerBuilder;
 
 import java.io.Console;
 import java.time.LocalDate;
@@ -17,12 +18,14 @@ import java.util.Optional;
 public class StudentPage extends BasePage {
     private final StudentGroupFinderInterface studentGroupFinder;
     private final ServiceStudentInterface serviceStudent;
+    private final PagerBuilder pagerBuilder;
 
     public StudentPage(StudentGroupFinderInterface studentGroupFinder,
-                       ServiceStudentInterface serviceStudent, InputReader inputReader) {
+                       ServiceStudentInterface serviceStudent, InputReader inputReader, PagerBuilder pagerBuilder) {
         super(inputReader);
         this.studentGroupFinder = studentGroupFinder;
         this.serviceStudent = serviceStudent;
+        this.pagerBuilder = pagerBuilder;
     }
 
     @Override
@@ -36,7 +39,8 @@ public class StudentPage extends BasePage {
                 new MenuItem("Add student", Right.ADD, this::createStudent),
                 new MenuItem("Edit student", Right.EDIT, this::editStudent),
                 new MenuItem("Delete student", Right.DELETE, this::deleteStudent),
-                new MenuItem("Show all student", Right.FIND, this::showAllStudents)
+                new MenuItem("Show all student", Right.FIND, this::showAllStudents),
+                new MenuItem("Find student", Right.FIND, pagerBuilder::getStudentFindPage)
         );
     }
 
