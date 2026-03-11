@@ -40,7 +40,12 @@ public class StudentPage extends BasePage {
                 new MenuItem("Edit student", Right.EDIT, this::editStudent),
                 new MenuItem("Delete student", Right.DELETE, this::deleteStudent),
                 new MenuItem("Show all student", Right.FIND, this::showAllStudents),
-                new MenuItem("Find student", Right.FIND, pagerBuilder::getStudentFindPage)
+                new MenuItem("Find student", Right.FIND, pagerBuilder::getStudentFindPage),
+
+                new MenuItem("Students sorted by course", Right.FIND, this::studentsSortedByCourse),
+                new MenuItem("Students of faculty sorted by surname", Right.FIND, this::studentsFacultySortedSurname),
+                new MenuItem("Students of department sorted by course", Right.FIND, this::studentsDepartmentSortedCourse),
+                new MenuItem("Students of department sorted by surname", Right.FIND, this::studentsDepartmentSortedSurname)
         );
     }
 
@@ -60,9 +65,21 @@ public class StudentPage extends BasePage {
         LocalDate birthDate = inputReader.readBirthDate();
         Contact contact = inputReader.readContact();
 
-        String uniqueCode = inputReader.readString("Enter unique code: ");
+        String uniqueCode, recordBook;
+        while (true) {
+            uniqueCode = inputReader.readString("Enter unique code: ");
+            if (!serviceStudent.existsByUniqueCode(uniqueCode))
+                break;
+            System.out.println("Student with this unique code already exists!");
+        }
         // тут перевірка на унікальність
-        String recordBook = inputReader.readString( "Enter record book number: ");
+        while (true) {
+            recordBook = inputReader.readString( "Enter record book number: ");
+            if (!serviceStudent.existsByRecordBookNumber(recordBook))
+                break;
+            System.out.println("Student with this record book number already exists!");
+        }
+
         int course = inputReader.readIntInRange("Enter course(1-6)", 1, 6);
         Year yearOfAdmission = inputReader.readYearOfAdmission();
         StudentStatus status = StudentStatus.STUDIES;
@@ -115,6 +132,44 @@ public class StudentPage extends BasePage {
     private Page showAllStudents() {
         for (Student student : serviceStudent.findAll())
             System.out.println("id - "+ student.getId() + ", " + student);
+        return this;
+    }
+
+    private Page studentsSortedByCourse() {
+        List<Student> students = serviceStudent.findAllSortedByCourse();
+
+        for (Student student : students) {
+            System.out.println("id - " + student.getId() + ", " + student);
+        }
+        return this;
+    }
+
+    private Page studentsFacultySortedSurname() {
+        Long facultyId = inputReader.readLong("Enter faculty id: ");
+        List<Student> students = serviceStudent.StudentsByFacultySortedSurname(facultyId);
+
+        for (Student student : students) {
+            System.out.println("id - " + student.getId() + ", " + student);
+        }
+        return this;
+    }
+
+    private Page studentsDepartmentSortedCourse() {
+        Long departmentId = inputReader.readLong("Enter department id: ");
+        List<Student> students = serviceStudent.StudentsByDepartmentSortedByCourse(departmentId);
+
+        for (Student student : students) {
+            System.out.println("id - " + student.getId() + ", " + student);
+        }
+        return this;
+    }
+    private Page studentsDepartmentSortedSurname() {
+        Long departmentId = inputReader.readLong("Enter department id: ");
+        List<Student> students = serviceStudent.StudentsByDepartmentSortedBySurname(departmentId);
+
+        for (Student student : students) {
+            System.out.println("id - " + student.getId() + ", " + student);
+        }
         return this;
     }
 }

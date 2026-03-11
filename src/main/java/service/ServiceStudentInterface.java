@@ -45,4 +45,16 @@ public interface ServiceStudentInterface {
     Optional<Student> findByEmail(String email);
 
     Optional<Student> findByPhone(String phone);
+
+    List<Student> findAllSortedByCourse();
+
+    List<Student> StudentsByFacultySortedSurname(Long facultyId);
+
+    List<Student> StudentsByDepartmentSortedByCourse(Long departmentId);
+
+    List<Student> StudentsByDepartmentSortedBySurname(Long departmentId);
+
+    boolean existsByUniqueCode(String uniqueCode);
+
+    boolean existsByRecordBookNumber(String recordBookNumber);
 }

@@ -2,6 +2,8 @@ package service;
 
 import entity.*;
 import repository.StudentRepository;
+
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,9 +15,13 @@ public class ServiceStudent implements ServiceStudentInterface{
     }
 
     public Student create(Student student) {
-        if (studentRepository.existsByRecordBookNumber(student.getRecordBookNumber())) {
-            throw new IllegalArgumentException("Student already exists!!!");
+        if (studentRepository.existsByUniqueCode(student.getUniqueCode())) {
+            throw new IllegalArgumentException("Student with this unique code already exists!");
         }
+        if (studentRepository.existsByRecordBookNumber(student.getRecordBookNumber())) {
+            throw new IllegalArgumentException("Student with this record book number already exists!");
+        }
+
         Student student1 = studentRepository.save(student);
         student1.getGroup().addStudent(student1);
         return student1;
@@ -119,4 +125,42 @@ public class ServiceStudent implements ServiceStudentInterface{
     public Optional<Student> findByPhone(String phone) {
         return studentRepository.findByPhone(phone);
     }
+
+    public List<Student> findAllSortedByCourse() {
+        return studentRepository.findAll()
+                .stream()
+                .sorted(Comparator.comparing(Student::getCourse))
+                .toList();
+    }
+
+    public List<Student> StudentsByFacultySortedSurname(Long facultyId) {
+
+        return studentRepository.findAll()
+                .stream()
+                .filter(student -> student.getGroup().getDepartment().getFaculty().getId().equals(facultyId))
+                .sorted(Comparator.comparing(s -> s.getFullName().surname()))
+                .toList();
+    }
+
+    public List<Student> StudentsByDepartmentSortedByCourse(Long departmentId) {
+        return studentRepository.findAll()
+                .stream()
+                .filter(student -> student.getGroup().getDepartment().getId().equals(departmentId))
+                .sorted(Comparator.comparing(Student::getCourse))
+                .toList();
+    }
+
+    public List<Student> StudentsByDepartmentSortedBySurname(Long departmentId) {
+        return studentRepository.findAll()
+                .stream()
+                .filter(student ->student.getGroup().getDepartment().getId().equals(departmentId))
+                .sorted(Comparator.comparing(s -> s.getFullName().surname()))
+                .toList();
+    }
+
+    public boolean existsByUniqueCode(String uniqueCode) {
+        return studentRepository.existsByUniqueCode(uniqueCode);
+    }
+
+    public boolean existsByRecordBookNumber(String recordBookNumber) {return studentRepository.existsByRecordBookNumber(recordBookNumber);}
 }

@@ -21,12 +21,10 @@ public class StudentGroup implements Entity{
 
     }
 
-
     public StudentGroup(String name, Department department) {
         setName(name);
         setDepartment(department);
         students = new HashSet<>();
-
     }
     public Department getDepartment() {
         return department;
@@ -124,4 +122,5 @@ public class StudentGroup implements Entity{
                 ",department - "+ departmentInfo + ", group leader - " + groupLeaderInfo +
                 ", students - " + studentsName +"]";
     }
+
 }

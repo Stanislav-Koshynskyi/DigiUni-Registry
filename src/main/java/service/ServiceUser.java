@@ -26,6 +26,9 @@ public class ServiceUser implements ServiceUserInterface {
 
     @Override
     public User save(User user) {
+        if (userRepository.existsByLogin(user.getLogin()))
+            throw new IllegalArgumentException("User with this login already exists!");
+
         user.setPassword(passwordCoder.encodePassword(user.getPassword()));
         return  userRepository.save(user);
     }
