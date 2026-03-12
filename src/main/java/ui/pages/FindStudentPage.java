@@ -49,28 +49,28 @@ public class FindStudentPage extends BasePage {
         }
     }
     private Page findByOrgStructure(){
-        printStudents(studentFinder.findByOrgStructure());
-        return this;
+        List<Student> student = studentFinder.findByOrgStructure();
+        return new SortStudentPage(inputReader, student);
     }
     private Page findByIDs(){
         printStudents(studentFinder.findByIds());
         return this;
     }
     private Page findBySurname(){
-        printStudents(studentFinder.findBySurname());
-        return this;
+        List<Student> student = studentFinder.findBySurname();
+        return new SortStudentPage(inputReader, student);
     }
     private Page findByPatronymic(){
-        printStudents(studentFinder.findByPatronymic());
-        return this;
+        List<Student> student = studentFinder.findByPatronymic();
+        return new SortStudentPage(inputReader, student);
     }
     private Page findByName(){
-        printStudents(studentFinder.findByName());
-        return this;
+        List<Student> student = studentFinder.findByName();
+        return new SortStudentPage(inputReader, student);
     }
     private Page findByCourse(){
-        printStudents(studentFinder.findByCourse());
-        return this;
+        List<Student> student = studentFinder.findByCourse();
+        return new SortStudentPage(inputReader, student);
     }
     private Page findByContact(){
         Optional<Student> student = studentFinder.findByContact();
@@ -83,15 +83,15 @@ public class FindStudentPage extends BasePage {
         return this;
     }
     private Page advancedSearch(){
-        printStudents(studentFinder.advancedSearch());
-        return this;
+        List<Student> student = studentFinder.advancedSearch();
+        return new SortStudentPage(inputReader, student);
     }
     private Page findByStudentStatus(){
-        printStudents(studentFinder.findByStudentStatus());
-        return this;
+        List<Student> student = studentFinder.findByStudentStatus();
+        return new SortStudentPage(inputReader, student);
     }
     private Page findByFormOfEducation(){
-        printStudents(studentFinder.findByFormOfEducation());
-        return this;
+        List<Student> student = studentFinder.findByFormOfEducation();
+        return new SortStudentPage(inputReader, student);
     }
 }

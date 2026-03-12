@@ -46,14 +46,6 @@ public interface ServiceStudentInterface {
 
     Optional<Student> findByPhone(String phone);
 
-    List<Student> findAllSortedByCourse();
-
-    List<Student> StudentsByFacultySortedSurname(Long facultyId);
-
-    List<Student> StudentsByDepartmentSortedByCourse(Long departmentId);
-
-    List<Student> StudentsByDepartmentSortedBySurname(Long departmentId);
-
     boolean existsByUniqueCode(String uniqueCode, University university);
 
     boolean existsByRecordBookNumber(String recordBookNumber, University university);

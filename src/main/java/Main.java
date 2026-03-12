@@ -7,6 +7,7 @@ import service.*;
 import ui.*;
 import ui.finders.*;
 import ui.pages.MainPage;
+import util.BaseForTest;
 import util.PagerBuilder;
 
 import java.io.Console;
@@ -21,7 +22,7 @@ public class Main {
         UniversityRepository universityRepository = new InMemoryUniversityRepository();
         UserRepository userRepository = new InMemoryUserRepository();
 
-
+        BaseForTest.seed(universityRepository, facultyRepository, departmentRepository, teacherRepository, studentGroupRepository, studentRepository);
 
         ServiceDepartmentInterface serviceDepartmentInterface = new ServiceDepartment(departmentRepository);
         ServiceFacultyInterface serviceFacultyInterface = new ServiceFaculty(facultyRepository);

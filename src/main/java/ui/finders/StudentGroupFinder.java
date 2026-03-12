@@ -69,7 +69,7 @@ public class StudentGroupFinder implements  StudentGroupFinderInterface {
         Optional<StudentGroup> optionalStudentGroup = Optional.empty();
         while (true) {
             StudentGroupFind find = inputReader.readChoose(
-                    Arrays.stream(StudentGroupFind.values()).toList(), "Choose criteria"
+                    Arrays.stream(StudentGroupFind.values()).toList(), "Choose criteria: "
             );
             switch (find) {
                 case UNIVERSITY -> {

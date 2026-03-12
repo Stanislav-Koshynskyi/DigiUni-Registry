@@ -127,38 +127,6 @@ public class ServiceStudent implements ServiceStudentInterface{
         return studentRepository.findByPhone(phone);
     }
 
-    public List<Student> findAllSortedByCourse() {
-        return studentRepository.findAll()
-                .stream()
-                .sorted(Comparator.comparing(Student::getCourse))
-                .toList();
-    }
-
-    public List<Student> StudentsByFacultySortedSurname(Long facultyId) {
-
-        return studentRepository.findAll()
-                .stream()
-                .filter(student -> student.getGroup().getDepartment().getFaculty().getId().equals(facultyId))
-                .sorted(Comparator.comparing(s -> s.getFullName().surname()))
-                .toList();
-    }
-
-    public List<Student> StudentsByDepartmentSortedByCourse(Long departmentId) {
-        return studentRepository.findAll()
-                .stream()
-                .filter(student -> student.getGroup().getDepartment().getId().equals(departmentId))
-                .sorted(Comparator.comparing(Student::getCourse))
-                .toList();
-    }
-
-    public List<Student> StudentsByDepartmentSortedBySurname(Long departmentId) {
-        return studentRepository.findAll()
-                .stream()
-                .filter(student ->student.getGroup().getDepartment().getId().equals(departmentId))
-                .sorted(Comparator.comparing(s -> s.getFullName().surname()))
-                .toList();
-    }
-
     public boolean existsByUniqueCode(String code, University university) {
         return studentRepository.existsByUniqueCode(code, university);
     }
