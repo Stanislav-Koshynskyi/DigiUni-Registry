@@ -39,9 +39,11 @@ public class TeacherPage extends BasePage {
     private Page createTeacher() {
         FullName fullName = inputReader.readfullName();
         LocalDate birthDate = inputReader.readBirthDate();
-        Contact contact = inputReader.readContact();
+        String email = uniqueEmail();
+        String phone = uniquePhone();
+        Contact contact = new Contact(phone, email);
 
-        String uniqueCode = inputReader.readString("Enter unique code: ");
+        String uniqueCode = uniqueCode();
         AcademicDegree degree = inputReader.readAcademicDegree();
         AcademicRank rank = inputReader.readAcademicRank();
         LocalDate dateOfEmployment = inputReader.readEmploymentDate();
@@ -87,5 +89,32 @@ public class TeacherPage extends BasePage {
             System.out.println("id -" + teacher.getId() + ", " + teacher);
         }
         return this;
+    }
+
+    private String uniqueEmail() {
+        while (true) {
+            String email = inputReader.readString("Enter email: ");
+            if (!serviceTeacher.existsByEmail(email))
+                return email;
+            System.out.println("Email " + email + " already exists");
+        }
+    }
+
+    private String uniquePhone() {
+        while (true) {
+            String phone = inputReader.readString("Enter phone: ");
+            if (!serviceTeacher.existsByPhone(phone))
+                return phone;
+            System.out.println("Phone " + phone + " already exists");
+        }
+    }
+
+    private String uniqueCode() {
+        while (true) {
+            String uniqueCode = inputReader.readString("Enter unique code: ");
+            if (!serviceTeacher.existsByUniqueCode(uniqueCode))
+                return uniqueCode;
+            System.out.println("Teacher " + uniqueCode + " already exists");
+        }
     }
 }

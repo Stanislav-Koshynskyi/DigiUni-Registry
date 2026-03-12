@@ -13,7 +13,9 @@ public interface StudentRepository extends PersonRepository<Student> {
 
     List<Student> findByRecordBookNumber(String recordBookNumber);
 
-    boolean existsByRecordBookNumber(String recordBookNumber);
+    boolean existsByUniqueCode(String uniqueCode, University university);
+
+    boolean existsByRecordBookNumber(String recordBookNumber, University university);
 
     List<Student> findByYearOfAdmission(Year yearOfAdmission);
 

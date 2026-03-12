@@ -26,4 +26,6 @@ public interface ServiceDepartmentInterface {
 
 
     Optional<Department> findById(Long id);
+
+    boolean existsByUniqueCode(String uniqueCode, University university);
 }

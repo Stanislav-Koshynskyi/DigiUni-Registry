@@ -19,6 +19,11 @@ public interface ServiceFacultyInterface {
     
     List<Faculty> findByUniqueCode(String uniqueCode);
 
+    boolean existsByUniqueCode(String uniqueCode, University university);
+
+    boolean existsByEmail(String email);
+
+    boolean existsByPhone(String phone);
 
     List<Faculty> findByName(String name);
 

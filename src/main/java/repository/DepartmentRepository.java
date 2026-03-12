@@ -30,4 +30,6 @@ public interface DepartmentRepository extends Repository<Department, Long> {
     List<Department> findByUniversity(University university);
 
     List<Department> findByShortName(String shortName);
+
+    boolean existsByUniqueCode(String uniqueCode, University university);
 }

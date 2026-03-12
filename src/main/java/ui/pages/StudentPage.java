@@ -58,28 +58,17 @@ public class StudentPage extends BasePage {
             return this;
         }
         StudentGroup studentGroup = optionalStudentGroup.get();
-
+        University university = studentGroup.getDepartment().getFaculty().getUniversity();
 
         FullName fullName = inputReader.readfullName();
         FormOfEducation form = inputReader.readFormOfEducation();
         LocalDate birthDate = inputReader.readBirthDate();
-        Contact contact = inputReader.readContact();
+        String email = uniqueEmail();
+        String phone = uniquePhone();
+        Contact contact = new Contact(phone, email);
 
-        String uniqueCode, recordBook;
-        while (true) {
-            uniqueCode = inputReader.readString("Enter unique code: ");
-            if (!serviceStudent.existsByUniqueCode(uniqueCode))
-                break;
-            System.out.println("Student with this unique code already exists!");
-        }
-        // тут перевірка на унікальність
-        while (true) {
-            recordBook = inputReader.readString( "Enter record book number: ");
-            if (!serviceStudent.existsByRecordBookNumber(recordBook))
-                break;
-            System.out.println("Student with this record book number already exists!");
-        }
-
+        String uniqueCode = uniqueCode(university);
+        String recordBook = uniqueRecordBookNumber(university);
         int course = inputReader.readIntInRange("Enter course(1-6)", 1, 6);
         Year yearOfAdmission = inputReader.readYearOfAdmission();
         StudentStatus status = StudentStatus.STUDIES;
@@ -89,6 +78,42 @@ public class StudentPage extends BasePage {
         Student student = new Student(uniqueCode, recordBook, fullName, birthDate, contact, form, status, yearOfAdmission, course, studentGroup);
         serviceStudent.create(student);
         return this;
+    }
+
+    private String uniqueCode(University university) {
+        while (true) {
+            String uniqueCode = inputReader.readString("Enter unique code: ");
+            if (!serviceStudent.existsByUniqueCode(uniqueCode, university))
+                return uniqueCode;
+            System.out.println("Student " + uniqueCode + " already exists");
+        }
+    }
+
+    private String uniqueRecordBookNumber(University university) {
+        while (true) {
+            String recordBookNumber = inputReader.readString("Enter record book number: ");
+            if (!serviceStudent.existsByRecordBookNumber(recordBookNumber, university))
+                return recordBookNumber;
+            System.out.println("Student with record book number " + recordBookNumber + " already exists");
+        }
+    }
+
+    private String uniquePhone() {
+        while (true) {
+            String phone = inputReader.readString("Enter phone: ");
+            if (!serviceStudent.existsByPhone(phone))
+                return phone;
+            System.out.println("Phone " + phone + " already exists");
+        }
+    }
+
+    private String uniqueEmail() {
+        while (true) {
+            String email = inputReader.readString("Enter email: ");
+            if (!serviceStudent.existsByEmail(email))
+                return email;
+            System.out.println("Email " + email + " already exists");
+        }
     }
 
     private Page editStudent() {

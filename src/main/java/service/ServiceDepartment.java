@@ -68,4 +68,9 @@ public class ServiceDepartment implements ServiceDepartmentInterface {
     public Optional<Department> findById(Long id) {
         return departmentRepository.findById(id);
     }
+
+    @Override
+    public boolean existsByUniqueCode(String uniqueCode, University university) {
+        return departmentRepository.existsByUniqueCode(uniqueCode, university);
+    }
 }

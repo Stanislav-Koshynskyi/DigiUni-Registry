@@ -1,9 +1,6 @@
 package ui.pages;
 
-import entity.Department;
-import entity.Faculty;
-import entity.Right;
-import entity.Teacher;
+import entity.*;
 import service.ServiceDepartmentInterface;
 import ui.*;
 import ui.finders.FacultyFinderInterface;
@@ -46,8 +43,6 @@ public class DepartmentPage extends BasePage {
     }
 
     private Page createDepartment() {
-
-        String uniqueCode = inputReader.readString("Enter unique code: ");
         String name = inputReader.readString("Enter department name: ");
         String shortName = inputReader.readStringWithMaxLengthProbablyBlank("Enter short name",
                 Department.MAX_SHORT_NAME_LENGTH);
@@ -62,6 +57,8 @@ public class DepartmentPage extends BasePage {
             return this;
         }
         Faculty faculty = optFaculty.get();
+        University university = faculty.getUniversity();
+        String uniqueCode = uniqueCode(university);
 
         Department department = new Department(uniqueCode, name, shortName, faculty, headOfDepartment, cabinet);
         serviceDepartment.create(department);
@@ -109,6 +106,15 @@ public class DepartmentPage extends BasePage {
         for (Department department : serviceDepartment.findAll())
             System.out.println("id -" + department.getId() + ", " + department);
         return this;
+    }
+
+    private String uniqueCode(University university) {
+        while (true) {
+            String uniqueCode = inputReader.readString("Enter unique code: ");
+            if (!serviceDepartment.existsByUniqueCode(uniqueCode, university))
+                return uniqueCode;
+            System.out.println("Department with " + uniqueCode + " already exists");
+        }
     }
 }
 

@@ -15,6 +15,13 @@ public class ServiceTeacher implements ServiceTeacherInterface {
     }
 
     public Teacher create(Teacher teacher) {
+        if (findByUniqueCode(teacher.getUniqueCode()).isPresent())
+            throw new IllegalArgumentException("Teacher already exists with unique code: " + teacher.getUniqueCode());
+        if (findByEmail(teacher.getContact().email()).isPresent())
+            throw new IllegalArgumentException("Contact teacher already exists with email: " + teacher.getContact().email());
+        if (findByPhone(teacher.getContact().phone()).isPresent())
+            throw new IllegalArgumentException("Contact teacher already exists with phone: " + teacher.getContact().phone());
+
         return teacherRepository.save(teacher);
     }
 
@@ -77,5 +84,20 @@ public class ServiceTeacher implements ServiceTeacherInterface {
     @Override
     public List<Teacher> findBySalary(Integer salaryMin, Integer salaryMax) {
         return teacherRepository.findBySalary(salaryMin,salaryMax);
+    }
+
+    @Override
+    public boolean existsByUniqueCode(String uniqueCode) {
+        return teacherRepository.findByUniqueCode(uniqueCode).stream().findAny().isPresent();
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return teacherRepository.findByEmail(email).isPresent();
+    }
+
+    @Override
+    public boolean existsByPhone(String phone) {
+        return teacherRepository.findByPhone(phone).isPresent();
     }
 }

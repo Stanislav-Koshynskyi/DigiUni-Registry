@@ -14,11 +14,9 @@ public class ServiceFaculty implements ServiceFacultyInterface{
     }
 
     public Faculty create(Faculty faculty) {
-        if (facultyRepository.existsByUniqueCode(faculty.getUniqueCode())) {
-            throw new IllegalArgumentException(
-                    "Faculty already exists!!!"
-            );
-        }
+        University university = faculty.getUniversity();
+        if (facultyRepository.existsByUniqueCode(faculty.getUniqueCode(), university))
+            throw new IllegalArgumentException("Faculty already exists!!!");
         return facultyRepository.save(faculty);
     }
 
@@ -65,5 +63,19 @@ public class ServiceFaculty implements ServiceFacultyInterface{
     @Override
     public List<Faculty> findByUniversity(University university) {
         return facultyRepository.findByUniversity(university);
+    }
+
+    public boolean existsByUniqueCode(String uniqueCode, University university) {
+        return facultyRepository.existsByUniqueCode(uniqueCode, university);
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return facultyRepository.existsByEmail(email);
+    }
+
+    @Override
+    public boolean existsByPhone(String phone) {
+        return facultyRepository.existsByPhone(phone);
     }
 }

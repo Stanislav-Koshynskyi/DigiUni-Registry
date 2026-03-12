@@ -25,9 +25,14 @@ public class InMemoryStudentRepository extends AbstractPersonRepository<Student>
         return data.values().stream().filter(p -> p.getRecordBookNumber().equals(recordBookNumber)).toList();
     }
     @Override
-    public boolean existsByRecordBookNumber(String recordBookNumber) {
+    public boolean existsByUniqueCode(String uniqueCode, University university) {
         Map<Long, Student> data = getData();
-        return data.values().stream().anyMatch(p -> p.getRecordBookNumber().equals(recordBookNumber));
+        return data.values().stream().anyMatch(s -> s.getUniqueCode().equals(uniqueCode) && s.getGroup().getDepartment().getFaculty().getUniversity().equals(university));
+    }
+    @Override
+    public boolean existsByRecordBookNumber(String recordBookNumber, University university) {
+        Map<Long, Student> data = getData();
+        return data.values().stream().anyMatch(s -> s.getRecordBookNumber().equals(recordBookNumber) && s.getGroup().getDepartment().getFaculty().getUniversity().equals(university));
     }
     @Override
     public List<Student> findByYearOfAdmission(Year yearOfAdmission) {

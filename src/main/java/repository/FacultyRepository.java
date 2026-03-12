@@ -25,6 +25,8 @@ public interface FacultyRepository extends  Repository<Faculty, Long> {
     boolean existsByPhone(String phone);
     Optional<Faculty> findByEmail(String email);
 
+    boolean existsByUniqueCode(String uniqueCode, University university);
+
     boolean existsByEmail(String email);
 
     List<Faculty> findByShortName(String shortName);

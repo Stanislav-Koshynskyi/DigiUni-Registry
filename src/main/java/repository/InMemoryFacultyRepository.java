@@ -59,6 +59,11 @@ public class InMemoryFacultyRepository extends AbstractRepositoryByLong<Faculty>
         return data.values().stream().filter(f -> f.getContact().email().equals(email)).findFirst();
     }
 
+    public boolean existsByUniqueCode(String uniqueCode, University university) {
+        Map<Long, Faculty> data = getData();
+        return data.values().stream().anyMatch(f -> f.getUniqueCode().equalsIgnoreCase(uniqueCode) && f.getUniversity().equals(university));
+    }
+
     public boolean existsByEmail(String email) {
         Map<Long, Faculty> data = getData();
         return data.values().stream().anyMatch(f -> f.getContact().email().equals(email));

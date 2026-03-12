@@ -47,10 +47,11 @@ public class FacultyPage extends BasePage {
     }
 
     private Page createFaculty() {
-        String uniqueCode = inputReader.readString( "Enter unique code: ");
         String name = inputReader.readString("Enter faculty name: ");
         String shortName = inputReader.readStringWithMaxLengthProbablyBlank("Enter short name", Faculty.MAX_SHORT_NAME_LENGTH);
-        Contact contact = inputReader.readContact();
+        String email = uniqueEmail();
+        String phone = uniquePhone();
+        Contact contact = new Contact(phone, email);
         System.out.println("Select dean (cansel if vacant)");
         Optional<Teacher> optionalTeacher = teacherFinder.findAndSelect();
         Teacher dean;
@@ -62,6 +63,7 @@ public class FacultyPage extends BasePage {
             return this;
         }
         University university = optionalUniversity.get();
+        String uniqueCode = uniqueCode(university);
         Faculty faculty = new Faculty(uniqueCode, name, shortName, dean, contact, university);
 
         serviceFaculty.create(faculty);
@@ -109,4 +111,30 @@ public class FacultyPage extends BasePage {
         return this;
     }
 
+    private String uniqueCode(University university) {
+        while (true) {
+            String uniqueCode = inputReader.readString("Enter unique code: ");
+            if (!serviceFaculty.existsByUniqueCode(uniqueCode, university))
+                return uniqueCode;
+            System.out.println("Faculty with " + uniqueCode + " already exists");
+        }
+    }
+
+    private String uniqueEmail() {
+        while (true) {
+            String email = inputReader.readString("Enter email: ");
+            if (!serviceFaculty.existsByEmail(email))
+                return email;
+            System.out.println("Email " + email + " already exists");
+        }
+    }
+
+    private String uniquePhone() {
+        while (true) {
+            String phone = inputReader.readString("Enter phone: ");
+            if (!serviceFaculty.existsByPhone(phone))
+                return phone;
+            System.out.println("Phone " + phone + " already exists");
+        }
+    }
 }

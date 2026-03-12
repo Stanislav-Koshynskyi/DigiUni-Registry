@@ -15,10 +15,11 @@ public class ServiceStudent implements ServiceStudentInterface{
     }
 
     public Student create(Student student) {
-        if (studentRepository.existsByUniqueCode(student.getUniqueCode())) {
+        University university = student.getGroup().getDepartment().getFaculty().getUniversity();
+        if (studentRepository.existsByUniqueCode(student.getUniqueCode(), university)) {
             throw new IllegalArgumentException("Student with this unique code already exists!");
         }
-        if (studentRepository.existsByRecordBookNumber(student.getRecordBookNumber())) {
+        if (studentRepository.existsByRecordBookNumber(student.getRecordBookNumber(), university)) {
             throw new IllegalArgumentException("Student with this record book number already exists!");
         }
 
@@ -158,9 +159,19 @@ public class ServiceStudent implements ServiceStudentInterface{
                 .toList();
     }
 
-    public boolean existsByUniqueCode(String uniqueCode) {
-        return studentRepository.existsByUniqueCode(uniqueCode);
+    public boolean existsByUniqueCode(String code, University university) {
+        return studentRepository.existsByUniqueCode(code, university);
     }
 
-    public boolean existsByRecordBookNumber(String recordBookNumber) {return studentRepository.existsByRecordBookNumber(recordBookNumber);}
+    public boolean existsByRecordBookNumber(String number, University university) {
+        return studentRepository.existsByRecordBookNumber(number, university);
+    }
+
+    public boolean existsByEmail(String email) {
+        return studentRepository.existsByEmail(email);
+    }
+
+    public boolean existsByPhone(String phone) {
+        return studentRepository.existsByPhone(phone);
+    }
 }

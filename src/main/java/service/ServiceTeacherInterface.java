@@ -34,4 +34,10 @@ public interface ServiceTeacherInterface {
     Optional<Teacher> findByUniqueCode(String uniqueCode);
 
     List<Teacher> findBySalary(Integer salaryMin, Integer salaryMax);
+
+    boolean existsByUniqueCode(String uniqueCode);
+
+    boolean existsByEmail(String email);
+
+    boolean existsByPhone(String phone);
 }

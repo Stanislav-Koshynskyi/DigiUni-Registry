@@ -54,7 +54,11 @@ public interface ServiceStudentInterface {
 
     List<Student> StudentsByDepartmentSortedBySurname(Long departmentId);
 
-    boolean existsByUniqueCode(String uniqueCode);
+    boolean existsByUniqueCode(String uniqueCode, University university);
 
-    boolean existsByRecordBookNumber(String recordBookNumber);
+    boolean existsByRecordBookNumber(String recordBookNumber, University university);
+
+    boolean existsByEmail(String email);
+
+    boolean existsByPhone(String phone);
 }

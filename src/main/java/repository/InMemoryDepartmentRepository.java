@@ -65,5 +65,11 @@ public class InMemoryDepartmentRepository extends AbstractRepositoryByLong<Depar
                 d -> d.getShortName().equals(shortName)
         ).toList();
     }
+
+    @Override
+    public boolean existsByUniqueCode(String uniqueCode, University university) {
+        Map<Long, Department> data = getData();
+        return data.values().stream().anyMatch(d -> d.getUniqueCode().equals(uniqueCode) && d.getFaculty().getUniversity().equals(university));
+    }
 }
 
