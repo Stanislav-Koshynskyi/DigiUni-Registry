@@ -1,12 +1,12 @@
 package service;
 
-import entity.Department;
-import entity.Faculty;
-import entity.University;
+import entity.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import repository.DepartmentRepository;
+import repository.FacultyRepository;
 import repository.InMemoryDepartmentRepository;
+import repository.InMemoryFacultyRepository;
 
 import java.util.Optional;
 
@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ServiceDepartmentTest {
     private DepartmentRepository departmentRepository;
     private ServiceDepartment serviceDepartment;
+    private FacultyRepository facultyRepository;
     private University university;
     private Faculty faculty;
 
@@ -22,10 +23,13 @@ public class ServiceDepartmentTest {
     void setUp() {
         departmentRepository = new InMemoryDepartmentRepository();
         serviceDepartment = new ServiceDepartment(departmentRepository);
+        facultyRepository = new InMemoryFacultyRepository();
         university = new University();
-        faculty = new Faculty();
-        faculty.setId(1111L);
-        faculty.setUniversity(university);
+        Address address = new Address("Kyiv", "Hryhoriya Skovorody", "2");
+        university = new University("National University of Kyiv", "NaUKMA", address);
+        Contact contact = new Contact("+380982345678", "CompScienceFaculty@naukma.edu.ua");
+        faculty = new Faculty("NAUKMA-FI", "Faculty of Informatics", "FI", null, contact, university);
+        facultyRepository.save(faculty);
     }
 
     @Test

@@ -3,8 +3,7 @@ package service;
 import entity.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import repository.InMemoryStudentRepository;
-import repository.StudentRepository;
+import repository.*;
 
 import java.time.LocalDate;
 import java.time.Year;
@@ -14,6 +13,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ServiceStudentTest {
     private StudentRepository studentRepository;
+    private FacultyRepository facultyRepository;
+    private DepartmentRepository departmentRepository;
     private ServiceStudent serviceStudent;
     private StudentGroup group;
 
@@ -21,13 +22,15 @@ public class ServiceStudentTest {
     void setUp() {
         studentRepository = new InMemoryStudentRepository();
         serviceStudent = new ServiceStudent(studentRepository);
+        facultyRepository = new InMemoryFacultyRepository();
+        departmentRepository = new InMemoryDepartmentRepository();
         Address address = new Address("Kyiv", "Hryhoriya Skovorody", "2");
         University university = new University("Kyiv-Mohyla Academy", "NaUKMA", address);
         Contact contact = new Contact("+380982345678", "CompScienceFaculty@naukma.edu.ua");
         Faculty faculty = new Faculty("NAUKMA-FI", "Faculty Informatics", "FI", null, contact, university);
-        faculty.setId(1111L);
+        facultyRepository.save(faculty);
         Department department = new Department("NAUKMA-1", "Computer Science", "CS", faculty, null, "315");
-        department.setId(2222L);
+        departmentRepository.save(department);
         group = new StudentGroup("Software engineers", department);
     }
 
