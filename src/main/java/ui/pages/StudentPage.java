@@ -58,10 +58,17 @@ public class StudentPage extends BasePage {
         FullName fullName = inputReader.readfullName();
         FormOfEducation form = inputReader.readFormOfEducation();
         LocalDate birthDate = inputReader.readBirthDate();
-        String email = uniqueEmail();
-        String phone = uniquePhone();
-        Contact contact = new Contact(phone, email);
-
+        Contact contact;
+        while (true) {
+            try {
+                String email = uniqueEmail();
+                String phone = uniquePhone();
+                contact = new Contact(phone, email);
+                break;
+            }catch (IllegalArgumentException e){
+                System.out.println(e.getMessage());
+            }
+        }
         String uniqueCode = uniqueCode(university);
         String recordBook = uniqueRecordBookNumber(university);
         int course = inputReader.readIntInRange("Enter course(1-6)", 1, 6);
@@ -69,9 +76,14 @@ public class StudentPage extends BasePage {
         StudentStatus status = StudentStatus.STUDIES;
 
 
-
-        Student student = new Student(uniqueCode, recordBook, fullName, birthDate, contact, form, status, yearOfAdmission, course, studentGroup);
-        serviceStudent.create(student);
+        try {
+            Student student = new Student(uniqueCode, recordBook, fullName, birthDate, contact, form, status, yearOfAdmission, course, studentGroup);
+            serviceStudent.create(student);
+        }catch (IllegalArgumentException e){
+            System.out.println("Illegal Argument");
+            System.out.println(e.getMessage());
+            System.out.println("Student not created");
+        }
         return this;
     }
 

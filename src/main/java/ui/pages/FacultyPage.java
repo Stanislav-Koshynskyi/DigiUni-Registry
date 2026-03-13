@@ -49,9 +49,17 @@ public class FacultyPage extends BasePage {
     private Page createFaculty() {
         String name = inputReader.readString("Enter faculty name: ");
         String shortName = inputReader.readStringWithMaxLengthProbablyBlank("Enter short name", Faculty.MAX_SHORT_NAME_LENGTH);
-        String email = uniqueEmail();
-        String phone = uniquePhone();
-        Contact contact = new Contact(phone, email);
+        Contact contact;
+        while(true) {
+            try {
+                String email = uniqueEmail();
+                String phone = uniquePhone();
+                contact = new Contact(phone, email);
+                break;
+            }catch (IllegalArgumentException e){
+                System.out.println(e.getMessage());
+            }
+        }
         System.out.println("Select dean (cansel if vacant)");
         Optional<Teacher> optionalTeacher = teacherFinder.findAndSelect();
         Teacher dean;
@@ -64,9 +72,13 @@ public class FacultyPage extends BasePage {
         }
         University university = optionalUniversity.get();
         String uniqueCode = uniqueCode(university);
-        Faculty faculty = new Faculty(uniqueCode, name, shortName, dean, contact, university);
-
-        serviceFaculty.create(faculty);
+        try {
+            Faculty faculty = new Faculty(uniqueCode, name, shortName, dean, contact, university);
+            serviceFaculty.create(faculty);
+        }catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+            System.out.println("Faculty not created");
+        }
         return this;
     }
 

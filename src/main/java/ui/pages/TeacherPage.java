@@ -39,17 +39,29 @@ public class TeacherPage extends BasePage {
     private Page createTeacher() {
         FullName fullName = inputReader.readfullName();
         LocalDate birthDate = inputReader.readBirthDate();
-        String email = uniqueEmail();
-        String phone = uniquePhone();
-        Contact contact = new Contact(phone, email);
-
+        Contact contact;
+        while (true) {
+            try {
+                String email = uniqueEmail();
+                String phone = uniquePhone();
+                contact = new Contact(phone, email);
+                break;
+            }catch (IllegalArgumentException e){
+                System.out.println(e.getMessage());
+            }
+        }
         String uniqueCode = uniqueCode();
         AcademicDegree degree = inputReader.readAcademicDegree();
         AcademicRank rank = inputReader.readAcademicRank();
         LocalDate dateOfEmployment = inputReader.readEmploymentDate();
         BigDecimal salary = inputReader.readBigDecimal("Enter salary: ");
-        Teacher teacher = new Teacher(uniqueCode, fullName, birthDate, contact, degree, rank, dateOfEmployment, salary);
-        serviceTeacher.create(teacher);
+        try {
+            Teacher teacher = new Teacher(uniqueCode, fullName, birthDate, contact, degree, rank, dateOfEmployment, salary);
+            serviceTeacher.create(teacher);
+        }catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+            System.out.println("Student not created");
+        }
         return this;
     }
 

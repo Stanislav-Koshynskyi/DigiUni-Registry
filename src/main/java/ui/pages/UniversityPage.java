@@ -41,9 +41,13 @@ public class UniversityPage extends BasePage {
         String buildNumber = inputReader.readString("Enter building number: ");
 
         Address address = new Address(city, street, buildNumber);
-        University university = new University(fullName, shortName, address);
-
-        serviceUniversity.create(university);
+        try {
+            University university = new University(fullName, shortName, address);
+            serviceUniversity.create(university);
+        }catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+            System.out.println("University not created");
+        }
         return this;
     }
     private Page showAllUniversity(){

@@ -59,9 +59,13 @@ public class DepartmentPage extends BasePage {
         Faculty faculty = optFaculty.get();
         University university = faculty.getUniversity();
         String uniqueCode = uniqueCode(university);
-
-        Department department = new Department(uniqueCode, name, shortName, faculty, headOfDepartment, cabinet);
-        serviceDepartment.create(department);
+        try {
+            Department department = new Department(uniqueCode, name, shortName, faculty, headOfDepartment, cabinet);
+            serviceDepartment.create(department);
+        }catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+            System.out.println("Department not created");
+        }
         return this;
     }
 
