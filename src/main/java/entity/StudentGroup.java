@@ -1,5 +1,6 @@
 package entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -10,9 +11,11 @@ public class StudentGroup implements Entity{
     private String name;
     @JsonIgnore
     private Teacher headOfGroup;
+    @Getter
     private Long headOfGroupId;
     @JsonIgnore
     private Student groupLeader;
+    @Getter
     private Long groupLeaderId;
 
     private HashSet<Student> students;

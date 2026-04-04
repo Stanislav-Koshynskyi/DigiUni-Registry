@@ -18,7 +18,8 @@
       "recordBookNumber" : "S-HP-1",
       "studentStatus" : "STUDIES",
       "yearOfAdmission" : "2022",
-      "course" : 3
+      "course" : 3,
+      "groupId" : 0
     },
     "1" : {
       "id" : 1,
@@ -37,7 +38,8 @@
       "recordBookNumber" : "S-HP-2",
       "studentStatus" : "STUDIES",
       "yearOfAdmission" : "2022",
-      "course" : 3
+      "course" : 3,
+      "groupId" : 0
     },
     "2" : {
       "id" : 2,
@@ -56,7 +58,8 @@
       "recordBookNumber" : "S-HP-3",
       "studentStatus" : "STUDIES",
       "yearOfAdmission" : "2022",
-      "course" : 3
+      "course" : 3,
+      "groupId" : 0
     },
     "3" : {
       "id" : 3,
@@ -75,7 +78,8 @@
       "recordBookNumber" : "S-SPN-1",
       "studentStatus" : "STUDIES",
       "yearOfAdmission" : "2021",
-      "course" : 4
+      "course" : 4,
+      "groupId" : 0
     },
     "4" : {
       "id" : 4,
@@ -94,7 +98,8 @@
       "recordBookNumber" : "S-VD-1",
       "studentStatus" : "STUDIES",
       "yearOfAdmission" : "2020",
-      "course" : 5
+      "course" : 5,
+      "groupId" : 0
     },
     "5" : {
       "id" : 5,
@@ -113,7 +118,8 @@
       "recordBookNumber" : "S-VD-2",
       "studentStatus" : "STUDIES",
       "yearOfAdmission" : "2020",
-      "course" : 5
+      "course" : 5,
+      "groupId" : 0
     },
     "6" : {
       "id" : 6,
@@ -132,7 +138,8 @@
       "recordBookNumber" : "S-BB-1",
       "studentStatus" : "STUDIES",
       "yearOfAdmission" : "2023",
-      "course" : 2
+      "course" : 2,
+      "groupId" : 0
     },
     "7" : {
       "id" : 7,
@@ -151,7 +158,8 @@
       "recordBookNumber" : "S-FNAF-1",
       "studentStatus" : "STUDIES",
       "yearOfAdmission" : "2021",
-      "course" : 4
+      "course" : 4,
+      "groupId" : 0
     },
     "8" : {
       "id" : 8,
@@ -170,7 +178,8 @@
       "recordBookNumber" : "S-SC-1",
       "studentStatus" : "STUDIES",
       "yearOfAdmission" : "2021",
-      "course" : 4
+      "course" : 4,
+      "groupId" : 0
     },
     "9" : {
       "id" : 9,
@@ -189,7 +198,8 @@
       "recordBookNumber" : "S-SC-2",
       "studentStatus" : "STUDIES",
       "yearOfAdmission" : "2022",
-      "course" : 3
+      "course" : 3,
+      "groupId" : 0
     }
   }
 }

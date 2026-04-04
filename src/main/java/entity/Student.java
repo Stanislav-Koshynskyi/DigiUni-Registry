@@ -1,6 +1,7 @@
 package entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.Year;
@@ -14,6 +15,7 @@ public class Student extends Person{
     private int course;
     @JsonIgnore
     private StudentGroup group;
+    @Getter
     private Long groupId;
 
     public static final int MINIUM_YEAR_OF_ADMISSION = 1898;

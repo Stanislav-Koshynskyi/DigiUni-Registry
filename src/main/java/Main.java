@@ -1,10 +1,15 @@
+import entity.Role;
+import entity.User;
 import repository.*;
 import security.*;
 import service.*;
 import ui.*;
 import ui.finders.*;
 import ui.pages.MainPage;
+import util.BaseForTest;
 import util.PagerBuilder;
+import util.RepositoryLinker;
+
 import java.io.Console;
 import java.nio.file.Path;
 
@@ -17,6 +22,8 @@ public class Main {
         TeacherRepository teacherRepository = new InMemoryTeacherRepository(Path.of("db", "teachers.json"));
         UniversityRepository universityRepository = new InMemoryUniversityRepository(Path.of("db", "universities.json"));
         UserRepository userRepository = new InMemoryUserRepository(Path.of("db", "users.json"));
+        RepositoryLinker.linkRepository(universityRepository, facultyRepository
+            ,departmentRepository, studentGroupRepository, studentRepository);
         // dont need now?
         //BaseForTest.seed(universityRepository, facultyRepository, departmentRepository, teacherRepository, studentGroupRepository, studentRepository);
 
@@ -30,11 +37,11 @@ public class Main {
         PasswordCoder coder = new BCryptPasswordEncoder();
 
         ServiceUserInterface serviceUserInterface = new ServiceUser(userRepository, coder);
-        // dont need now?
-        //serviceUserInterface.save(new User(Role.ADMIN, "admin", "admin"));
-        //serviceUserInterface.save(new User(Role.USER, "user", "user"));
-        //serviceUserInterface.save(new User(Role.MODERATOR, "moderator", "moderator"));
-
+        /* dont need now?
+        serviceUserInterface.save(new User(Role.ADMIN, "admin", "admin"));
+        serviceUserInterface.save(new User(Role.USER, "user", "user"));
+        serviceUserInterface.save(new User(Role.MODERATOR, "moderator", "moderator"));
+         */
 
         SessionInfo sessionInfo = new LocalSessionInfo();
 

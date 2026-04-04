@@ -4,19 +4,19 @@
     "0" : {
       "id" : 0,
       "role" : "ADMIN",
-      "password" : "$2b$10$VqGB.XCEf6/ckeooBFIRaeDTptScIjAyXj.q8.s/y8zbBCoQ6smPm",
+      "password" : "$2b$10$8fq6d4FMxNWAdw2j9aWrQucWtpE189rzpzzVGu3cn/SZmdM0x6Pki",
       "login" : "admin"
     },
     "1" : {
       "id" : 1,
       "role" : "USER",
-      "password" : "$2b$10$luJG/QmCuf.USrA3KpstaODN/W335p5HGnRIZQGqYwWV8xi6evIbe",
+      "password" : "$2b$10$OCjDwvsPb1YVWytmY7abLuYMeYIzgnbv115/u57QPuXHtF2bKn1cu",
       "login" : "user"
     },
     "2" : {
       "id" : 2,
       "role" : "MODERATOR",
-      "password" : "$2b$10$H1rolTsXuYK83elfs60qUOUPHhKY9tiY/4g7rphjt5ajw2nDj57Fi",
+      "password" : "$2b$10$HNiRdC3xuUr2xF5fyatxiukwUxAO1oPtfwxgcLLz9/wvgzXHtSOAa",
       "login" : "moderator"
     }
   }

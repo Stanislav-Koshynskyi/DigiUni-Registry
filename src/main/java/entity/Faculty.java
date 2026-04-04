@@ -1,6 +1,7 @@
 package entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -16,7 +17,8 @@ public class Faculty implements Entity {
     private Contact contact;
     @JsonIgnore
     private University university;
-    private Long universityId ;
+    @Getter
+    private Long universityId;
     public static final int MAX_SHORT_NAME_LENGTH = 15;
 
     public Faculty() {

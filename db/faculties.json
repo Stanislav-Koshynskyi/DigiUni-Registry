@@ -10,7 +10,8 @@
       "contact" : {
         "phone" : "+380441234567",
         "email" : "fi@naukma.edu.ua"
-      }
+      },
+      "universityId" : 0
     }
   }
 }
