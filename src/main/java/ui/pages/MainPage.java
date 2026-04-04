@@ -24,13 +24,13 @@ public class MainPage extends BasePage {
     @Override
     public List<MenuItem> getMenuItems() {
         return List.of(
-                new MenuItem("Student", Right.ANY, pagerBuilder::getStudentPage),
-                new MenuItem("Teacher", Right.ANY, pagerBuilder::getTeacherPage),
-                new MenuItem("University", Right.ANY, pagerBuilder::getUniversityPage),
-                new MenuItem("Student group", Right.ANY, pagerBuilder::getStudentGroupPage),
-                new MenuItem("Faculty", Right.ANY, pagerBuilder::getFacultyPage),
-                new MenuItem("Department", Right.ANY, pagerBuilder::getDepartmentPage),
-                new MenuItem("User", Right.ANY, pagerBuilder::getUserPage)
+                new MenuItem("Student", Right.LOGGED_IN, pagerBuilder::getStudentPage),
+                new MenuItem("Teacher", Right.LOGGED_IN, pagerBuilder::getTeacherPage),
+                new MenuItem("University", Right.LOGGED_IN, pagerBuilder::getUniversityPage),
+                new MenuItem("Student group", Right.LOGGED_IN, pagerBuilder::getStudentGroupPage),
+                new MenuItem("Faculty", Right.LOGGED_IN, pagerBuilder::getFacultyPage),
+                new MenuItem("Department", Right.LOGGED_IN, pagerBuilder::getDepartmentPage),
+                new MenuItem("Account", Right.ANY, pagerBuilder::getUserPage)
         );
     }
 }

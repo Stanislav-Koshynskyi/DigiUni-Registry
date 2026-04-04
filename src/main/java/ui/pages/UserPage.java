@@ -31,7 +31,7 @@ view all user for admin
  */
     @Override
     public String getTitle() {
-        return "User Page";
+        return "Account";
     }
 
     @Override
