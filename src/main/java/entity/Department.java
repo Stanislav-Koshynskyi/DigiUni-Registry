@@ -1,5 +1,7 @@
 package entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Objects;
 import java.util.Optional;
 
@@ -8,8 +10,10 @@ public class Department implements Entity {
     private String uniqueCode;
     private String name;
     private String shortName;
+    @JsonIgnore
     private Faculty faculty;
     private Long facultyId;
+    @JsonIgnore
     private Teacher headOfDepartment;
     private Long headOfDepartmentId;
     private String cabinet;

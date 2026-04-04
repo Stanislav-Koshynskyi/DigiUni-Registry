@@ -1,5 +1,7 @@
 package entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.Objects;
@@ -10,6 +12,7 @@ public class Student extends Person{
     private StudentStatus studentStatus;
     private Year yearOfAdmission;
     private int course;
+    @JsonIgnore
     private StudentGroup group;
     private Long groupId;
 
