@@ -5,6 +5,7 @@ import entity.Teacher;
 import entity.University;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -12,7 +13,7 @@ import java.util.Optional;
 
 
 public class InMemoryFacultyRepository extends AbstractRepositorySaveByLong<Faculty> implements FacultyRepository {
-    public InMemoryFacultyRepository( File file) {
+    public InMemoryFacultyRepository( Path file) {
         super(Faculty.class, file);
     }
 

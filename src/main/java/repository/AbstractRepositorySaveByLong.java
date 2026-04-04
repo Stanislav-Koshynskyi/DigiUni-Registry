@@ -10,14 +10,17 @@ import util.IdGenerator;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 
 public abstract class AbstractRepositorySaveByLong<T extends Entity>
         extends AbstractRepositoryByLong<T>{
     private final ObjectMapper objectMapper;
-    private final File file;
+    private final Path file;
     private final Class<T> clazz;
-    public AbstractRepositorySaveByLong(Class<T> clazz, File file) {
+    public AbstractRepositorySaveByLong(Class<T> clazz, Path file) {
         super();
         this.clazz = clazz;
         this.objectMapper = new ObjectMapper();
@@ -30,6 +33,14 @@ public abstract class AbstractRepositorySaveByLong<T extends Entity>
         // for read
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         this.file = file;
+
+        try {
+            if (file.getParent() != null) {
+                Files.createDirectories(file.getParent());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Не вдалося створити директорії", e); // щось кастомне мб
+        }
         loadFromFile();
     }
     @Override
@@ -40,38 +51,40 @@ public abstract class AbstractRepositorySaveByLong<T extends Entity>
     }
 
     @Override
-    public void delete(T entity) {
+    public synchronized void delete(T entity) {
         super.delete(entity);
         saveToFile();
     }
 
     @Override
-    public void deleteById(Long id) {
+    public synchronized void deleteById(Long id) {
         super.deleteById(id);
         saveToFile();
     }
     private void saveToFile() {
+        Path tempPath = file.resolveSibling(file.getFileName() + ".tmp");
         try {
-            if (file.getParentFile() != null && !file.getParentFile().exists()) {
-                file.getParentFile().mkdirs();
-            }
             long currentId = getCurrentId();
             RepositoryWrapperForSave<T> repositoryWrapperForSave = new RepositoryWrapperForSave<T>(
                     currentId, new HashMap<>(getData())
             );
-            objectMapper.writeValue(file, repositoryWrapperForSave );
+            objectMapper.writeValue(tempPath.toFile(), repositoryWrapperForSave );
+            Files.move(tempPath, file,
+                    StandardCopyOption.REPLACE_EXISTING,
+                    StandardCopyOption.ATOMIC_MOVE);
         } catch (IOException e) {
             throw new RuntimeException(e); // тут має бути якись кастомний, потім додам
         }
     }
-    private void loadFromFile() {
-        if (!file.exists() || file.length() == 0) {
-            return;
-        }
+    private void loadFromFile()  {
+
 
         try {
+
+            if (!Files.exists(file) || Files.size(file) == 0)
+                return;
             RepositoryWrapperForSave<T> wrapper = objectMapper.readValue(
-                    file,
+                    file.toFile(),
                     objectMapper.getTypeFactory().constructParametricType(RepositoryWrapperForSave.class, clazz)
             );
 

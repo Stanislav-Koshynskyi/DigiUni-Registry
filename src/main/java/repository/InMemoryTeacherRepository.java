@@ -6,12 +6,13 @@ import entity.Teacher;
 import entity.University;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
 public class InMemoryTeacherRepository extends AbstractPersonRepository<Teacher> implements TeacherRepository {
-    public InMemoryTeacherRepository(File file) {
+    public InMemoryTeacherRepository(Path file) {
         super(Teacher.class, file);
     }
 

@@ -6,13 +6,14 @@ import entity.Teacher;
 import entity.University;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
 public class InMemoryDepartmentRepository extends AbstractRepositorySaveByLong<Department> implements  DepartmentRepository {
-    public InMemoryDepartmentRepository( File file) {
+    public InMemoryDepartmentRepository( Path file) {
         super(Department.class, file);
     }
 

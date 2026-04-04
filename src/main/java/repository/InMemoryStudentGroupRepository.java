@@ -3,10 +3,11 @@ package repository;
 import entity.*;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.*;
 
 public class InMemoryStudentGroupRepository extends AbstractRepositorySaveByLong<StudentGroup> implements  StudentGroupRepository {
-    public InMemoryStudentGroupRepository(File file) {
+    public InMemoryStudentGroupRepository(Path file) {
         super(StudentGroup.class, file);
     }
 

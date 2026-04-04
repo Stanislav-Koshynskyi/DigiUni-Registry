@@ -3,12 +3,13 @@ package repository;
 import entity.University;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 public class InMemoryUniversityRepository extends AbstractRepositorySaveByLong<University> implements  UniversityRepository {
-    public InMemoryUniversityRepository(File file) {
+    public InMemoryUniversityRepository(Path file) {
         super(University.class, file);
     }
 
