@@ -15,13 +15,13 @@ import java.io.File;
 
 public class Main {
     public static void main(String[] args) {
-        DepartmentRepository departmentRepository = new InMemoryDepartmentRepository(new File("db/departments.json"));
-        FacultyRepository  facultyRepository = new InMemoryFacultyRepository(new  File("db/faculties.json"));
-        StudentRepository studentRepository = new InMemoryStudentRepository(new  File("db/students.json"));
-        StudentGroupRepository studentGroupRepository = new InMemoryStudentGroupRepository(new   File("db/student_groups.json"));
-        TeacherRepository teacherRepository = new InMemoryTeacherRepository(new   File("db/teachers.json"));
-        UniversityRepository universityRepository = new InMemoryUniversityRepository(new   File("db/universities.json"));
-        UserRepository userRepository = new InMemoryUserRepository(new   File("db/users.json"));
+        DepartmentRepository departmentRepository = new InMemoryDepartmentRepository(Path.of("db", "departments.json"));
+        FacultyRepository  facultyRepository = new InMemoryFacultyRepository(Path.of("db", "faculties.json"));
+        StudentRepository studentRepository = new InMemoryStudentRepository(Path.of("db", "students.json"));
+        StudentGroupRepository studentGroupRepository = new InMemoryStudentGroupRepository(Path.of("db", "student_groups.json"));
+        TeacherRepository teacherRepository = new InMemoryTeacherRepository(Path.of("db", "teachers.json"));
+        UniversityRepository universityRepository = new InMemoryUniversityRepository(Path.of("db", "universities.json"));
+        UserRepository userRepository = new InMemoryUserRepository(Path.of("db", "users.json"));
         // dont need now?
         //BaseForTest.seed(universityRepository, facultyRepository, departmentRepository, teacherRepository, studentGroupRepository, studentRepository);
 
