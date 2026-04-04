@@ -1,0 +1,11 @@
+{
+  "currentId" : 1,
+  "data" : {
+    "0" : {
+      "id" : 0,
+      "name" : "CS-101",
+      "students" : [ ],
+      "departmentId" : 0
+    }
+  }
+}

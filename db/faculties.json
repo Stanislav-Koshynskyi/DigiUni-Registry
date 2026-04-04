@@ -1,0 +1,16 @@
+{
+  "currentId" : 1,
+  "data" : {
+    "0" : {
+      "id" : 0,
+      "uniqueCode" : "NAUKMA-FI",
+      "name" : "Faculty of Informatics",
+      "shortName" : "FI",
+      "deanId" : null,
+      "contact" : {
+        "phone" : "+380441234567",
+        "email" : "fi@naukma.edu.ua"
+      }
+    }
+  }
+}
