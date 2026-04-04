@@ -2,12 +2,15 @@ package repository;
 
 import entity.University;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class InMemoryUniversityRepository extends AbstractRepositoryByLong<University> implements  UniversityRepository {
-    public InMemoryUniversityRepository() {}
+public class InMemoryUniversityRepository extends AbstractRepositorySaveByLong<University> implements  UniversityRepository {
+    public InMemoryUniversityRepository(File file) {
+        super(University.class, file);
+    }
 
     public Optional<University> findByFullName(String fullName) {
         Map<Long, University> data = getData();

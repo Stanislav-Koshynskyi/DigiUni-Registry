@@ -2,10 +2,13 @@ package repository;
 
 import entity.*;
 
+import java.io.File;
 import java.util.*;
 
-public class InMemoryStudentGroupRepository extends AbstractRepositoryByLong<StudentGroup> implements  StudentGroupRepository {
-    public InMemoryStudentGroupRepository() {}
+public class InMemoryStudentGroupRepository extends AbstractRepositorySaveByLong<StudentGroup> implements  StudentGroupRepository {
+    public InMemoryStudentGroupRepository(File file) {
+        super(StudentGroup.class, file);
+    }
 
     public List<StudentGroup> findByDepartment(Department department) {
         Map<Long, StudentGroup> data = getData();

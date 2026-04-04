@@ -27,12 +27,19 @@ public abstract class AbstractRepositoryByLong<T extends Entity> implements Repo
     }
 
     @Override
-    public T save(T entity){
+    public synchronized T save(T entity){
         if (entity.getId() == null) {
             entity.setId(idGenerator.nextId());
         }
         data.put(entity.getId(), entity);
         return entity;
+    }
+    public long getCurrentId(){
+        return idGenerator.getId();
+    }
+    public long setCurrentId(long id){
+        idGenerator.setCurrentId(id);
+        return idGenerator.getId();
     }
     @Override
     public void delete(T entity){

@@ -3,17 +3,16 @@ package repository;
 import entity.Person;
 import entity.Student;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public abstract class AbstractPersonRepository <P extends Person> extends AbstractRepositoryByLong<P> implements PersonRepository <P> {
-    public AbstractPersonRepository() {
-    }
+public abstract class AbstractPersonRepository <P extends Person> extends AbstractRepositorySaveByLong<P> implements PersonRepository <P> {
 
-    public AbstractPersonRepository(long id) {
-        super(id);
+    public AbstractPersonRepository(Class<P> clazz, File file) {
+        super(clazz, file);
     }
 
     public List<P> findByUniqueCode(String uniqueCode) {
