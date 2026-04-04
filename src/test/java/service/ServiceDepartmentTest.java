@@ -3,58 +3,67 @@ package service;
 import entity.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import repository.DepartmentRepository;
-import repository.FacultyRepository;
-import repository.InMemoryDepartmentRepository;
-import repository.InMemoryFacultyRepository;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class ServiceDepartmentTest {
+
+    @Mock
     private DepartmentRepository departmentRepository;
+
+    @InjectMocks
     private ServiceDepartment serviceDepartment;
-    private FacultyRepository facultyRepository;
+
     private University university;
     private Faculty faculty;
+    private Department department;
 
     @BeforeEach
     void setUp() {
-        departmentRepository = new InMemoryDepartmentRepository();
-        serviceDepartment = new ServiceDepartment(departmentRepository);
-        facultyRepository = new InMemoryFacultyRepository();
-        university = new University();
         Address address = new Address("Kyiv", "Hryhoriya Skovorody", "2");
-        university = new University("National University of Kyiv", "NaUKMA", address);
+        university = new University(1L, "National University of Kyiv", "NaUKMA", address);
         Contact contact = new Contact("+380982345678", "CompScienceFaculty@naukma.edu.ua");
-        faculty = new Faculty("NAUKMA-FI", "Faculty of Informatics", "FI", null, contact, university);
-        facultyRepository.save(faculty);
+        faculty = new Faculty(1L, "NAUKMA-FI", "Faculty of Informatics", "FI", null, contact, university);
+        department = new Department(1L, "NAUKMA-1", "Computer Science", "CS", faculty, null, "315");
     }
 
     @Test
     void createDepartmentTest() {
-        Department department = new Department("NAUKMA-1", "Computer Science", "CS", faculty, null, "315");
-        Department create = serviceDepartment.create(department);
-        assertNotNull(create);
-        assertEquals("Computer Science", create.getName());
+        when(departmentRepository.existsByUniqueCode("NAUKMA-1")).thenReturn(false);
+        when(departmentRepository.save(department)).thenReturn(department);
+
+        Department result = serviceDepartment.create(department);
+
+        assertNotNull(result);
+        assertEquals("Computer Science", result.getName());
+        verify(departmentRepository).existsByUniqueCode("NAUKMA-1");
+        verify(departmentRepository).save(department);
     }
 
     @Test
     void updateDepartmentTest() {
-        Department department = new Department("NAUKMA-1", "Science Computer", "CS", faculty, null, "315");
-        Department create = serviceDepartment.create(department);
-        create.setName("Computer Science");
-        Department updated = serviceDepartment.update(create);
-        assertEquals("Computer Science", updated.getName());
+        department.setName("Computer Science Updated");
+        when(departmentRepository.save(department)).thenReturn(department);
+
+        Department result = serviceDepartment.update(department);
+
+        assertEquals("Computer Science Updated", result.getName());
+        verify(departmentRepository).save(department);
     }
 
     @Test
     void deleteDepartmentTest() {
-        Department department = new Department("NAUKMA-1", "Computer Science", "CS", faculty, null, "315");
-        Department create = serviceDepartment.create(department);
-        serviceDepartment.delete(create.getId());
-        Optional<Department> found = departmentRepository.findById(create.getId());
-        assertFalse(found.isPresent());
+        serviceDepartment.delete(1L);
+
+        verify(departmentRepository).deleteById(1L);
     }
 }

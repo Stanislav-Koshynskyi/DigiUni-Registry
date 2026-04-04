@@ -1,3 +1,4 @@
+
 package service;
 
 import entity.Address;
@@ -6,53 +7,65 @@ import entity.Faculty;
 import entity.University;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import repository.FacultyRepository;
-import repository.InMemoryFacultyRepository;
 
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+        import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class ServiceFacultyTest {
+
+    @Mock
     private FacultyRepository facultyRepository;
+
+    @InjectMocks
     private ServiceFaculty serviceFaculty;
+
     private University university;
+    private Faculty faculty;
 
     @BeforeEach
     void setUp() {
-        facultyRepository = new InMemoryFacultyRepository();
-        serviceFaculty = new ServiceFaculty(facultyRepository);
         Address address = new Address("Kyiv", "Hryhoriya Skovorody", "2");
-        university = new University("National University of Kyiv", "NaUKMA", address);
+        university = new University(1L, "National University of Kyiv", "NaUKMA", address);
+        Contact contact = new Contact("+380982345678", "CompScienceFaculty@naukma.edu.ua");
+        faculty = new Faculty(1L, "NAUKMA-FI", "Faculty Informatics", "FI", null, contact, university);
     }
 
     @Test
     void createFacultyTest() {
-        Contact contact = new Contact("+380982345678", "CompScienceFaculty@naukma.edu.ua");
-        Faculty faculty = new Faculty("NAUKMA-FI", "Faculty Informatics", "FI", null, contact, university);
-        Faculty create = serviceFaculty.create(faculty);
-        assertNotNull(create);
-        assertEquals("Faculty Informatics", create.getName());
+        when(facultyRepository.existsByUniqueCode("NAUKMA-FI", university)).thenReturn(false);
+        when(facultyRepository.save(faculty)).thenReturn(faculty);
+
+        Faculty result = serviceFaculty.create(faculty);
+
+        assertNotNull(result);
+        assertEquals("Faculty Informatics", result.getName());
+        verify(facultyRepository).existsByUniqueCode("NAUKMA-FI", university);
+        verify(facultyRepository).save(faculty);
     }
+
 
     @Test
     void updateFacultyTest() {
-        Contact contact = new Contact("+380982345678", "CompScienceFaculty@naukma.edu.ua");
-        Faculty faculty = new Faculty("NAUKMA-FI", "Faculty CS", "FI", null, contact, university);
-        Faculty create = serviceFaculty.create(faculty);
+        faculty.setName("Faculty CS Updated");
+        when(facultyRepository.save(faculty)).thenReturn(faculty);
 
-        create.setName("Faculty Informatics");
-        Faculty updated = serviceFaculty.update(create);
-        assertEquals("Faculty Informatics", updated.getName());
+        Faculty result = serviceFaculty.update(faculty);
+
+        assertEquals("Faculty CS Updated", result.getName());
+        verify(facultyRepository).save(faculty);
     }
 
     @Test
     void deleteFacultyTest() {
-        Contact contact = new Contact("+380982345678", "CompScienceFaculty@naukma.edu.ua");
-        Faculty faculty = new Faculty("NAUKMA-FI", "Faculty CS", "FI", null, contact, university);
-        Faculty create = serviceFaculty.create(faculty);
-        serviceFaculty.delete(create.getId());
-        Optional<Faculty> facultyOptional = serviceFaculty.findById(create.getId());
-        assertFalse(facultyOptional.isPresent());
+        serviceFaculty.delete(1L);
+
+        verify(facultyRepository).deleteById(1L);
     }
 }

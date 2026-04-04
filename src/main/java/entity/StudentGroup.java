@@ -38,6 +38,12 @@ public class StudentGroup implements Entity{
         setDepartment(department);
         students = new HashSet<>();
     }
+    public StudentGroup(Long id,String name, Department department) {
+        setId(id);
+        setName(name);
+        setDepartment(department);
+        students = new HashSet<>();
+    }
     public Department getDepartment() {
         return department;
     }
