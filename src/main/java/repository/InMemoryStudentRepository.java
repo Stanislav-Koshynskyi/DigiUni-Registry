@@ -2,12 +2,15 @@ package repository;
 
 import entity.*;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.time.Year;
 import java.util.List;
 import java.util.Map;
 
 public class InMemoryStudentRepository extends AbstractPersonRepository<Student> implements StudentRepository {
-    public InMemoryStudentRepository() {
+    public InMemoryStudentRepository( Path file) {
+        super(Student.class, file);
     }
     @Override
     public List<Student> findByFormOfEducation(FormOfEducation formOfEducation) {

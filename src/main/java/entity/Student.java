@@ -1,5 +1,7 @@
 package entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.Objects;
@@ -10,6 +12,7 @@ public class Student extends Person{
     private StudentStatus studentStatus;
     private Year yearOfAdmission;
     private int course;
+    @JsonIgnore
     private StudentGroup group;
     private Long groupId;
 
@@ -25,7 +28,7 @@ public class Student extends Person{
         setGroup(group);
         setRecordBookNumber(recordBookNumber);
     }
-    public Student(Long id, String recordBookNumber, String uniqueCode, FullName fullName, LocalDate birthDate, Contact contact, FormOfEducation formOfEducation, StudentStatus studentStatus, Year yearOfAdmission, int course, StudentGroup group) {
+    public Student(Long id, String uniqueCode, String recordBookNumber, FullName fullName, LocalDate birthDate, Contact contact, FormOfEducation formOfEducation, StudentStatus studentStatus, Year yearOfAdmission, int course, StudentGroup group) {
         super(id, uniqueCode, fullName, birthDate, contact);
         setFormOfEducation(formOfEducation);
         setStudentStatus(studentStatus);

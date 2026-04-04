@@ -1,15 +1,27 @@
 package entity;
-import java.util.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.util.*;
+@Setter
 public class StudentGroup implements Entity{
     private Long id;
     private String name;
+    @JsonIgnore
     private Teacher headOfGroup;
+    private Long headOfGroupId;
+    @JsonIgnore
     private Student groupLeader;
-    private final HashSet<Student> students;
+    private Long groupLeaderId;
+
+    private HashSet<Student> students;
+    @JsonIgnore
     private Department department;
     private Long departmentId;
-
+    public  StudentGroup() {
+        this.students = new HashSet<>();
+    }
     public StudentGroup(Long id, String name,Department department, Teacher headOfGroup, Student groupLeader, HashSet<Student> students) {
         this.students = students != null ? new HashSet<>(students) : new HashSet<>();
         setId(id);
@@ -22,6 +34,12 @@ public class StudentGroup implements Entity{
     }
 
     public StudentGroup(String name, Department department) {
+        setName(name);
+        setDepartment(department);
+        students = new HashSet<>();
+    }
+    public StudentGroup(Long id,String name, Department department) {
+        setId(id);
         setName(name);
         setDepartment(department);
         students = new HashSet<>();
@@ -65,6 +83,7 @@ public class StudentGroup implements Entity{
 
     public void setHeadOfGroup(Teacher headOfGroup) {
         this.headOfGroup = headOfGroup;
+        this.headOfGroupId = headOfGroup.getId();
     }
 
     public Optional<Student> getGroupLeader() {
@@ -77,6 +96,7 @@ public class StudentGroup implements Entity{
         }
 
         this.groupLeader = groupLeader;
+        this.groupLeaderId = groupLeader.getId();
     }
     public void addStudent(Student student) {
         if (student ==  null) throw new IllegalArgumentException("student cannot be null");

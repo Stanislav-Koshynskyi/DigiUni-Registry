@@ -1,0 +1,195 @@
+{
+  "currentId" : 10,
+  "data" : {
+    "0" : {
+      "id" : 0,
+      "uniqueCode" : "RB-001",
+      "fullName" : {
+        "name" : "Harry",
+        "surname" : "Potter",
+        "patronymic" : ""
+      },
+      "birthDate" : "2000-07-31",
+      "contact" : {
+        "phone" : "+380981111111",
+        "email" : "harry@student.naukma.edu.ua"
+      },
+      "formOfEducation" : "BUDGET",
+      "recordBookNumber" : "S-HP-1",
+      "studentStatus" : "STUDIES",
+      "yearOfAdmission" : "2022",
+      "course" : 3
+    },
+    "1" : {
+      "id" : 1,
+      "uniqueCode" : "RB-002",
+      "fullName" : {
+        "name" : "Hermione",
+        "surname" : "Granger",
+        "patronymic" : ""
+      },
+      "birthDate" : "2000-09-19",
+      "contact" : {
+        "phone" : "+380982222222",
+        "email" : "hermione@student.naukma.edu.ua"
+      },
+      "formOfEducation" : "BUDGET",
+      "recordBookNumber" : "S-HP-2",
+      "studentStatus" : "STUDIES",
+      "yearOfAdmission" : "2022",
+      "course" : 3
+    },
+    "2" : {
+      "id" : 2,
+      "uniqueCode" : "RB-003",
+      "fullName" : {
+        "name" : "Ron",
+        "surname" : "Weasley",
+        "patronymic" : ""
+      },
+      "birthDate" : "2000-03-01",
+      "contact" : {
+        "phone" : "+380983333333",
+        "email" : "ron@student.naukma.edu.ua"
+      },
+      "formOfEducation" : "CONTRACT",
+      "recordBookNumber" : "S-HP-3",
+      "studentStatus" : "STUDIES",
+      "yearOfAdmission" : "2022",
+      "course" : 3
+    },
+    "3" : {
+      "id" : 3,
+      "uniqueCode" : "RB-004",
+      "fullName" : {
+        "name" : "Castiel",
+        "surname" : "Angel",
+        "patronymic" : ""
+      },
+      "birthDate" : "1999-11-05",
+      "contact" : {
+        "phone" : "+380984444444",
+        "email" : "castiel@student.naukma.edu.ua"
+      },
+      "formOfEducation" : "BUDGET",
+      "recordBookNumber" : "S-SPN-1",
+      "studentStatus" : "STUDIES",
+      "yearOfAdmission" : "2021",
+      "course" : 4
+    },
+    "4" : {
+      "id" : 4,
+      "uniqueCode" : "RB-005",
+      "fullName" : {
+        "name" : "Damon",
+        "surname" : "Salvatore",
+        "patronymic" : ""
+      },
+      "birthDate" : "1998-06-18",
+      "contact" : {
+        "phone" : "+380985555555",
+        "email" : "damon@student.naukma.edu.ua"
+      },
+      "formOfEducation" : "CONTRACT",
+      "recordBookNumber" : "S-VD-1",
+      "studentStatus" : "STUDIES",
+      "yearOfAdmission" : "2020",
+      "course" : 5
+    },
+    "5" : {
+      "id" : 5,
+      "uniqueCode" : "RB-006",
+      "fullName" : {
+        "name" : "Stefan",
+        "surname" : "Salvatore",
+        "patronymic" : ""
+      },
+      "birthDate" : "1998-11-01",
+      "contact" : {
+        "phone" : "+380986666666",
+        "email" : "stefan@student.naukma.edu.ua"
+      },
+      "formOfEducation" : "BUDGET",
+      "recordBookNumber" : "S-VD-2",
+      "studentStatus" : "STUDIES",
+      "yearOfAdmission" : "2020",
+      "course" : 5
+    },
+    "6" : {
+      "id" : 6,
+      "uniqueCode" : "RB-007",
+      "fullName" : {
+        "name" : "Ken",
+        "surname" : "Carson",
+        "patronymic" : ""
+      },
+      "birthDate" : "2001-02-14",
+      "contact" : {
+        "phone" : "+380987777777",
+        "email" : "ken@student.naukma.edu.ua"
+      },
+      "formOfEducation" : "CONTRACT",
+      "recordBookNumber" : "S-BB-1",
+      "studentStatus" : "STUDIES",
+      "yearOfAdmission" : "2023",
+      "course" : 2
+    },
+    "7" : {
+      "id" : 7,
+      "uniqueCode" : "RB-008",
+      "fullName" : {
+        "name" : "Michael",
+        "surname" : "Afton",
+        "patronymic" : ""
+      },
+      "birthDate" : "1999-04-20",
+      "contact" : {
+        "phone" : "+380988888888",
+        "email" : "michael@student.naukma.edu.ua"
+      },
+      "formOfEducation" : "BUDGET",
+      "recordBookNumber" : "S-FNAF-1",
+      "studentStatus" : "STUDIES",
+      "yearOfAdmission" : "2021",
+      "course" : 4
+    },
+    "8" : {
+      "id" : 8,
+      "uniqueCode" : "RB-009",
+      "fullName" : {
+        "name" : "Billy",
+        "surname" : "Loomis",
+        "patronymic" : ""
+      },
+      "birthDate" : "1999-08-10",
+      "contact" : {
+        "phone" : "+380989999999",
+        "email" : "billy@student.naukma.edu.ua"
+      },
+      "formOfEducation" : "CONTRACT",
+      "recordBookNumber" : "S-SC-1",
+      "studentStatus" : "STUDIES",
+      "yearOfAdmission" : "2021",
+      "course" : 4
+    },
+    "9" : {
+      "id" : 9,
+      "uniqueCode" : "RB-010",
+      "fullName" : {
+        "name" : "Stu",
+        "surname" : "Macher",
+        "patronymic" : ""
+      },
+      "birthDate" : "2000-01-01",
+      "contact" : {
+        "phone" : "+380980000000",
+        "email" : "stu@student.naukma.edu.ua"
+      },
+      "formOfEducation" : "BUDGET",
+      "recordBookNumber" : "S-SC-2",
+      "studentStatus" : "STUDIES",
+      "yearOfAdmission" : "2022",
+      "course" : 3
+    }
+  }
+}

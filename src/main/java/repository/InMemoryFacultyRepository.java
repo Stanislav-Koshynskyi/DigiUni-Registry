@@ -4,14 +4,18 @@ import entity.Faculty;
 import entity.Teacher;
 import entity.University;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
 
-public class InMemoryFacultyRepository extends AbstractRepositoryByLong<Faculty> implements FacultyRepository {
-    public InMemoryFacultyRepository() {}
+public class InMemoryFacultyRepository extends AbstractRepositorySaveByLong<Faculty> implements FacultyRepository {
+    public InMemoryFacultyRepository( Path file) {
+        super(Faculty.class, file);
+    }
 
     public List<Faculty> findByUniqueCode(String uniqueCode) {
         Map<Long, Faculty> data = getData();

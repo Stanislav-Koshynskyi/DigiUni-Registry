@@ -5,13 +5,17 @@ import entity.Faculty;
 import entity.Teacher;
 import entity.University;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-public class InMemoryDepartmentRepository extends AbstractRepositoryByLong<Department> implements  DepartmentRepository {
-    public InMemoryDepartmentRepository() {}
+public class InMemoryDepartmentRepository extends AbstractRepositorySaveByLong<Department> implements  DepartmentRepository {
+    public InMemoryDepartmentRepository( Path file) {
+        super(Department.class, file);
+    }
 
     public List<Department> findByUniqueCode(String code){
         Map<Long, Department> data = getData();

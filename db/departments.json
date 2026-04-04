@@ -1,0 +1,14 @@
+{
+  "currentId" : 1,
+  "data" : {
+    "0" : {
+      "id" : 0,
+      "uniqueCode" : "NAUKMA-CS",
+      "name" : "Computer Science",
+      "shortName" : "CS",
+      "facultyId" : 0,
+      "headOfDepartmentId" : null,
+      "cabinet" : "315"
+    }
+  }
+}

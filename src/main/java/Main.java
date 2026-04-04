@@ -11,18 +11,19 @@ import util.BaseForTest;
 import util.PagerBuilder;
 
 import java.io.Console;
+import java.io.File;
 
 public class Main {
     public static void main(String[] args) {
-        DepartmentRepository departmentRepository = new InMemoryDepartmentRepository();
-        FacultyRepository  facultyRepository = new InMemoryFacultyRepository();
-        StudentRepository studentRepository = new InMemoryStudentRepository();
-        StudentGroupRepository studentGroupRepository = new InMemoryStudentGroupRepository();
-        TeacherRepository teacherRepository = new InMemoryTeacherRepository();
-        UniversityRepository universityRepository = new InMemoryUniversityRepository();
-        UserRepository userRepository = new InMemoryUserRepository();
-
-        BaseForTest.seed(universityRepository, facultyRepository, departmentRepository, teacherRepository, studentGroupRepository, studentRepository);
+        DepartmentRepository departmentRepository = new InMemoryDepartmentRepository(Path.of("db", "departments.json"));
+        FacultyRepository  facultyRepository = new InMemoryFacultyRepository(Path.of("db", "faculties.json"));
+        StudentRepository studentRepository = new InMemoryStudentRepository(Path.of("db", "students.json"));
+        StudentGroupRepository studentGroupRepository = new InMemoryStudentGroupRepository(Path.of("db", "student_groups.json"));
+        TeacherRepository teacherRepository = new InMemoryTeacherRepository(Path.of("db", "teachers.json"));
+        UniversityRepository universityRepository = new InMemoryUniversityRepository(Path.of("db", "universities.json"));
+        UserRepository userRepository = new InMemoryUserRepository(Path.of("db", "users.json"));
+        // dont need now?
+        //BaseForTest.seed(universityRepository, facultyRepository, departmentRepository, teacherRepository, studentGroupRepository, studentRepository);
 
         ServiceDepartmentInterface serviceDepartmentInterface = new ServiceDepartment(departmentRepository);
         ServiceFacultyInterface serviceFacultyInterface = new ServiceFaculty(facultyRepository);
@@ -34,9 +35,10 @@ public class Main {
         PasswordCoder coder = new BCryptPasswordEncoder();
 
         ServiceUserInterface serviceUserInterface = new ServiceUser(userRepository, coder);
-        serviceUserInterface.save(new User(Role.ADMIN, "admin", "admin"));
-        serviceUserInterface.save(new User(Role.USER, "user", "user"));
-        serviceUserInterface.save(new User(Role.MODERATOR, "moderator", "moderator"));
+        // dont need now?
+        //serviceUserInterface.save(new User(Role.ADMIN, "admin", "admin"));
+        //serviceUserInterface.save(new User(Role.USER, "user", "user"));
+        //serviceUserInterface.save(new User(Role.MODERATOR, "moderator", "moderator"));
 
 
         SessionInfo sessionInfo = new LocalSessionInfo();

@@ -5,12 +5,15 @@ import entity.AcademicRank;
 import entity.Teacher;
 import entity.University;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
 public class InMemoryTeacherRepository extends AbstractPersonRepository<Teacher> implements TeacherRepository {
-    public InMemoryTeacherRepository() {
+    public InMemoryTeacherRepository(Path file) {
+        super(Teacher.class, file);
     }
 
     public List<Teacher> findByAcademicRank(AcademicRank academicRank) {

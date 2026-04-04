@@ -11,6 +11,9 @@ public class IdGenerator {
     public Long nextId(){
         return idGenerator.getAndIncrement();
     }
+    public Long getId(){
+        return idGenerator.get();
+    }
     public void setCurrentId(Long id){
         idGenerator.set(id);
     }
