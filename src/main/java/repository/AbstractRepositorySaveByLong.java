@@ -43,7 +43,7 @@ public abstract class AbstractRepositorySaveByLong<T extends Entity>
         }
         loadFromFile();
     }
-    public void saveToFile() {
+    public synchronized void saveToFile() {
         Path tempPath = file.resolveSibling(file.getFileName() + ".tmp");
         try {
             long currentId = getCurrentId();
