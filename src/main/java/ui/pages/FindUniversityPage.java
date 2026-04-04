@@ -28,7 +28,7 @@ public class FindUniversityPage extends BasePage {
     @Override
     public List<MenuItem> getMenuItems() {
         return List.of(
-                new MenuItem("By name", Right.FIND,this::findUniversityByCity),
+                new MenuItem("By name", Right.FIND,this::findUniversityByName),
                 new MenuItem("By short name", Right.FIND,this::findUniversityByShortName ),
                 new MenuItem("By city", Right.FIND,this::findUniversityByCity)
         );
