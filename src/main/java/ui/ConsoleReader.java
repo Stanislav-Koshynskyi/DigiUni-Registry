@@ -281,14 +281,14 @@ public class ConsoleReader implements InputReader {
     }
     public <T> T readChooseProbablyNull(List<T> list, String promt, String promptForZero) {
         if (list == null || list.isEmpty()) return null;
-         int i = 1;
-         System.out.println("0" + promptForZero);
-         for (T t : list) {
-             System.out.println(i++ + " - " + t);
-         }
-         int choose = readIntInRange(promt, 0, list.size());
-         if (choose == 0) return null;
-         return list.get(choose);
+        int i = 1;
+        System.out.println("0" + promptForZero);
+        for (T t : list) {
+            System.out.println(i++ + " - " + t);
+        }
+        int choose = readIntInRange(promt, 0, list.size());
+        if (choose == 0) return null;
+        return list.get(choose-1);
     }
     @Override
     public String readProbablyBlank(String prompt) {
