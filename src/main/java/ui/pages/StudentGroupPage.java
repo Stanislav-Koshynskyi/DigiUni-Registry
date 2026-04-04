@@ -48,6 +48,7 @@ public class StudentGroupPage extends BasePage {
         if (department.isEmpty()) {
             System.out.println("Department not found");
             System.out.println("Group not created");
+            return this;
         }
 
 
