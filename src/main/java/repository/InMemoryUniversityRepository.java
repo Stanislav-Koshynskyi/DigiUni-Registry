@@ -31,7 +31,7 @@ public class InMemoryUniversityRepository extends AbstractRepositorySaveByLong<U
     @Override
     public boolean existsByCity(String city) {
         Map<Long, University> data = getData();
-        return data.values().stream().anyMatch(u -> u.getShortName().equalsIgnoreCase(city));
+        return data.values().stream().anyMatch(u -> u.getAddress().city().equalsIgnoreCase(city));
     }
 
     public  boolean existsByShortName(String shortName) {
