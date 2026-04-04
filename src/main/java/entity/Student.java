@@ -28,7 +28,7 @@ public class Student extends Person{
         setGroup(group);
         setRecordBookNumber(recordBookNumber);
     }
-    public Student(Long id, String recordBookNumber, String uniqueCode, FullName fullName, LocalDate birthDate, Contact contact, FormOfEducation formOfEducation, StudentStatus studentStatus, Year yearOfAdmission, int course, StudentGroup group) {
+    public Student(Long id, String uniqueCode, String recordBookNumber, FullName fullName, LocalDate birthDate, Contact contact, FormOfEducation formOfEducation, StudentStatus studentStatus, Year yearOfAdmission, int course, StudentGroup group) {
         super(id, uniqueCode, fullName, birthDate, contact);
         setFormOfEducation(formOfEducation);
         setStudentStatus(studentStatus);
