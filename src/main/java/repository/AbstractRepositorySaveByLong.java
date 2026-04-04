@@ -16,7 +16,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 
 public abstract class AbstractRepositorySaveByLong<T extends Entity>
-        extends AbstractRepositoryByLong<T>{
+        extends AbstractRepositoryByLong<T> implements Stored {
     private final ObjectMapper objectMapper;
     private final Path file;
     private final Class<T> clazz;
@@ -43,25 +43,7 @@ public abstract class AbstractRepositorySaveByLong<T extends Entity>
         }
         loadFromFile();
     }
-    @Override
-    public synchronized T save(T entity) {
-        T savedEntity = super.save(entity);
-        saveToFile();
-        return savedEntity;
-    }
-
-    @Override
-    public synchronized void delete(T entity) {
-        super.delete(entity);
-        saveToFile();
-    }
-
-    @Override
-    public synchronized void deleteById(Long id) {
-        super.deleteById(id);
-        saveToFile();
-    }
-    private void saveToFile() {
+    public synchronized void saveToFile() {
         Path tempPath = file.resolveSibling(file.getFileName() + ".tmp");
         try {
             long currentId = getCurrentId();

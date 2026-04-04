@@ -12,20 +12,37 @@ import util.RepositoryLinker;
 
 import java.io.Console;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static void main(String[] args) {
-        DepartmentRepository departmentRepository = new InMemoryDepartmentRepository(Path.of("db", "departments.json"));
-        FacultyRepository  facultyRepository = new InMemoryFacultyRepository(Path.of("db", "faculties.json"));
-        StudentRepository studentRepository = new InMemoryStudentRepository(Path.of("db", "students.json"));
-        StudentGroupRepository studentGroupRepository = new InMemoryStudentGroupRepository(Path.of("db", "student_groups.json"));
-        TeacherRepository teacherRepository = new InMemoryTeacherRepository(Path.of("db", "teachers.json"));
-        UniversityRepository universityRepository = new InMemoryUniversityRepository(Path.of("db", "universities.json"));
-        UserRepository userRepository = new InMemoryUserRepository(Path.of("db", "users.json"));
+        InMemoryDepartmentRepository departmentRepository = new InMemoryDepartmentRepository(Path.of("db", "departments.json"));
+        InMemoryFacultyRepository  facultyRepository = new InMemoryFacultyRepository(Path.of("db", "faculties.json"));
+        InMemoryStudentRepository studentRepository = new InMemoryStudentRepository(Path.of("db", "students.json"));
+        InMemoryStudentGroupRepository studentGroupRepository = new InMemoryStudentGroupRepository(Path.of("db", "student_groups.json"));
+        InMemoryTeacherRepository teacherRepository = new InMemoryTeacherRepository(Path.of("db", "teachers.json"));
+        InMemoryUniversityRepository universityRepository = new InMemoryUniversityRepository(Path.of("db", "universities.json"));
+        InMemoryUserRepository userRepository = new InMemoryUserRepository(Path.of("db", "users.json"));
         RepositoryLinker.linkRepository(universityRepository, facultyRepository
             ,departmentRepository, studentGroupRepository, studentRepository);
         // dont need now?
         //BaseForTest.seed(universityRepository, facultyRepository, departmentRepository, teacherRepository, studentGroupRepository, studentRepository);
+
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        List<Stored> stored = List.of(universityRepository, facultyRepository
+        ,departmentRepository, studentGroupRepository, studentRepository, userRepository
+        ,teacherRepository);
+        scheduler.scheduleAtFixedRate(()->stored.forEach(Stored::saveToFile),
+                5, 5, TimeUnit.MINUTES);
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            scheduler.shutdown();
+            stored.forEach(Stored::saveToFile);
+        }));
+
 
         ServiceDepartmentInterface serviceDepartmentInterface = new ServiceDepartment(departmentRepository);
         ServiceFacultyInterface serviceFacultyInterface = new ServiceFaculty(facultyRepository);
