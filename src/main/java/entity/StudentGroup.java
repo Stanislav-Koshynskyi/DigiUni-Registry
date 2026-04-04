@@ -17,7 +17,7 @@ public class StudentGroup implements Entity{
     private Student groupLeader;
     @Getter
     private Long groupLeaderId;
-
+    @JsonIgnore
     private HashSet<Student> students;
     @JsonIgnore
     private Department department;
