@@ -1,17 +1,12 @@
-import entity.Role;
-import entity.User;
-import entity.find_criteria.UniversityFind;
 import repository.*;
 import security.*;
 import service.*;
 import ui.*;
 import ui.finders.*;
 import ui.pages.MainPage;
-import util.BaseForTest;
 import util.PagerBuilder;
-
 import java.io.Console;
-import java.io.File;
+import java.nio.file.Path;
 
 public class Main {
     public static void main(String[] args) {
