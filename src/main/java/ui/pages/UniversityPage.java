@@ -51,9 +51,7 @@ public class UniversityPage extends BasePage {
         return this;
     }
     private Page showAllUniversity(){
-        for (University university : serviceUniversity.findAll()) {
-            System.out.println("id - "+ university.getId() + ", " + university);
-        }
-        return this;
+        List<University> universities = serviceUniversity.findAll();
+        return new SortUniversityPage(inputReader, universities);
     }
 }

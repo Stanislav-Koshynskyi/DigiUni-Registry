@@ -118,9 +118,8 @@ public class FacultyPage extends BasePage {
     }
 
     private Page showAllFaculties() {
-        for (Faculty faculty : serviceFaculty.findAll())
-            System.out.println("id -" + faculty.getId() + ", " +faculty);
-        return this;
+        List<Faculty> faculties = serviceFaculty.findAll();
+        return new SortFacultyPage(inputReader, faculties);
     }
 
     private String uniqueCode(University university) {

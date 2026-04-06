@@ -97,10 +97,8 @@ public class TeacherPage extends BasePage {
     }
 
     private Page showAllTeachers() {
-        for (Teacher teacher : serviceTeacher.findAll()) {
-            System.out.println("id -" + teacher.getId() + ", " + teacher);
-        }
-        return this;
+        List<Teacher> teachers = serviceTeacher.findAll();
+        return new SortTeacherPage(inputReader, teachers);
     }
 
     private String uniqueEmail() {

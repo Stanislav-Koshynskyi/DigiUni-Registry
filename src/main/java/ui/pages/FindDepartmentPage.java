@@ -40,8 +40,8 @@ public class FindDepartmentPage extends BasePage {
 
 
     private Page findByUniqueCode() {
-        printDepartments(departmentFinder.findByUniqueCode());
-        return this;
+        List<Department> departments = departmentFinder.findByName();
+        return new SortDepartmentPage(inputReader, departmentFinder.findByUniqueCode());
     }
     private void printDepartments(List<Department> departments) {
         if (departments.isEmpty()) {

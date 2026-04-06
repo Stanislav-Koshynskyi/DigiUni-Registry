@@ -85,7 +85,7 @@ public class StudentGroupPage extends BasePage {
 
     private Page showStudentGroup() {
         for (StudentGroup group : serviceStudentGroup.findAll()) {
-            System.out.println("ID: " + group.getId() + group);
+            System.out.println("ID: " + group.getId() + ", " + group);
         }
         return this;
     }

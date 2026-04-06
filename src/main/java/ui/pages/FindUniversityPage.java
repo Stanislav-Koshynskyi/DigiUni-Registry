@@ -55,13 +55,10 @@ public class FindUniversityPage extends BasePage {
     }
     public Page findUniversityByCity() {
         List<University> universityList = universityFinder.findByCity();
-        if (universityList.isEmpty()){
+        if (universityList.isEmpty()) {
             System.out.println("There is no university with that name");
+            return this;
         }
-        else{
-            //тут можна зробити перехід на сторінку сортування
-            universityList.forEach(System.out::println);
-        }
-        return this;
+        return new SortUniversityPage(inputReader, universityList);
     }
 }

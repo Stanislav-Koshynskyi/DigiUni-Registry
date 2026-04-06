@@ -107,9 +107,8 @@ public class DepartmentPage extends BasePage {
     }
 
     private Page showAllDepartments() {
-        for (Department department : serviceDepartment.findAll())
-            System.out.println("id -" + department.getId() + ", " + department);
-        return this;
+        List<Department> departments = serviceDepartment.findAll();
+        return new SortDepartmentPage(inputReader, departments);
     }
 
     private String uniqueCode(University university) {

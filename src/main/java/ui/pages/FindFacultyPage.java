@@ -40,12 +40,9 @@ public class FindFacultyPage extends BasePage {
         List<Faculty> faculties = facultyFinder.findByUniqueCode();
         if  (faculties.isEmpty()) {
             System.out.println("No faculties found");
+            return this;
         }
-        else{
-            System.out.println(faculties);
-        }
-        //тут теж можна переходити на сторінку з сортуваннями
-        return this;
+        return new SortFacultyPage(inputReader, faculties);
     }
     private Page findByName(){
         List<Faculty> faculties = facultyFinder.findByName();
