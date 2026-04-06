@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import entity.Entity;
+import exception.StorageException;
 import util.IdGenerator;
 
 import java.io.File;
@@ -39,7 +40,7 @@ public abstract class AbstractRepositorySaveByLong<T extends Entity>
                 Files.createDirectories(file.getParent());
             }
         } catch (IOException e) {
-            throw new RuntimeException("Не вдалося створити директорії", e); // щось кастомне мб
+            throw new StorageException("Error of create directory: " + file.getParent(), e);
         }
         loadFromFile();
     }
@@ -55,7 +56,7 @@ public abstract class AbstractRepositorySaveByLong<T extends Entity>
                     StandardCopyOption.REPLACE_EXISTING,
                     StandardCopyOption.ATOMIC_MOVE);
         } catch (IOException e) {
-            throw new RuntimeException(e); // тут має бути якись кастомний, потім додам
+            throw new StorageException("Error to write in file: " + file.getFileName(), e);
         }
     }
     private void loadFromFile()  {
@@ -75,7 +76,7 @@ public abstract class AbstractRepositorySaveByLong<T extends Entity>
             setCurrentId(wrapper.getCurrentId());
 
         } catch (IOException e) {
-            throw new RuntimeException(e); // тут теж своя
+            throw new StorageException("Error of read file: " + file.getFileName(), e);
         }
     }
 }

@@ -1,5 +1,7 @@
 import entity.Role;
 import entity.User;
+import exception.LinkedException;
+import exception.StorageException;
 import repository.*;
 import security.*;
 import service.*;
@@ -12,6 +14,7 @@ import util.RepositoryLinker;
 
 import java.io.Console;
 import java.nio.file.Path;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -20,15 +23,38 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static void main(String[] args) {
-        InMemoryDepartmentRepository departmentRepository = new InMemoryDepartmentRepository(Path.of("db", "departments.json"));
-        InMemoryFacultyRepository  facultyRepository = new InMemoryFacultyRepository(Path.of("db", "faculties.json"));
-        InMemoryStudentRepository studentRepository = new InMemoryStudentRepository(Path.of("db", "students.json"));
-        InMemoryStudentGroupRepository studentGroupRepository = new InMemoryStudentGroupRepository(Path.of("db", "student_groups.json"));
-        InMemoryTeacherRepository teacherRepository = new InMemoryTeacherRepository(Path.of("db", "teachers.json"));
-        InMemoryUniversityRepository universityRepository = new InMemoryUniversityRepository(Path.of("db", "universities.json"));
-        InMemoryUserRepository userRepository = new InMemoryUserRepository(Path.of("db", "users.json"));
-        RepositoryLinker.linkRepository(universityRepository, facultyRepository
-            ,departmentRepository, studentGroupRepository, studentRepository);
+
+        InMemoryDepartmentRepository departmentRepository = null;
+        InMemoryFacultyRepository  facultyRepository = null;
+        InMemoryStudentRepository studentRepository = null;
+        InMemoryStudentGroupRepository studentGroupRepository = null;
+        InMemoryTeacherRepository teacherRepository  = null;
+        InMemoryUniversityRepository universityRepository =  null;
+        InMemoryUserRepository userRepository = null;
+        try {
+            departmentRepository = new InMemoryDepartmentRepository(Path.of("db", "departments.json"));
+            facultyRepository = new InMemoryFacultyRepository(Path.of("db", "faculties.json"));
+            studentRepository = new InMemoryStudentRepository(Path.of("db", "students.json"));
+            studentGroupRepository = new InMemoryStudentGroupRepository(Path.of("db", "student_groups.json"));
+            teacherRepository = new InMemoryTeacherRepository(Path.of("db", "teachers.json"));
+            universityRepository = new InMemoryUniversityRepository(Path.of("db", "universities.json"));
+            userRepository = new InMemoryUserRepository(Path.of("db", "users.json"));
+            RepositoryLinker.linkRepository(universityRepository, facultyRepository
+                    , departmentRepository, studentGroupRepository, studentRepository);
+        }catch (StorageException e){
+            System.out.println("Disk error, we can`t read/writo into file");
+            System.exit(1);
+        }catch (LinkedException e){
+            System.out.println("File read successfully but data connection broken");
+            System.exit(1);
+        }catch (Exception e){
+            System.out.println("Unexpected error");
+            System.exit(1);
+        }
+
+
+
+
         // dont need now?
         //BaseForTest.seed(universityRepository, facultyRepository, departmentRepository, teacherRepository, studentGroupRepository, studentRepository);
 
@@ -54,11 +80,11 @@ public class Main {
         PasswordCoder coder = new BCryptPasswordEncoder();
 
         ServiceUserInterface serviceUserInterface = new ServiceUser(userRepository, coder);
-        /* dont need now?
+        /*// dont need now?
         serviceUserInterface.save(new User(Role.ADMIN, "admin", "admin"));
         serviceUserInterface.save(new User(Role.USER, "user", "user"));
         serviceUserInterface.save(new User(Role.MODERATOR, "moderator", "moderator"));
-         */
+        */
 
         SessionInfo sessionInfo = new LocalSessionInfo();
 
