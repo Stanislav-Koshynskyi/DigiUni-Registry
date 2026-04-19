@@ -17,7 +17,8 @@ import java.util.Optional;
 
 public class AdminPage extends BasePage {
     private final ServiceUserInterface serviceUser;
-    public AdminPage(InputReader inputReader,  ServiceUserInterface serviceUser) {
+
+    public AdminPage(InputReader inputReader, ServiceUserInterface serviceUser) {
         super(inputReader);
         this.serviceUser = serviceUser;
     }
@@ -25,7 +26,7 @@ public class AdminPage extends BasePage {
     @Override
     public List<MenuItem> getMenuItems() {
         return List.of(
-                new MenuItem("Show all user", Right.ADMIN_ONLY, this::showAllUsers ),
+                new MenuItem("Show all user", Right.ADMIN_ONLY, this::showAllUsers),
                 new MenuItem("Edit role", Right.ADMIN_ONLY, this::editRole),
                 new MenuItem("Delete user", Right.ADMIN_ONLY, this::deleteUser)
         );
@@ -33,14 +34,13 @@ public class AdminPage extends BasePage {
 
     private Page deleteUser() {
         Optional<User> userOptional = findUser();
-        if (userOptional.isEmpty()){
+        if (userOptional.isEmpty()) {
             System.out.println("No user found");
-        }
-        else{
+        } else {
             User user = userOptional.get();
             UserDelete userDelete = inputReader.readChoose(
                     List.of(UserDelete.values()), "Choose how delete");
-            switch (userDelete){
+            switch (userDelete) {
                 case HARD -> {
                     user.setRole(Role.DELETED);
                     serviceUser.delete(user);
@@ -56,13 +56,12 @@ public class AdminPage extends BasePage {
 
     private Page editRole() {
         Optional<User> userOptional = findUser();
-        if (userOptional.isEmpty()){
+        if (userOptional.isEmpty()) {
             System.out.println("No user found");
-        }
-        else{
+        } else {
             User user = userOptional.get();
-            System.out.println("Current user role: " +  user.getRole());
-            Role newRole = inputReader.readChoose(List.of(Role.values()), "Select a new role");
+            System.out.println("Current user role: " + user.getRole());
+            Role newRole = inputReader.readChoose(List.of(Role.ADMIN, Role.MODERATOR, Role.USER), "Select a new role");
             user.setRole(newRole);
             System.out.println("Role for " + user.getLogin() + " changed successfully, new role: " + user.getRole());
         }
@@ -87,9 +86,10 @@ public class AdminPage extends BasePage {
     public String getTitle() {
         return "Admin Panel";
     }
-    private Page showAllUsers(){
+
+    private Page showAllUsers() {
         List<User> users = serviceUser.findAllUsers();
-        for (User user : users){
+        for (User user : users) {
             System.out.println("id - " + user.getId() + " " + user);
         }
         return this;
