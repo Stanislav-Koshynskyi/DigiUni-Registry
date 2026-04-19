@@ -47,6 +47,7 @@ public class AdminPage extends BasePage {
                 }
                 case SOFT -> {
                     user.setRole(Role.DELETED);
+                    serviceUser.update(user);
                 }
             }
             System.out.println("User deleted successfully, deleted type: " + userDelete);
