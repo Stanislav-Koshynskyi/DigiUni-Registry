@@ -3,11 +3,13 @@ package ui.pages;
 import entity.Right;
 import entity.Role;
 import entity.User;
+import exception.UserDeletedException;
 import exception.UserNotFoundException;
 import exception.WrongPasswordException;
 import security.AuthService;
 import service.ServiceUserInterface;
 import ui.*;
+import util.PagerBuilder;
 
 import java.io.Console;
 import java.util.List;
@@ -15,13 +17,15 @@ import java.util.List;
 public class UserPage extends BasePage {
     AuthService authService;
     ServiceUserInterface serviceUser;
+    PagerBuilder pagerBuilder;
 
     public UserPage(AuthService authService, ServiceUserInterface serviceUser,
-                    InputReader inputReader) {
+                    InputReader inputReader, PagerBuilder pagerBuilder) {
         super(inputReader);
         this.authService = authService;
         this.serviceUser = serviceUser;
         this.inputReader = inputReader;
+        this.pagerBuilder = pagerBuilder;
     }
 
     /*
@@ -40,7 +44,7 @@ view all user for admin
                 new MenuItem("Login", Right.GUEST_ONLY,this :: login ),
                 new MenuItem("Register", Right.GUEST_ONLY,this :: register ),
                 new MenuItem("Logout", Right.LOGGED_IN, this :: logout ),
-                new MenuItem("Show all user", Right.ADMIN_ONLY, this::showAllUsers )
+                new MenuItem("Admin Panel", Right.ADMIN_ONLY, pagerBuilder::getAdminPage)
         );
     }
     private Page login(){
@@ -53,6 +57,10 @@ view all user for admin
             return this;
         }catch (WrongPasswordException e){
             System.out.println("Wrong password");
+            return this;
+        }
+        catch (UserDeletedException e){
+            System.out.println("Current user has been deleted, try other or create a new one");
             return this;
         }
         System.out.println("Logged in successfully");
@@ -74,13 +82,6 @@ view all user for admin
     }
     private Page logout(){
         authService.logout();
-        return this;
-    }
-    private Page showAllUsers(){
-        List<User> users = serviceUser.findAllUsers();
-        for (User user : users){
-            System.out.println("id - " + user.getId() + " " + user);
-        }
         return this;
     }
 
