@@ -1,5 +1,6 @@
 package service;
 
+import entity.Role;
 import entity.User;
 
 import java.util.List;
@@ -14,4 +15,5 @@ public interface ServiceUserInterface {
     List<User> findAllUsers();
 
 
+    List<User> findByRole(Role role);
 }

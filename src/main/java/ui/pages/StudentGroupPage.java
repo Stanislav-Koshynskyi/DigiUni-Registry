@@ -3,7 +3,6 @@ package ui.pages;
 import entity.Department;
 import entity.Right;
 import entity.StudentGroup;
-import service.ServiceDepartmentInterface;
 import service.ServiceStudentGroupInterface;
 import ui.*;
 import ui.finders.DepartmentFinderInterface;

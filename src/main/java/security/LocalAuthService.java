@@ -1,6 +1,8 @@
 package security;
 
+import entity.Role;
 import entity.User;
+import exception.UserDeletedException;
 import exception.UserNotFoundException;
 import exception.WrongPasswordException;
 import service.ServiceUserInterface;
@@ -35,6 +37,7 @@ public class LocalAuthService implements  AuthService {
         User user = userOpt.get();
         boolean passwordMatch = passwordCoder.matches(password, user.getPassword());
         if (!passwordMatch) throw new WrongPasswordException("Wrong password");
+        if (user.getRole().equals(Role.DELETED)) throw new UserDeletedException("User deleted");
         sessionInfo.login(user);
         return user;
     }

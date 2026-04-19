@@ -1,6 +1,7 @@
 package entity;
 
 public enum Role {
+    DELETED(0),
     GUEST(16),
     USER(1),
     MODERATOR(15),

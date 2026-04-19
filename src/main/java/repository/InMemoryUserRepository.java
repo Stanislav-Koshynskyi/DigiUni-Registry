@@ -1,9 +1,11 @@
 package repository;
 
+import entity.Role;
 import entity.User;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 
 public class InMemoryUserRepository extends AbstractRepositorySaveByLong<User> implements UserRepository{
@@ -19,5 +21,9 @@ public class InMemoryUserRepository extends AbstractRepositorySaveByLong<User> i
     @Override
     public boolean existsByLogin(String login) {
         return getData().values().stream().anyMatch(d -> d.getLogin().equals(login));
+    }
+    @Override
+    public List<User> findByRole(Role role){
+        return getData().values().stream().filter(u -> u.getRole().equals(role)).toList();
     }
 }
