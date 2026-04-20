@@ -71,4 +71,17 @@ public class ServiceUniversityTest {
 
         verify(universityRepository).deleteById(1L);
     }
+    @Test
+    void createWhenNameExistsTest() {
+        when(universityRepository.existsByFullName("Kyiv-Mohyla Academy")).thenReturn(true);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> serviceUniversity.create(university));
+        verify(universityRepository, never()).save(any());
+    }
+    @Test
+    void deleteWhenHasConnectionTest(){
+        when(universityRepository.findById(1L)).thenReturn(Optional.of(university));
+        when(facultyRepository.findByUniversity(university)).thenReturn(List.of(new Faculty()));
+        Assertions.assertThrows(EntityInUseException.class, () -> serviceUniversity.delete(1L));
+        verify(universityRepository, never()).deleteById(any());
+    }
 }
