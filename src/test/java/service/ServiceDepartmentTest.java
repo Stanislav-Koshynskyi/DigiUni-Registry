@@ -83,5 +83,6 @@ public class ServiceDepartmentTest {
     void createIfExistsByUniqueCodeTest() {
         when(departmentRepository.existsByUniqueCode(department.getUniqueCode())).thenReturn(true);
         Assertions.assertThrows(IllegalArgumentException.class, () -> serviceDepartment.create(department));
+        verify(departmentRepository, never()).save(any());
     }
 }
