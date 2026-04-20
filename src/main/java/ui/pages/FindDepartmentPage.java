@@ -40,7 +40,6 @@ public class FindDepartmentPage extends BasePage {
 
 
     private Page findByUniqueCode() {
-        List<Department> departments = departmentFinder.findByName();
         return new SortDepartmentPage(inputReader, departmentFinder.findByUniqueCode());
     }
     private void printDepartments(List<Department> departments) {
