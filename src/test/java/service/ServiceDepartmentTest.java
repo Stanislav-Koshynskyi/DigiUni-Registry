@@ -1,6 +1,8 @@
 package service;
 
 import entity.*;
+import exception.EntityInUseException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -69,7 +71,6 @@ public class ServiceDepartmentTest {
         when(departmentRepository.findById(1L)).thenReturn(Optional.of(department));
         when(studentGroupRepository.findByDepartment(department)).thenReturn(List.of());
         serviceDepartment.delete(1L);
-
         verify(departmentRepository).deleteById(1L);
     }
     @Test
