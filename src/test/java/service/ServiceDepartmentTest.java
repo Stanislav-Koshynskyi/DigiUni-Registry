@@ -77,6 +77,7 @@ public class ServiceDepartmentTest {
         when(departmentRepository.findById(1L)).thenReturn(Optional.of(department));
         when(studentGroupRepository.findByDepartment(department)).thenReturn(List.of(new StudentGroup()));
         Assertions.assertThrows(EntityInUseException.class, () -> serviceDepartment.delete(1L));
+        verify(departmentRepository, never()).deleteById(any());
     }
     @Test
     void createIfExistsByUniqueCodeTest() {
