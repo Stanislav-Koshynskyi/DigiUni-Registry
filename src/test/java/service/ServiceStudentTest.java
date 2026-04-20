@@ -79,4 +79,17 @@ public class ServiceStudentTest {
 
         verify(studentRepository).deleteById(1L);
     }
+    @Test
+    void createIfExistsByUniqueCodeTest() {
+        when(studentRepository.existsByUniqueCode("Barbara-1", university)).thenReturn(true);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> serviceStudent.create(student));
+        verify(studentRepository, never()).save(any());
+    }
+    @Test
+    void createIfExistsByRecordBookNumberTest() {
+        when(studentRepository.existsByUniqueCode(student.getUniqueCode(), university)).thenReturn(false);
+        when(studentRepository.existsByRecordBookNumber(student.getRecordBookNumber(), university)).thenReturn(true);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> serviceStudent.create(student));
+        verify(studentRepository, never()).save(any());
+    }
 }
