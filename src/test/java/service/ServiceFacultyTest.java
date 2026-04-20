@@ -75,4 +75,18 @@ public class ServiceFacultyTest {
         serviceFaculty.delete(1L);
         verify(facultyRepository).deleteById(1L);
     }
+
+    @Test
+    void deleteIfHasConnection(){
+        when(facultyRepository.findById(1L)).thenReturn(Optional.of(faculty));
+        when(departmentRepository.findByFaculty(faculty)).thenReturn(List.of(new Department()));
+        Assertions.assertThrows(EntityInUseException.class, () -> serviceFaculty.delete(1L));
+        verify(facultyRepository, never()).deleteById(any());
+    }
+    @Test
+    void createIfExistsByUniqueCodeTest() {
+        when(facultyRepository.existsByUniqueCode("NAUKMA-FI", university)).thenReturn(true);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> serviceFaculty.create(faculty));
+        verify(departmentRepository, never()).save(any());
+    }
 }
