@@ -68,4 +68,28 @@ public class ServiceTeacherTest {
 
         verify(teacherRepository).deleteById(1L);
     }
+
+    @Test
+    void createIfUniqueCodeIsPresentTest() {
+        when(teacherRepository.findByUniqueCode("Barbara-1")).thenReturn(List.of(teacher));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> serviceTeacher.create(teacher));
+        verify(teacherRepository, never()).save(any());
+    }
+
+    @Test
+    void createTeacherIfEmailExistsTest() {
+        when(teacherRepository.findByUniqueCode("Barbara-1")).thenReturn(List.of());
+        when(teacherRepository.findByEmail("BarbaraMillicent@naukma.edu.ua")).thenReturn(Optional.of(teacher));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> serviceTeacher.create(teacher));
+        verify(teacherRepository, never()).save(any());
+    }
+
+    @Test
+    void createTeacherIfNumberExistsTest() {
+        when(teacherRepository.findByUniqueCode("Barbara-1")).thenReturn(List.of());
+        when(teacherRepository.findByEmail("BarbaraMillicent@naukma.edu.ua")).thenReturn(Optional.empty());
+        when(teacherRepository.findByPhone("+380982345678")).thenReturn(Optional.of(teacher));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> serviceTeacher.create(teacher));
+        verify(teacherRepository, never()).save(any());
+    }
 }
