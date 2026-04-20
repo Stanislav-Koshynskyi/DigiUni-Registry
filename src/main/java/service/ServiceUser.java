@@ -1,5 +1,6 @@
 package service;
 
+import entity.Role;
 import entity.User;
 import repository.UserRepository;
 import security.PasswordCoder;
@@ -44,5 +45,10 @@ public class ServiceUser implements ServiceUserInterface {
     @Override
     public List<User> findAllUsers() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public List<User> findByRole(Role role) {
+        return userRepository.findByRole(role);
     }
 }

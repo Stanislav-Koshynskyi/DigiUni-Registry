@@ -69,7 +69,7 @@ public class PagerBuilder {
     }
     public Page getUserPage(){
         return new UserPage(authService,
-                serviceUser, inputReader);
+                serviceUser, inputReader, this);
     }
     public Page getFindUniversityPage(){
         return new FindUniversityPage(inputReader, universityFinder);
@@ -89,5 +89,7 @@ public class PagerBuilder {
     public Page getTeacherFindPage() {
         return new FindTeacherPage(inputReader, teacherFinder);
     }
-
+    public Page getAdminPage() {
+        return new AdminPage(inputReader, serviceUser);
+    }
 }
