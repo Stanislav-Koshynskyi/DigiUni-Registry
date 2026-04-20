@@ -72,4 +72,15 @@ public class ServiceDepartmentTest {
 
         verify(departmentRepository).deleteById(1L);
     }
+    @Test
+    void deleteIfHasConnectionTest(){
+        when(departmentRepository.findById(1L)).thenReturn(Optional.of(department));
+        when(studentGroupRepository.findByDepartment(department)).thenReturn(List.of(new StudentGroup()));
+        Assertions.assertThrows(EntityInUseException.class, () -> serviceDepartment.delete(1L));
+    }
+    @Test
+    void createIfExistsByUniqueCodeTest() {
+        when(departmentRepository.existsByUniqueCode(department.getUniqueCode())).thenReturn(true);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> serviceDepartment.create(department));
+    }
 }
