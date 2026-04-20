@@ -4,6 +4,7 @@ import entity.*;
 import service.ServiceTeacherInterface;
 import ui.*;
 import ui.finders.TeacherFinderInterface;
+import util.Annotations;
 import util.PagerBuilder;
 
 import java.io.Console;
@@ -29,16 +30,21 @@ public class TeacherPage extends BasePage {
         return "Teacher";
     }
 
-    @Override
-    public List<MenuItem> getMenuItems() {
-        return List.of(
-            new MenuItem("Add teacher", Right.ADD, this::createTeacher),
-            new MenuItem("Edit teacher", Right.EDIT, this::editTeacher),
-            new MenuItem("Delete teacher", Right.DELETE, this::deleteTeacher),
-            new MenuItem("Show all teacher", Right.FIND, this:: showAllTeachers),
-            new MenuItem("Find teachers", Right.FIND, pagerBuilder::getTeacherFindPage)
-        );
+//    @Override
+//    public List<MenuItem> getMenuItems() {
+//        return List.of(
+//            new MenuItem("Add teacher", Right.ADD, this::createTeacher),
+//            new MenuItem("Edit teacher", Right.EDIT, this::editTeacher),
+//            new MenuItem("Delete teacher", Right.DELETE, this::deleteTeacher),
+//            new MenuItem("Show all teacher", Right.FIND, this:: showAllTeachers),
+//            new MenuItem("Find teachers", Right.FIND, pagerBuilder::getTeacherFindPage)
+//        );
+//    }
+    @Annotations(name = "Find teachers", right = Right.FIND, order = 5)
+    private Page findTeacher() {
+        return pagerBuilder.getTeacherFindPage();
     }
+    @Annotations(name = "Add teacher", right = Right.ADD, order = 1)
     private Page createTeacher() {
         FullName fullName = inputReader.readfullName();
         LocalDate birthDate = inputReader.readBirthDate();
@@ -67,7 +73,7 @@ public class TeacherPage extends BasePage {
         }
         return this;
     }
-
+    @Annotations(name = "Edit teacher", right = Right.EDIT, order = 2)
     private Page editTeacher() {
         Long id = inputReader.readLong("Enter teacher id: ");
         Optional<Teacher> optionalTeacher = serviceTeacher.findById(id);
@@ -86,7 +92,7 @@ public class TeacherPage extends BasePage {
         serviceTeacher.update(teacher);
         return this;
     }
-
+    @Annotations(name = "Delete teacher", right = Right.DELETE, order = 3)
     private Page deleteTeacher() {
         Optional<Teacher> teacherOptional = teacherFinder.findAndSelect();
         if (teacherOptional.isPresent()){
@@ -95,7 +101,7 @@ public class TeacherPage extends BasePage {
 
         return this;
     }
-
+    @Annotations(name = "Show all teacher", right = Right.FIND, order = 4)
     private Page showAllTeachers() {
         List<Teacher> teachers = serviceTeacher.findAll();
         return new SortTeacherPage(inputReader, teachers);

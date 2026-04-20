@@ -6,6 +6,7 @@ import service.ServiceStudentInterface;
 import ui.*;
 import ui.finders.StudentFinderInterface;
 import ui.finders.StudentGroupFinderInterface;
+import util.Annotations;
 import util.PagerBuilder;
 
 import java.io.Console;
@@ -35,18 +36,22 @@ public class StudentPage extends BasePage {
         return "Student";
     }
 
-    @Override
-    public List<MenuItem> getMenuItems() {
-        return List.of(
-                new MenuItem("Add student", Right.ADD, this::createStudent),
-                new MenuItem("Edit student", Right.EDIT, this::editStudent),
-                new MenuItem("Delete student", Right.DELETE, this::deleteStudent),
-                new MenuItem("Show all student", Right.FIND, this::showAllStudents),
-                new MenuItem("Find student", Right.FIND, pagerBuilder::getStudentFindPage)
-        );
+//    @Override
+//    public List<MenuItem> getMenuItems() {
+//        return List.of(
+//                new MenuItem("Add student", Right.ADD, this::createStudent),
+//                new MenuItem("Edit student", Right.EDIT, this::editStudent),
+//                new MenuItem("Delete student", Right.DELETE, this::deleteStudent),
+//                new MenuItem("Show all student", Right.FIND, this::showAllStudents),
+//                new MenuItem("Find student", Right.FIND, pagerBuilder::getStudentFindPage)
+//        );
+//    }
+    @Annotations(name = "Find student", right = Right.FIND, order = 5)
+    private Page findStudent() {
+        return pagerBuilder.getStudentFindPage();
     }
 
-
+    @Annotations(name = "Add student", right = Right.ADD, order = 1)
     private Page createStudent() {
         Optional<StudentGroup> optionalStudentGroup = studentGroupFinder.findAndSelect();
         if (optionalStudentGroup.isEmpty()){
@@ -125,6 +130,7 @@ public class StudentPage extends BasePage {
         }
     }
 
+    @Annotations(name = "Edit student", right = Right.EDIT, order = 2)
     private Page editStudent() {
         Long id = inputReader.readLong("Enter student id to edit: ");
         Optional<Student> optionalStudent = serviceStudent.findById(id);
@@ -149,6 +155,7 @@ public class StudentPage extends BasePage {
         return this;
     }
 
+    @Annotations(name = "Delete student", right = Right.DELETE, order = 3)
     private Page deleteStudent() {
         Optional<Student> studentOptional = studentFinder.findAndSelect();
         if(studentOptional.isPresent()){
@@ -162,6 +169,7 @@ public class StudentPage extends BasePage {
         return this;
     }
 
+    @Annotations(name = "Show all student", right = Right.FIND, order = 4)
     private Page showAllStudents() {
         List<Student> student = serviceStudent.findAll();
         return new SortStudentPage(inputReader, student);

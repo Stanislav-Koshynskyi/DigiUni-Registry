@@ -9,6 +9,7 @@ import ui.*;
 import ui.finders.DepartmentFinderInterface;
 import ui.finders.StudentGroupFinder;
 import ui.finders.StudentGroupFinderInterface;
+import util.Annotations;
 import util.PagerBuilder;
 
 import java.io.Console;
@@ -35,16 +36,21 @@ public class StudentGroupPage extends BasePage {
         return "Student Group";
     }
 
-    @Override
-    public List<MenuItem> getMenuItems() {
-        return List.of(
-                new MenuItem("Create student group", Right.ADD, this::createStudentGroup),
-                new MenuItem("Edit student group", Right.EDIT, this::editStudentGroup),
-                new MenuItem("Delete student group", Right.DELETE, this::deleteStudentGroup),
-                new MenuItem("Show all student group", Right.FIND, this::showStudentGroup),
-                new MenuItem("Find student group", Right.FIND, pagerBuilder::getStudentGroupFindPage)
-        );
+//    @Override
+//    public List<MenuItem> getMenuItems() {
+//        return List.of(
+//                new MenuItem("Create student group", Right.ADD, this::createStudentGroup),
+//                new MenuItem("Edit student group", Right.EDIT, this::editStudentGroup),
+//                new MenuItem("Delete student group", Right.DELETE, this::deleteStudentGroup),
+//                new MenuItem("Show all student group", Right.FIND, this::showStudentGroup),
+//                new MenuItem("Find student group", Right.FIND, pagerBuilder::getStudentGroupFindPage)
+//        );
+//    }
+    @Annotations(name = "Find student group", right = Right.FIND, order = 5)
+    private Page findStudentGroup() {
+        return pagerBuilder.getStudentGroupFindPage();
     }
+    @Annotations(name = "Create student group", right = Right.ADD, order = 1)
     private Page createStudentGroup() {
         String name = inputReader.readString("Enter group name: ");
 
@@ -61,6 +67,7 @@ public class StudentGroupPage extends BasePage {
         return this;
     }
 
+    @Annotations(name = "Edit student group", right = Right.EDIT, order = 2)
     private Page editStudentGroup() {
         Long id = inputReader.readLong("Enter group id to edit: ");
         Optional<StudentGroup> optionalGroup = serviceStudentGroup.findById(id);
@@ -79,7 +86,7 @@ public class StudentGroupPage extends BasePage {
         serviceStudentGroup.update(group);
         return this;
     }
-
+    @Annotations(name = "Delete student group", right = Right.DELETE, order = 3)
     private Page deleteStudentGroup() {
         Optional<StudentGroup> studentGroup = studentGroupFinder.findAndSelect();
         if (studentGroup.isPresent()) {
@@ -94,7 +101,7 @@ public class StudentGroupPage extends BasePage {
         }
         return this;
     }
-
+    @Annotations(name = "Show all student groups", right = Right.FIND, order = 4)
     private Page showStudentGroup() {
         for (StudentGroup group : serviceStudentGroup.findAll()) {
             System.out.println("ID: " + group.getId() + ", " + group);

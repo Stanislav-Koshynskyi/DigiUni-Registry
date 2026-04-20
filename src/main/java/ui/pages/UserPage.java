@@ -9,6 +9,7 @@ import exception.WrongPasswordException;
 import security.AuthService;
 import service.ServiceUserInterface;
 import ui.*;
+import util.Annotations;
 import util.PagerBuilder;
 
 import java.io.Console;
@@ -38,15 +39,20 @@ view all user for admin
         return "Account";
     }
 
-    @Override
-    public List<MenuItem> getMenuItems() {
-        return List.of(
-                new MenuItem("Login", Right.GUEST_ONLY,this :: login ),
-                new MenuItem("Register", Right.GUEST_ONLY,this :: register ),
-                new MenuItem("Logout", Right.LOGGED_IN, this :: logout ),
-                new MenuItem("Admin Panel", Right.ADMIN_ONLY, pagerBuilder::getAdminPage)
-        );
+//    @Override
+//    public List<MenuItem> getMenuItems() {
+//        return List.of(
+//                new MenuItem("Login", Right.GUEST_ONLY,this :: login ),
+//                new MenuItem("Register", Right.GUEST_ONLY,this :: register ),
+//                new MenuItem("Logout", Right.LOGGED_IN, this :: logout ),
+//                new MenuItem("Admin Panel", Right.ADMIN_ONLY, pagerBuilder::getAdminPage)
+//        );
+//    }
+    @Annotations(name = "Admin Panel", right = Right.ADMIN_ONLY, order = 4)
+    private Page adminPanel() {
+        return pagerBuilder.getAdminPage();
     }
+    @Annotations(name = "Login", right = Right.GUEST_ONLY, order = 1)
     private Page login(){
         String username = inputReader.readString("Enter username: ");
         String password = inputReader.readPassword("Enter password: ");
@@ -66,6 +72,7 @@ view all user for admin
         System.out.println("Logged in successfully");
         return this;
     }
+    @Annotations(name = "Register", right = Right.GUEST_ONLY, order = 2)
     private Page register(){
         String username = inputReader.readString("Enter username: ");
         String password = inputReader.readPassword("Enter password: ");
@@ -80,6 +87,7 @@ view all user for admin
         System.out.println("User registered successfully");
         return this;
     }
+    @Annotations(name = "Logout", right = Right.LOGGED_IN, order = 3)
     private Page logout(){
         authService.logout();
         return this;
