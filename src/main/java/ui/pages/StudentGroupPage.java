@@ -3,9 +3,12 @@ package ui.pages;
 import entity.Department;
 import entity.Right;
 import entity.StudentGroup;
+import exception.EntityInUseException;
 import service.ServiceStudentGroupInterface;
 import ui.*;
 import ui.finders.DepartmentFinderInterface;
+import ui.finders.StudentGroupFinder;
+import ui.finders.StudentGroupFinderInterface;
 import util.PagerBuilder;
 
 import java.io.Console;
@@ -15,13 +18,15 @@ import java.util.Optional;
 public class StudentGroupPage extends BasePage {
     private final ServiceStudentGroupInterface serviceStudentGroup;
     private final DepartmentFinderInterface departmentFinder;
+    private final StudentGroupFinderInterface studentGroupFinder;
     private final PagerBuilder pagerBuilder;
 
     public StudentGroupPage(ServiceStudentGroupInterface serviceStudentGroup, InputReader inputReader,
-                            DepartmentFinderInterface departmentFinder, PagerBuilder pagerBuilder) {
+                            DepartmentFinderInterface departmentFinder, StudentGroupFinderInterface studentGroupFinder, PagerBuilder pagerBuilder) {
         super(inputReader);
         this.serviceStudentGroup = serviceStudentGroup;
         this.departmentFinder = departmentFinder;
+        this.studentGroupFinder = studentGroupFinder;
         this.pagerBuilder = pagerBuilder;
     }
 
@@ -76,9 +81,17 @@ public class StudentGroupPage extends BasePage {
     }
 
     private Page deleteStudentGroup() {
-        Long id = inputReader.readLong("Enter group id to delete: ");
-        // треба додати перевірку на існування
-        serviceStudentGroup.delete(id);
+        Optional<StudentGroup> studentGroup = studentGroupFinder.findAndSelect();
+        if (studentGroup.isPresent()) {
+            try {
+                StudentGroup group = studentGroup.get();
+                serviceStudentGroup.delete(group.getId());
+            }catch (IllegalArgumentException e) {
+                System.out.println("Deleting error");
+            }catch (EntityInUseException e) {
+                System.out.println(e.getMessage());
+            }
+        }
         return this;
     }
 

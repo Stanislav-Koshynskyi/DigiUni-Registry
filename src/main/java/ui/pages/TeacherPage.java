@@ -3,6 +3,7 @@ package ui.pages;
 import entity.*;
 import service.ServiceTeacherInterface;
 import ui.*;
+import ui.finders.TeacherFinderInterface;
 import util.PagerBuilder;
 
 import java.io.Console;
@@ -14,10 +15,12 @@ import java.util.Optional;
 public class TeacherPage extends BasePage {
     private final ServiceTeacherInterface serviceTeacher;
     private final PagerBuilder pagerBuilder;
+    private final TeacherFinderInterface teacherFinder;
     public TeacherPage( ServiceTeacherInterface serviceTeacher, InputReader inputReader,
-                        PagerBuilder pagerBuilder) {
+                        TeacherFinderInterface teacherFinder,PagerBuilder pagerBuilder) {
         super(inputReader);
         this.serviceTeacher = serviceTeacher;
+        this.teacherFinder = teacherFinder;
         this.pagerBuilder = pagerBuilder;
     }
 
@@ -85,14 +88,11 @@ public class TeacherPage extends BasePage {
     }
 
     private Page deleteTeacher() {
-        Long id = inputReader.readLong("Enter teacher id: ");
-        Optional<Teacher> optionalTeacher = serviceTeacher.findById(id);
-        if (optionalTeacher.isEmpty()) {
-            System.out.println("Teacher not found!!!");
-            return this;
+        Optional<Teacher> teacherOptional = teacherFinder.findAndSelect();
+        if (teacherOptional.isPresent()){
+            serviceTeacher.delete(teacherOptional.get().getId());
         }
 
-        serviceTeacher.delete(id);
         return this;
     }
 

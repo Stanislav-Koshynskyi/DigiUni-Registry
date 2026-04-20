@@ -34,7 +34,12 @@ public class ServiceStudent implements ServiceStudentInterface{
 
 
     public void delete(Long studentId) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("Student not found"));
         studentRepository.deleteById(studentId);
+        if (student.getGroup() != null) {
+            student.getGroup().removeStudent(student);
+        }
     }
 
 

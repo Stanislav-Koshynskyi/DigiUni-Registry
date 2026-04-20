@@ -2,8 +2,11 @@ package service;
 
 import entity.Department;
 import entity.Faculty;
+import entity.StudentGroup;
 import entity.University;
+import exception.EntityInUseException;
 import repository.DepartmentRepository;
+import repository.StudentGroupRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,9 +14,11 @@ import java.util.Optional;
 public class ServiceDepartment implements ServiceDepartmentInterface {
 
     private final DepartmentRepository departmentRepository;
+    private final StudentGroupRepository studentGroupRepository;
 
-    public ServiceDepartment(DepartmentRepository departmentRepository) {
+    public ServiceDepartment(DepartmentRepository departmentRepository, StudentGroupRepository studentGroupRepository) {
         this.departmentRepository = departmentRepository;
+        this.studentGroupRepository = studentGroupRepository;
     }
 
     public Department create(Department department) {
@@ -32,6 +37,12 @@ public class ServiceDepartment implements ServiceDepartmentInterface {
 
 
     public void delete(Long id) {
+        Department department = departmentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Department with id " + id + " does not exist"));
+        List<StudentGroup> studentGroups = studentGroupRepository.findByDepartment(department);
+        if (!studentGroups.isEmpty()) {
+            throw new EntityInUseException("This department has student groups, number: " + studentGroups.size());
+        }
         departmentRepository.deleteById(id);
     }
 

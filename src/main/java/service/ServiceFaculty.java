@@ -1,16 +1,21 @@
 package service;
 
+import entity.Department;
 import entity.Faculty;
 import entity.University;
+import exception.EntityInUseException;
+import repository.DepartmentRepository;
 import repository.FacultyRepository;
 import java.util.List;
 import java.util.Optional;
 
 public class ServiceFaculty implements ServiceFacultyInterface{
     private final FacultyRepository facultyRepository;
+    private final DepartmentRepository departmentRepository;
 
-    public ServiceFaculty(FacultyRepository facultyRepository) {
+    public ServiceFaculty(FacultyRepository facultyRepository, DepartmentRepository departmentRepository) {
         this.facultyRepository = facultyRepository;
+        this.departmentRepository = departmentRepository;
     }
 
     public Faculty create(Faculty faculty) {
@@ -25,7 +30,14 @@ public class ServiceFaculty implements ServiceFacultyInterface{
     }
 
     public void delete(Long id) {
+        Faculty faculty = facultyRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Faculty with id: " + id + " not found!"));
+        List<Department> departments = departmentRepository.findByFaculty(faculty);
+        if (!departments.isEmpty()) {
+            throw new EntityInUseException("This university has departments, number: " + departments.size());
+        }
         facultyRepository.deleteById(id);
+
     }
 
     public List<Faculty> findAll() {

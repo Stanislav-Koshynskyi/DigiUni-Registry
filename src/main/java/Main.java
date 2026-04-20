@@ -70,11 +70,11 @@ public class Main {
         }));
 
 
-        ServiceDepartmentInterface serviceDepartmentInterface = new ServiceDepartment(departmentRepository);
-        ServiceFacultyInterface serviceFacultyInterface = new ServiceFaculty(facultyRepository);
+        ServiceDepartmentInterface serviceDepartmentInterface = new ServiceDepartment(departmentRepository, studentGroupRepository);
+        ServiceFacultyInterface serviceFacultyInterface = new ServiceFaculty(facultyRepository, departmentRepository);
         ServiceStudentInterface serviceStudentInterface = new ServiceStudent(studentRepository);
         ServiceTeacherInterface serviceTeacherInterface = new ServiceTeacher(teacherRepository);
-        ServiceUniversityInterface serviceUniversityInterface = new ServiceUniversity(universityRepository);
+        ServiceUniversityInterface serviceUniversityInterface = new ServiceUniversity(universityRepository, facultyRepository);
         ServiceStudentGroupInterface serviceStudentGroupInterface = new ServiceStudentGroup(studentGroupRepository);
 
         PasswordCoder coder = new BCryptPasswordEncoder();

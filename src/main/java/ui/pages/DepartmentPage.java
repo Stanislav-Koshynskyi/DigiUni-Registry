@@ -1,8 +1,10 @@
 package ui.pages;
 
 import entity.*;
+import exception.EntityInUseException;
 import service.ServiceDepartmentInterface;
 import ui.*;
+import ui.finders.DepartmentFinderInterface;
 import ui.finders.FacultyFinderInterface;
 import ui.finders.TeacherFinderInterface;
 import util.PagerBuilder;
@@ -14,15 +16,17 @@ public class DepartmentPage extends BasePage {
     private final ServiceDepartmentInterface serviceDepartment;
     private final TeacherFinderInterface teacherFinder;
     private final FacultyFinderInterface facultyFinder;
+    private final DepartmentFinderInterface departmentFinder;
     private final PagerBuilder pagerBuilder;
     public DepartmentPage(ServiceDepartmentInterface serviceDepartment
             ,TeacherFinderInterface teacherFinder,
                           InputReader inputReader, FacultyFinderInterface facultyFinder,
-                          PagerBuilder pagerBuilder) {
+                          DepartmentFinderInterface departmentFinder,PagerBuilder pagerBuilder) {
         super(inputReader);
         this.serviceDepartment = serviceDepartment;
         this.teacherFinder = teacherFinder;
         this.facultyFinder = facultyFinder;
+        this.departmentFinder = departmentFinder;
         this.pagerBuilder = pagerBuilder;
     }
 
@@ -96,13 +100,17 @@ public class DepartmentPage extends BasePage {
     }
 
     private Page deleteDepartment() {
-        Long id = inputReader.readLong("Enter department id to delete: ");
-        Optional<Department> optionalDepartment = serviceDepartment.findById(id);
-        if (optionalDepartment.isEmpty()) {
-            System.out.println("Department not found!!!");
-            return this;
+        Optional<Department> optionalDepartment = departmentFinder.findAndSelect();
+        if (optionalDepartment.isPresent()){
+            try{
+                Department department = optionalDepartment.get();
+                serviceDepartment.delete(department.getId());
+            }catch (IllegalArgumentException e){
+                System.out.println("Deleting error");
+            }catch (EntityInUseException e){
+                System.out.println(e.getMessage());
+            }
         }
-        serviceDepartment.delete(id);
         return this;
     }
 

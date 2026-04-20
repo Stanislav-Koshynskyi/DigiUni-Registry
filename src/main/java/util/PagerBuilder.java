@@ -48,24 +48,24 @@ public class PagerBuilder {
     }
 
     public Page getDepartmentPage(){
-        return new DepartmentPage(serviceDepartment,  teacherFinder, inputReader, facultyFinder, this);
+        return new DepartmentPage(serviceDepartment,  teacherFinder, inputReader, facultyFinder, departmentFinder, this);
     }
     public Page getFacultyPage(){
         return new FacultyPage(serviceFaculty, teacherFinder, inputReader,
-                universityFinder, this);
+                universityFinder, facultyFinder, this);
     }
     public Page getUniversityPage(){
-        return new UniversityPage(serviceUniversity, inputReader, this);
+        return new UniversityPage(serviceUniversity, inputReader, universityFinder, this);
     }
     public Page getTeacherPage(){
-        return new TeacherPage(serviceTeacher, inputReader, this);
+        return new TeacherPage(serviceTeacher, inputReader, teacherFinder, this);
     }
     public  Page getStudentPage(){
         return new StudentPage(studentGroupFinder,
-                serviceStudent, inputReader, this);
+                serviceStudent, inputReader, studentFinder,this);
     }
     public Page getStudentGroupPage(){
-        return new StudentGroupPage( serviceStudentGroup, inputReader, departmentFinder, this);
+        return new StudentGroupPage( serviceStudentGroup, inputReader, departmentFinder, studentGroupFinder, this);
     }
     public Page getUserPage(){
         return new UserPage(authService,

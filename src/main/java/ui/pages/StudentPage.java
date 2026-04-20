@@ -19,12 +19,14 @@ public class StudentPage extends BasePage {
     private final StudentGroupFinderInterface studentGroupFinder;
     private final ServiceStudentInterface serviceStudent;
     private final PagerBuilder pagerBuilder;
+    private final StudentFinderInterface studentFinder;
 
     public StudentPage(StudentGroupFinderInterface studentGroupFinder,
-                       ServiceStudentInterface serviceStudent, InputReader inputReader, PagerBuilder pagerBuilder) {
+                       ServiceStudentInterface serviceStudent, InputReader inputReader,StudentFinderInterface studentFinder, PagerBuilder pagerBuilder) {
         super(inputReader);
         this.studentGroupFinder = studentGroupFinder;
         this.serviceStudent = serviceStudent;
+        this.studentFinder = studentFinder;
         this.pagerBuilder = pagerBuilder;
     }
 
@@ -148,16 +150,15 @@ public class StudentPage extends BasePage {
     }
 
     private Page deleteStudent() {
-        Long id = inputReader.readLong("Enter student id to delete: ");
-        Optional<Student> optionalStudent = serviceStudent.findById(id);
-        if (optionalStudent.isEmpty()) {
-            System.out.println("Student not found!!!");
-            return this;
+        Optional<Student> studentOptional = studentFinder.findAndSelect();
+        if(studentOptional.isPresent()){
+            try{
+                Student student = studentOptional.get();
+                serviceStudent.delete(student.getId());
+            }catch (IllegalArgumentException e){
+                System.out.println("Deleting error");
+            }
         }
-
-        Student student = optionalStudent.get();
-        student.getGroup().removeStudent(student);
-        serviceStudent.delete(id);
         return this;
     }
 

@@ -1,20 +1,26 @@
 package ui.pages;
 
 import entity.*;
+import exception.EntityInUseException;
 import service.ServiceUniversityInterface;
 import ui.*;
+import ui.finders.UniversityFinder;
+import ui.finders.UniversityFinderInterface;
 import util.PagerBuilder;
 
 import java.io.Console;
 import java.util.List;
+import java.util.Optional;
 
 public class UniversityPage extends BasePage {
     private final ServiceUniversityInterface serviceUniversity;
     private final PagerBuilder pagerBuilder;
+    private final UniversityFinderInterface universityFinder;
     public UniversityPage(ServiceUniversityInterface serviceUniversity,
-                          InputReader inputReader, PagerBuilder pagerBuilder) {
+                          InputReader inputReader,UniversityFinderInterface universityFinder, PagerBuilder pagerBuilder) {
         super(inputReader);
         this.serviceUniversity = serviceUniversity;
+        this.universityFinder = universityFinder;
         this.pagerBuilder = pagerBuilder;
     }
 
@@ -28,8 +34,26 @@ public class UniversityPage extends BasePage {
         return List.of(
             new MenuItem("Create university", Right.ADD, this::createUniversity),
             new MenuItem("Find university", Right.FIND, pagerBuilder::getFindUniversityPage),
-            new MenuItem("Show all university", Right.FIND,this::showAllUniversity)
+            new MenuItem("Show all university", Right.FIND,this::showAllUniversity),
+            new MenuItem("Delete university", Right.DELETE, this::delete)
         );
+    }
+
+    private Page delete() {
+    Optional <University> universityOptional= universityFinder.findAndSelect();
+    if (universityOptional.isPresent()) {
+        try{
+            University university = universityOptional.get();
+            serviceUniversity.delete(university.getId());
+            System.out.println("Deleted university with id: " + university.getId());
+        }catch (EntityInUseException e){
+            System.out.println(e.getMessage());
+        }
+        catch (IllegalArgumentException e){
+            System.out.println("Error deleting university");
+        }
+    }
+    return this;
     }
 
     private Page createUniversity() {

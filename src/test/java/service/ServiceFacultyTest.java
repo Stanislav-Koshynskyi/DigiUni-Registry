@@ -11,8 +11,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import repository.DepartmentRepository;
 import repository.FacultyRepository;
 
+
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
         import static org.mockito.Mockito.*;
@@ -22,6 +26,8 @@ public class ServiceFacultyTest {
 
     @Mock
     private FacultyRepository facultyRepository;
+    @Mock
+    private DepartmentRepository departmentRepository;
 
     @InjectMocks
     private ServiceFaculty serviceFaculty;
@@ -64,8 +70,9 @@ public class ServiceFacultyTest {
 
     @Test
     void deleteFacultyTest() {
+        when(facultyRepository.findById(1L)).thenReturn(Optional.of(faculty));
+        when(departmentRepository.findByFaculty(faculty)).thenReturn(List.of());
         serviceFaculty.delete(1L);
-
         verify(facultyRepository).deleteById(1L);
     }
 }

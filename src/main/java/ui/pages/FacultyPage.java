@@ -1,6 +1,7 @@
 package ui.pages;
 
 import entity.*;
+import exception.EntityInUseException;
 import service.ServiceFacultyInterface;
 import service.ServiceTeacherInterface;
 import service.ServiceUniversityInterface;
@@ -18,15 +19,17 @@ public class FacultyPage extends BasePage {
     private final ServiceFacultyInterface serviceFaculty;
     private final TeacherFinderInterface teacherFinder;
     private final UniversityFinderInterface universityFinder;
+    private final FacultyFinderInterface facultyFinder;
     private final PagerBuilder pagerBuilder;
 
     public FacultyPage(ServiceFacultyInterface serviceFaculty, TeacherFinderInterface teacherFinder,
-                       InputReader inputReader, UniversityFinderInterface universityFinder,
+                       InputReader inputReader, UniversityFinderInterface universityFinder, FacultyFinderInterface facultyFinder,
                        PagerBuilder pagerBuilder) {
         super(inputReader);
         this.serviceFaculty = serviceFaculty;
         this.teacherFinder = teacherFinder;
         this.universityFinder = universityFinder;
+        this.facultyFinder = facultyFinder;
         this.pagerBuilder = pagerBuilder;
     }
 
@@ -106,14 +109,17 @@ public class FacultyPage extends BasePage {
     }
 
     private Page deleteFaculty() {
-        Long id = inputReader.readLong("Enter faculty id to delete ");
-        Optional<Faculty> optionalFaculty = serviceFaculty.findById(id);
-        if (optionalFaculty.isEmpty()) {
-            System.out.println("Faculty not found!!!");
-            return this;
+        Optional<Faculty> faculty = facultyFinder.findAndSelect();
+        if (faculty.isPresent()) {
+            try {
+                Faculty facultyToDelete = faculty.get();
+                serviceFaculty.delete(facultyToDelete.getId());
+            }catch (IllegalArgumentException e){
+                System.out.println("Deleting error");
+            }catch (EntityInUseException e) {
+                System.out.println(e.getMessage());
+            }
         }
-
-        serviceFaculty.delete(id);
         return this;
     }
 

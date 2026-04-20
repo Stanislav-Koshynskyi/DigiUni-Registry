@@ -11,6 +11,7 @@ import repository.StudentRepository;
 
 import java.time.LocalDate;
 import java.time.Year;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
         import static org.mockito.Mockito.*;
@@ -41,6 +42,7 @@ public class ServiceStudentTest {
         Contact contact = new Contact("+380982345678", "BarbaraMillicent@naukma.edu.ua");
         student = new Student(1L, "Barbara-1", "RB001", fullName, LocalDate.of(1959, 2, 9), contact,
                 FormOfEducation.BUDGET, StudentStatus.STUDIES, Year.of(2020), 1, group);
+        group.addStudent(student);
     }
 
     @Test
@@ -72,6 +74,7 @@ public class ServiceStudentTest {
 
     @Test
     void deleteStudentTest() {
+        when(studentRepository.findById(1L)).thenReturn(Optional.of(student));
         serviceStudent.delete(1L);
 
         verify(studentRepository).deleteById(1L);
