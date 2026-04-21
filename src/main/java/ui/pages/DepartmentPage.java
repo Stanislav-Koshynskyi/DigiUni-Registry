@@ -7,6 +7,7 @@ import ui.*;
 import ui.finders.DepartmentFinderInterface;
 import ui.finders.FacultyFinderInterface;
 import ui.finders.TeacherFinderInterface;
+import util.Annotations;
 import util.PagerBuilder;
 
 import java.util.List;
@@ -35,17 +36,23 @@ public class DepartmentPage extends BasePage {
         return "Department";
     }
 
-    @Override
-    public List<MenuItem> getMenuItems() {
-        return List.of(
-                new MenuItem("Create department", Right.ADD, this::createDepartment),
-                new MenuItem("Edit department", Right.EDIT, this::editDepartment),
-                new MenuItem("Delete Department", Right.DELETE, this::deleteDepartment),
-                new MenuItem("Show all departments", Right.FIND, this::showAllDepartments),
-                new MenuItem("Find departments", Right.FIND, pagerBuilder::getDepartmentFindPage)
-        );
+//    @Override
+//    public List<MenuItem> getMenuItems() {
+//        return List.of(
+//                new MenuItem("Create department", Right.ADD, this::createDepartment),
+//                new MenuItem("Edit department", Right.EDIT, this::editDepartment),
+//                new MenuItem("Delete Department", Right.DELETE, this::deleteDepartment),
+//                new MenuItem("Show all departments", Right.FIND, this::showAllDepartments),
+//                new MenuItem("Find departments", Right.FIND, pagerBuilder::getDepartmentFindPage)
+//        );
+//    }
+
+    @Annotations(name = "Find departments", right = Right.FIND, order = 5)
+    private Page findDepartment() {
+        return pagerBuilder.getDepartmentFindPage();
     }
 
+    @Annotations(name = "Create department", right = Right.ADD, order = 1)
     private Page createDepartment() {
         String name = inputReader.readString("Enter department name: ");
         String shortName = inputReader.readStringWithMaxLengthProbablyBlank("Enter short name",
@@ -72,7 +79,7 @@ public class DepartmentPage extends BasePage {
         }
         return this;
     }
-
+    @Annotations(name = "Edit department", right = Right.EDIT, order = 2)
     private Page editDepartment() {
         Optional<Department> optionalDepartment = departmentFinder.findAndSelect();
         if (optionalDepartment.isEmpty()) {
@@ -97,7 +104,7 @@ public class DepartmentPage extends BasePage {
         serviceDepartment.update(department);
         return this;
     }
-
+    @Annotations(name = "Delete department", right = Right.DELETE, order = 3)
     private Page deleteDepartment() {
         Optional<Department> optionalDepartment = departmentFinder.findAndSelect();
         if (optionalDepartment.isPresent()){
@@ -112,7 +119,7 @@ public class DepartmentPage extends BasePage {
         }
         return this;
     }
-
+    @Annotations(name = "Show all departments", right = Right.FIND, order = 4)
     private Page showAllDepartments() {
         List<Department> departments = serviceDepartment.findAll();
         return new SortDepartmentPage(inputReader, departments);

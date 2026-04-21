@@ -8,5 +8,5 @@ public abstract class BasePage implements Page {
     public BasePage(InputReader inputReader) {
         this.inputReader = inputReader;
     }
-    public abstract List<MenuItem> getMenuItems();
+    public List<MenuItem> getMenuItems() {return AnnotationPageBuilder.buildPageItems(this);}
 }

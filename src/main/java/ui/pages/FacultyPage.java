@@ -9,6 +9,7 @@ import ui.*;
 import ui.finders.FacultyFinderInterface;
 import ui.finders.TeacherFinderInterface;
 import ui.finders.UniversityFinderInterface;
+import util.Annotations;
 import util.PagerBuilder;
 
 import java.io.Console;
@@ -38,17 +39,21 @@ public class FacultyPage extends BasePage {
         return "Faculty";
     }
 
-    @Override
-    public List<MenuItem> getMenuItems() {
-        return List.of(
-                new MenuItem("Create faculty", Right.ADD, this::createFaculty),
-                new MenuItem("Edit faculty", Right.EDIT, this::editFaculty),
-                new MenuItem("Delete faculty", Right.DELETE, this::deleteFaculty),
-                new MenuItem("Find faculty", Right.FIND, pagerBuilder::getFindFacultyPage),
-                new MenuItem("Show all faculties", Right.FIND, this::showAllFaculties)
-        );
+//    @Override
+//    public List<MenuItem> getMenuItems() {
+//        return List.of(
+//                new MenuItem("Create faculty", Right.ADD, this::createFaculty),
+//                new MenuItem("Edit faculty", Right.EDIT, this::editFaculty),
+//                new MenuItem("Delete faculty", Right.DELETE, this::deleteFaculty),
+//                new MenuItem("Find faculty", Right.FIND, pagerBuilder::getFindFacultyPage),
+//                new MenuItem("Show all faculties", Right.FIND, this::showAllFaculties)
+//        );
+//    }
+    @Annotations(name = "Find faculty", right = Right.FIND, order = 4)
+    private Page findFaculty() {
+        return pagerBuilder.getFindFacultyPage();
     }
-
+    @Annotations(name = "Create faculty", right = Right.ADD, order = 1)
     private Page createFaculty() {
         String name = inputReader.readString("Enter faculty name: ");
         String shortName = inputReader.readStringWithMaxLengthProbablyBlank("Enter short name", Faculty.MAX_SHORT_NAME_LENGTH);
@@ -84,7 +89,7 @@ public class FacultyPage extends BasePage {
         }
         return this;
     }
-
+    @Annotations(name = "Edit faculty", right = Right.EDIT, order = 2)
     private Page editFaculty() {
         Optional<Faculty> optionalFaculty = facultyFinder.findAndSelect();
         if (optionalFaculty.isEmpty()) {
@@ -106,7 +111,7 @@ public class FacultyPage extends BasePage {
         serviceFaculty.update(faculty);
         return this;
     }
-
+    @Annotations(name = "Delete faculty", right = Right.DELETE, order = 3)
     private Page deleteFaculty() {
         Optional<Faculty> faculty = facultyFinder.findAndSelect();
         if (faculty.isPresent()) {
@@ -121,7 +126,7 @@ public class FacultyPage extends BasePage {
         }
         return this;
     }
-
+    @Annotations(name = "Show all faculties", right = Right.FIND, order = 5)
     private Page showAllFaculties() {
         List<Faculty> faculties = serviceFaculty.findAll();
         return new SortFacultyPage(inputReader, faculties);
