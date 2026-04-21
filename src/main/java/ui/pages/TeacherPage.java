@@ -69,8 +69,7 @@ public class TeacherPage extends BasePage {
     }
 
     private Page editTeacher() {
-        Long id = inputReader.readLong("Enter teacher id: ");
-        Optional<Teacher> optionalTeacher = serviceTeacher.findById(id);
+        Optional<Teacher> optionalTeacher = teacherFinder.findAndSelect();
         if (optionalTeacher.isEmpty()) {
             System.out.println("Teacher not found!!!");
             return this;

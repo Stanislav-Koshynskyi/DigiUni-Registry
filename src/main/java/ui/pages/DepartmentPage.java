@@ -74,8 +74,7 @@ public class DepartmentPage extends BasePage {
     }
 
     private Page editDepartment() {
-        Long id = inputReader.readLong("Enter department id to edit: ");
-        Optional<Department> optionalDepartment = serviceDepartment.findById(id);
+        Optional<Department> optionalDepartment = departmentFinder.findAndSelect();
         if (optionalDepartment.isEmpty()) {
             System.out.println("Department not found!!!");
             return this;

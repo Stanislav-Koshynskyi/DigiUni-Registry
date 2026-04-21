@@ -126,8 +126,7 @@ public class StudentPage extends BasePage {
     }
 
     private Page editStudent() {
-        Long id = inputReader.readLong("Enter student id to edit: ");
-        Optional<Student> optionalStudent = serviceStudent.findById(id);
+        Optional<Student> optionalStudent = studentFinder.findAndSelect();
         if (optionalStudent.isEmpty()) {
             System.out.println("Student not found!!!");
             return this;

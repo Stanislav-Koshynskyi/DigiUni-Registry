@@ -62,9 +62,7 @@ public class StudentGroupPage extends BasePage {
     }
 
     private Page editStudentGroup() {
-        Long id = inputReader.readLong("Enter group id to edit: ");
-        Optional<StudentGroup> optionalGroup = serviceStudentGroup.findById(id);
-
+        Optional<StudentGroup> optionalGroup = studentGroupFinder.findAndSelect();
         if (optionalGroup.isEmpty()) {
             System.out.println("Group not found!");
             return this;
