@@ -4,11 +4,12 @@ import entity.Department;
 import entity.Faculty;
 import entity.University;
 import exception.EntityInUseException;
+import lombok.extern.slf4j.Slf4j;
 import repository.DepartmentRepository;
 import repository.FacultyRepository;
 import java.util.List;
 import java.util.Optional;
-
+@Slf4j
 public class ServiceFaculty implements ServiceFacultyInterface{
     private final FacultyRepository facultyRepository;
     private final DepartmentRepository departmentRepository;
@@ -20,9 +21,13 @@ public class ServiceFaculty implements ServiceFacultyInterface{
 
     public Faculty create(Faculty faculty) {
         University university = faculty.getUniversity();
-        if (facultyRepository.existsByUniqueCode(faculty.getUniqueCode(), university))
+        if (facultyRepository.existsByUniqueCode(faculty.getUniqueCode(), university)) {
+            log.warn("Trying create faculty, but faculty with code {} already exists", faculty.getUniqueCode());
             throw new IllegalArgumentException("Faculty already exists!!!");
-        return facultyRepository.save(faculty);
+        }
+        Faculty result = facultyRepository.save(faculty);
+        log.info("Create faculty with id {}", result.getId());
+        return result;
     }
 
     public Faculty update(Faculty faculty) {
@@ -31,11 +36,16 @@ public class ServiceFaculty implements ServiceFacultyInterface{
 
     public void delete(Long id) {
         Faculty faculty = facultyRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Faculty with id: " + id + " not found!"));
+            .orElseThrow(() -> {
+                log.warn("Trying delete faculty with id {}, but not found", id);
+                return new IllegalArgumentException("Faculty with id: " + id + " not found!");
+            });
         List<Department> departments = departmentRepository.findByFaculty(faculty);
         if (!departments.isEmpty()) {
-            throw new EntityInUseException("This university has departments, number: " + departments.size());
+            log.warn("Trying delete faculty with id {}, but it has departments", id);
+            throw new EntityInUseException("This faculty has departments, number: " + departments.size());
         }
+        log.info("Delete faculty with id {}", faculty.getId());
         facultyRepository.deleteById(id);
 
     }
