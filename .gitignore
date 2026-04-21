@@ -43,7 +43,8 @@ META-INF/*
 #### db
 /db
 
-logs/
+logs/*
+!logs/.gitkeep
 *.log
 *.log.gz
 
