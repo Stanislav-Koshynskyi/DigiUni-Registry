@@ -47,49 +47,49 @@ public class PagerBuilder {
         this.teacherFinder = teacherFinder;
     }
 
-    public Page getDepartmentPage(){
+    public Page getDepartmentPage(InputReader reader){
         return new DepartmentPage(serviceDepartment,  teacherFinder, inputReader, facultyFinder, departmentFinder, this);
     }
-    public Page getFacultyPage(){
+    public Page getFacultyPage(InputReader reader){
         return new FacultyPage(serviceFaculty, teacherFinder, inputReader,
                 universityFinder, facultyFinder, this);
     }
-    public Page getUniversityPage(){
+    public Page getUniversityPage(InputReader reader){
         return new UniversityPage(serviceUniversity, inputReader, universityFinder, this);
     }
-    public Page getTeacherPage(){
+    public Page getTeacherPage(InputReader reader){
         return new TeacherPage(serviceTeacher, inputReader, teacherFinder, this);
     }
-    public  Page getStudentPage(){
+    public  Page getStudentPage(InputReader reader){
         return new StudentPage(studentGroupFinder,
                 serviceStudent, inputReader, studentFinder,this);
     }
-    public Page getStudentGroupPage(){
+    public Page getStudentGroupPage(InputReader reader){
         return new StudentGroupPage( serviceStudentGroup, inputReader, departmentFinder, studentGroupFinder, this);
     }
-    public Page getUserPage(){
+    public Page getUserPage(InputReader reader){
         return new UserPage(authService,
                 serviceUser, inputReader, this);
     }
-    public Page getFindUniversityPage(){
+    public Page getFindUniversityPage(InputReader reader){
         return new FindUniversityPage(inputReader, universityFinder);
     }
-    public  Page getFindFacultyPage(){
+    public  Page getFindFacultyPage(InputReader reader){
         return new FindFacultyPage(inputReader, facultyFinder);
     }
-    public Page getDepartmentFindPage() {
+    public Page getDepartmentFindPage(InputReader reader) {
         return new FindDepartmentPage(inputReader, departmentFinder);
     }
-    public Page getStudentGroupFindPage() {
+    public Page getStudentGroupFindPage(InputReader reader) {
         return new FindStudentGroupPage(inputReader, studentGroupFinder);
     }
-    public Page getStudentFindPage() {
+    public Page getStudentFindPage(InputReader reader) {
         return new FindStudentPage(inputReader, studentFinder);
     }
-    public Page getTeacherFindPage() {
+    public Page getTeacherFindPage(InputReader reader) {
         return new FindTeacherPage(inputReader, teacherFinder);
     }
-    public Page getAdminPage() {
+    public Page getAdminPage(InputReader reader) {
         return new AdminPage(inputReader, serviceUser);
     }
 }

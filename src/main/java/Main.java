@@ -5,6 +5,7 @@ import exception.StorageException;
 import repository.*;
 import security.*;
 import service.*;
+import socket.TCPServer;
 import ui.*;
 import ui.finders.*;
 import ui.pages.MainPage;
@@ -13,6 +14,7 @@ import util.PagerBuilder;
 import util.RepositoryLinker;
 
 import java.io.Console;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
@@ -110,6 +112,17 @@ public class Main {
                 authService, serviceUserInterface, inputReader,
                 universityFinderInterface,  facultyFinder, departmentFinder,
                 studentGroupFinder, studentFinder, teacherFinder);
+
+        TCPServer tcpServer = new TCPServer(31337, pagerBuilder, coder, serviceUserInterface);
+        Thread serverThread = new Thread(() -> {
+            try {
+                tcpServer.start();
+            } catch (IOException e) {
+                System.out.println("TCP Server error " + e.getMessage());
+            }
+        });
+        serverThread.setDaemon(true);
+        serverThread.start();
 
         Page mainPage = new MainPage(inputReader, pagerBuilder);
         PageDisplay pageDisplay = new PageDisplay(authService, inputReader);

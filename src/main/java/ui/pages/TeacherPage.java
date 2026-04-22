@@ -42,7 +42,7 @@ public class TeacherPage extends BasePage {
 //    }
     @Annotations(name = "Find teachers", right = Right.FIND, order = 5)
     private Page findTeacher() {
-        return pagerBuilder.getTeacherFindPage();
+        return pagerBuilder.getTeacherFindPage(inputReader);
     }
     @Annotations(name = "Add teacher", right = Right.ADD, order = 1)
     private Page createTeacher() {

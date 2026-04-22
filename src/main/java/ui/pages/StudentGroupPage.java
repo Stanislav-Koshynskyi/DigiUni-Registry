@@ -48,7 +48,7 @@ public class StudentGroupPage extends BasePage {
 //    }
     @Annotations(name = "Find student group", right = Right.FIND, order = 5)
     private Page findStudentGroup() {
-        return pagerBuilder.getStudentGroupFindPage();
+        return pagerBuilder.getStudentGroupFindPage(inputReader);
     }
     @Annotations(name = "Create student group", right = Right.ADD, order = 1)
     private Page createStudentGroup() {

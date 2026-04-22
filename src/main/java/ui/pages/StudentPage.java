@@ -48,7 +48,7 @@ public class StudentPage extends BasePage {
 //    }
     @Annotations(name = "Find student", right = Right.FIND, order = 5)
     private Page findStudent() {
-        return pagerBuilder.getStudentFindPage();
+        return pagerBuilder.getStudentFindPage(inputReader);
     }
 
     @Annotations(name = "Add student", right = Right.ADD, order = 1)

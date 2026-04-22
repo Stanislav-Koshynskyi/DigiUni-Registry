@@ -51,7 +51,7 @@ public class FacultyPage extends BasePage {
 //    }
     @Annotations(name = "Find faculty", right = Right.FIND, order = 4)
     private Page findFaculty() {
-        return pagerBuilder.getFindFacultyPage();
+        return pagerBuilder.getFindFacultyPage(inputReader);
     }
     @Annotations(name = "Create faculty", right = Right.ADD, order = 1)
     private Page createFaculty() {

@@ -41,7 +41,7 @@ public class UniversityPage extends BasePage {
 //    }
     @Annotations(name = "Find university", right = Right.FIND, order = 2)
     private Page findUniversity() {
-        return pagerBuilder.getFindUniversityPage();
+        return pagerBuilder.getFindUniversityPage(inputReader);
     }
     @Annotations(name = "Delete university", right = Right.ADD, order = 1)
     private Page delete() {

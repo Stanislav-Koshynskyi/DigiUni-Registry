@@ -50,7 +50,7 @@ view all user for admin
 //    }
     @Annotations(name = "Admin Panel", right = Right.ADMIN_ONLY, order = 4)
     private Page adminPanel() {
-        return pagerBuilder.getAdminPage();
+        return pagerBuilder.getAdminPage(inputReader);
     }
     @Annotations(name = "Login", right = Right.GUEST_ONLY, order = 1)
     private Page login(){
