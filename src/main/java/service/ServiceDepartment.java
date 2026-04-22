@@ -5,12 +5,13 @@ import entity.Faculty;
 import entity.StudentGroup;
 import entity.University;
 import exception.EntityInUseException;
+import lombok.extern.slf4j.Slf4j;
 import repository.DepartmentRepository;
 import repository.StudentGroupRepository;
 
 import java.util.List;
 import java.util.Optional;
-
+@Slf4j
 public class ServiceDepartment implements ServiceDepartmentInterface {
 
     private final DepartmentRepository departmentRepository;
@@ -23,11 +24,14 @@ public class ServiceDepartment implements ServiceDepartmentInterface {
 
     public Department create(Department department) {
         if (departmentRepository.existsByUniqueCode(department.getUniqueCode())) {
+            log.warn("Department with code {} already exists", department.getUniqueCode());
             throw new IllegalArgumentException(
                     "Department with this unique code already exists"
             );
         }
-        return departmentRepository.save(department);
+        Department result = departmentRepository.save(department);
+        log.info("Department with id {} created", result.getId());
+        return result;
     }
 
 
@@ -38,11 +42,16 @@ public class ServiceDepartment implements ServiceDepartmentInterface {
 
     public void delete(Long id) {
         Department department = departmentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Department with id " + id + " does not exist"));
+                .orElseThrow(() -> {
+                    log.warn("Trying delete department with id {} buy not found", id);
+                    return new IllegalArgumentException("Department with id " + id + " does not exist");
+                });
         List<StudentGroup> studentGroups = studentGroupRepository.findByDepartment(department);
         if (!studentGroups.isEmpty()) {
+            log.warn("Trying delete department with id {}, but it has studentGroups", id);
             throw new EntityInUseException("This department has student groups, number: " + studentGroups.size());
         }
+        log.info("Department {} deleted, id: {}", department.getName(), department.getId());
         departmentRepository.deleteById(id);
     }
 

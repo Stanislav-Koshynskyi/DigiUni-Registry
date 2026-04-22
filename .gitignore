@@ -42,3 +42,10 @@ out/artifacts/**/
 META-INF/*
 #### db
 /db
+
+logs/*
+!logs/.gitkeep
+*.log
+*.log.gz
+
+logs/.gitkeep

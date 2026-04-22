@@ -1,12 +1,13 @@
 package service;
 
 import entity.*;
+import lombok.extern.slf4j.Slf4j;
 import repository.StudentRepository;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-
+@Slf4j
 public class ServiceStudent implements ServiceStudentInterface{
     private final StudentRepository studentRepository;
 
@@ -17,14 +18,17 @@ public class ServiceStudent implements ServiceStudentInterface{
     public Student create(Student student) {
         University university = student.getGroup().getDepartment().getFaculty().getUniversity();
         if (studentRepository.existsByUniqueCode(student.getUniqueCode(), university)) {
+            log.warn("Trying to create student, but student with code {} already exists in university {}", student.getUniqueCode(), university.getFullName());
             throw new IllegalArgumentException("Student with this unique code already exists!");
         }
         if (studentRepository.existsByRecordBookNumber(student.getRecordBookNumber(), university)) {
+            log.warn("Trying to create student, but student with record book {} already exists in university {}", student.getRecordBookNumber(),  university.getFullName());
             throw new IllegalArgumentException("Student with this record book number already exists!");
         }
 
         Student student1 = studentRepository.save(student);
         student1.getGroup().addStudent(student1);
+        log.info("Created student with id: {}", student1.getId());
         return student1;
     }
 
@@ -35,8 +39,12 @@ public class ServiceStudent implements ServiceStudentInterface{
 
     public void delete(Long studentId) {
         Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new IllegalArgumentException("Student not found"));
+                .orElseThrow(() -> {
+                    log.warn("Trying delete student with id: {}, but dont found", studentId);
+                    return new IllegalArgumentException("Student not found");
+                });
         studentRepository.deleteById(studentId);
+        log.info("Deleted student with id: {}", studentId);
         if (student.getGroup() != null) {
             student.getGroup().removeStudent(student);
         }

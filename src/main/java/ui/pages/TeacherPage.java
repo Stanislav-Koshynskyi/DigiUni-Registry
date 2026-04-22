@@ -75,8 +75,7 @@ public class TeacherPage extends BasePage {
     }
     @Annotations(name = "Edit teacher", right = Right.EDIT, order = 2)
     private Page editTeacher() {
-        Long id = inputReader.readLong("Enter teacher id: ");
-        Optional<Teacher> optionalTeacher = serviceTeacher.findById(id);
+        Optional<Teacher> optionalTeacher = teacherFinder.findAndSelect();
         if (optionalTeacher.isEmpty()) {
             System.out.println("Teacher not found!!!");
             return this;

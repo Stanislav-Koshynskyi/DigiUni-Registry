@@ -91,8 +91,7 @@ public class FacultyPage extends BasePage {
     }
     @Annotations(name = "Edit faculty", right = Right.EDIT, order = 2)
     private Page editFaculty() {
-        Long id = inputReader.readLong("Enter faculty id to edit: ");
-        Optional<Faculty> optionalFaculty = serviceFaculty.findById(id);
+        Optional<Faculty> optionalFaculty = facultyFinder.findAndSelect();
         if (optionalFaculty.isEmpty()) {
             System.out.println("Faculty not found");
             return this;

@@ -85,8 +85,14 @@ public class StudentGroup implements Entity{
     }
 
     public void setHeadOfGroup(Teacher headOfGroup) {
-        this.headOfGroup = headOfGroup;
-        this.headOfGroupId = headOfGroup.getId();
+        if (headOfGroup != null) {
+            this.headOfGroup = headOfGroup;
+            this.headOfGroupId = headOfGroup.getId();
+        }
+        else{
+            this.headOfGroup = null;
+            this.headOfGroupId = null;
+        }
     }
 
     public Optional<Student> getGroupLeader() {
@@ -94,12 +100,18 @@ public class StudentGroup implements Entity{
     }
 
     public void setGroupLeader(Student groupLeader) {
-        if (groupLeader!=null && !students.contains(groupLeader)) {
-            addStudent(groupLeader);
-        }
+        if (groupLeader != null) {
+            if (!students.contains(groupLeader)) {
+                addStudent(groupLeader);
+            }
 
-        this.groupLeader = groupLeader;
-        this.groupLeaderId = groupLeader.getId();
+            this.groupLeader = groupLeader;
+            this.groupLeaderId = groupLeader.getId();
+        }
+        else{
+            this.groupLeader = null;
+            this.groupLeaderId = null;
+        }
     }
     public void addStudent(Student student) {
         if (student ==  null) throw new IllegalArgumentException("student cannot be null");
