@@ -38,7 +38,7 @@ public class Main {
             universityRepository = new InMemoryUniversityRepository(Path.of("db", "universities.json"));
             userRepository = new InMemoryUserRepository(Path.of("db", "users.json"));
             RepositoryLinker.linkRepository(universityRepository, facultyRepository
-                    , departmentRepository, studentGroupRepository, studentRepository);
+                    , departmentRepository, studentGroupRepository, studentRepository, teacherRepository);
         }catch (StorageException e){
             System.out.println("Disk error, we can`t read/writo into file");
             System.exit(1);

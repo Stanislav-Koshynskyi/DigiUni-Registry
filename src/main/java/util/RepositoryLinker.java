@@ -14,22 +14,27 @@ public class RepositoryLinker {
             FacultyRepository  facultyRepository,
             DepartmentRepository  departmentRepository,
             StudentGroupRepository  studentGroupRepository,
-            StudentRepository studentRepository
+            StudentRepository studentRepository,
+            TeacherRepository teacherRepository
     ){
-        linkFacultyRepository(facultyRepository, universityRepository);
-        linkDepartmentRepository(departmentRepository, facultyRepository);
-        linkStudentGroupRepository(studentGroupRepository, departmentRepository);
+        linkFacultyRepository(facultyRepository, universityRepository, teacherRepository);
+        linkDepartmentRepository(departmentRepository, facultyRepository, teacherRepository);
+        linkStudentGroupRepository(studentGroupRepository, departmentRepository, teacherRepository, studentRepository);
         linkStudentRepository(studentRepository, studentGroupRepository);
 
     }
     public static void linkFacultyRepository (
             FacultyRepository facultyRepository,
-            UniversityRepository universityRepository
+            UniversityRepository universityRepository,
+            TeacherRepository teacherRepository
     ){
         List<Faculty> faculties = facultyRepository.findAll();
         for (Faculty faculty : faculties){
             try {
                 faculty.setUniversity(universityRepository.findById(faculty.getUniversityId()).get());
+                if (faculty.getDeanId() != null) {
+                    faculty.setDean(teacherRepository.findById(faculty.getDeanId()).get());
+                }
             }catch (NoSuchElementException e){
                 log.error("error of linking faculty with id {}", faculty.getUniversityId(), e);
                 throw new LinkedException("error of linking faculty with id " + faculty.getUniversityId(), e);
@@ -39,12 +44,16 @@ public class RepositoryLinker {
     }
     public static void linkDepartmentRepository (
             DepartmentRepository departmentRepository,
-            FacultyRepository facultyRepository
+            FacultyRepository facultyRepository,
+            TeacherRepository teacherRepository
     ){
         List<Department> departments = departmentRepository.findAll();
         for (Department department : departments){
             try{
                 department.setFaculty(facultyRepository.findById(department.getFacultyId()).get());
+                if (department.getHeadOfDepartmentId() != null) {
+                    department.setHeadOfDepartment(teacherRepository.findById(department.getHeadOfDepartmentId()).get());
+                }
             }catch (NoSuchElementException e) {
                 log.error("error of linking department with id {}", department.getFacultyId(), e);
                 throw new LinkedException("error of linking departments with id " + department.getFacultyId(), e);
@@ -54,12 +63,20 @@ public class RepositoryLinker {
     }
     public static void linkStudentGroupRepository (
             StudentGroupRepository studentGroupRepository,
-            DepartmentRepository departmentRepository
+            DepartmentRepository departmentRepository,
+            TeacherRepository teacherRepository,
+            StudentRepository studentRepository
     ){
         List<StudentGroup> studentGroups = studentGroupRepository.findAll();
         for (StudentGroup studentGroup : studentGroups){
             try{
                 studentGroup.setDepartment(departmentRepository.findById(studentGroup.getDepartmentId()).get());
+                if (studentGroup.getHeadOfGroupId() != null) {
+                    studentGroup.setHeadOfGroup(teacherRepository.findById(studentGroup.getHeadOfGroupId()).get());
+                }
+                if (studentGroup.getGroupLeaderId() != null) {
+                    studentGroup.setGroupLeader(studentRepository.findById(studentGroup.getGroupLeaderId()).get());
+                }
             }catch (NoSuchElementException e){
                 log.error("error of linking studentGroups with id {}", studentGroup.getDepartmentId(), e);
                 throw new LinkedException("error of linking studentGroups with id " + studentGroup.getDepartmentId(), e);
