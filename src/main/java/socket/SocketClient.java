@@ -10,22 +10,21 @@ import java.net.Socket;
 public class SocketClient implements Runnable {
     private final Socket socket;
     private final PagerBuilder pagerBuilder;
-    private final AuthService authService;
+    private final InputReader reader;
 
-    public SocketClient(Socket socket, PagerBuilder pagerBuilder, AuthService authService) {
+    public SocketClient(Socket socket, PagerBuilder pagerBuilder, InputReader reader) {
         this.socket = socket;
         this.pagerBuilder = pagerBuilder;
-        this.authService = authService;
+        this.reader = reader;
     }
 
     @Override
     public void run() {
         try (socket) {
-            InputReader reader = new SocketConsoleReader(socket);
-            PageDisplay display = new PageDisplay(authService, reader);
+            PageDisplay display = new PageDisplay(pagerBuilder.getAuthService(), reader);
             display.start(pagerBuilder.getUserPage(reader));
         } catch (Exception e) {
-            System.out.println("Client disconnect " + e.getMessage());
+            System.out.println("Client disconnect: " + e.getMessage());
         }
     }
 }

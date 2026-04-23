@@ -10,11 +10,19 @@ public class TCPClient {
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
 
-        while (true) {
-            String line = in.readLine();
-            if (line == null) break;
-            System.out.print(line);
-            out.println(console.readLine());
-        }
+        Thread reader = new Thread(() -> {
+            try {
+                String line;
+                while ((line = in.readLine()) != null) {System.out.println(line);}
+            } catch (IOException e) {
+                System.out.println("Server disconnected");
+            }
+        });
+        reader.setDaemon(true);
+        reader.start();
+
+        String input;
+        while ((input = console.readLine()) != null) {out.println(input);}
+        socket.close();
     }
 }

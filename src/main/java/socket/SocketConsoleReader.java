@@ -18,6 +18,7 @@ public class SocketConsoleReader implements InputReader {
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.out = new PrintWriter(socket.getOutputStream(), true);
     }
+    public void println(String message) {out.println(message);}
     public String readString(String prompt) {
         while (true) {
             String input = readLine(prompt);
