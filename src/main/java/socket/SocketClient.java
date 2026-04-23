@@ -22,7 +22,7 @@ public class SocketClient implements Runnable {
     public void run() {
         try (socket) {
             PageDisplay display = new PageDisplay(pagerBuilder.getAuthService(), reader);
-            display.start(pagerBuilder.getUserPage(reader));
+            display.start(new MainPage(reader, pagerBuilder));
         } catch (Exception e) {
             System.out.println("Client disconnect: " + e.getMessage());
         }
