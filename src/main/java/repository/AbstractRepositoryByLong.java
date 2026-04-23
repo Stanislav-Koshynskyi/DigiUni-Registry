@@ -3,14 +3,12 @@ package repository;
 import entity.Entity;
 import util.IdGenerator;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractRepositoryByLong<T extends Entity> implements Repository<T, Long>{
     private final IdGenerator idGenerator = new IdGenerator();
-    private final HashMap<Long, T> data = new HashMap<>();
+    private final Map<Long, T> data = new ConcurrentHashMap<>();
     public AbstractRepositoryByLong(){}
 
     public AbstractRepositoryByLong(long id){
@@ -54,7 +52,7 @@ public abstract class AbstractRepositoryByLong<T extends Entity> implements Repo
         return data.containsKey(id);
     }
 
-    protected HashMap<Long, T> getData(){
+    protected Map<Long, T> getData(){
         return data;
     }
 
