@@ -1,26 +1,22 @@
-import entity.Role;
-import entity.User;
 import exception.LinkedException;
 import exception.StorageException;
+import lombok.extern.slf4j.Slf4j;
 import repository.*;
 import security.*;
 import service.*;
 import ui.*;
 import ui.finders.*;
 import ui.pages.MainPage;
-import util.BaseForTest;
 import util.PagerBuilder;
 import util.RepositoryLinker;
 
 import java.io.Console;
 import java.nio.file.Path;
-import java.sql.SQLOutput;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
+@Slf4j
 public class Main {
     public static void main(String[] args) {
 
@@ -113,7 +109,9 @@ public class Main {
 
         Page mainPage = new MainPage(inputReader, pagerBuilder);
         PageDisplay pageDisplay = new PageDisplay(authService, inputReader);
+        log.info("Starting program");
         pageDisplay.start(mainPage);
-
+        log.info("Ending program");
+        System.exit(0);
     }
 }
