@@ -65,7 +65,7 @@ public class StudentGroupFinder implements  StudentGroupFinderInterface {
         }
     }
     public Optional<StudentGroup> findAndSelect(){
-        System.out.println("Select student group");
+        inputReader.println("Select student group");
         Optional<StudentGroup> optionalStudentGroup = Optional.empty();
         while (true) {
             StudentGroupFind find = inputReader.readChoose(
@@ -96,7 +96,7 @@ public class StudentGroupFinder implements  StudentGroupFinderInterface {
             }
             if (optionalStudentGroup.isPresent()) return optionalStudentGroup;
             else{
-                System.out.println("No student group found, try again");
+                inputReader.println("No student group found, try again");
             }
         }
     }

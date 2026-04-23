@@ -23,7 +23,7 @@ public class TeacherFinder implements  TeacherFinderInterface {
     public Optional<Teacher> findAndSelect(){
         Optional<Teacher> teacherOptional = Optional.empty();
         while (true) {
-            System.out.println("Select teacher");
+            inputReader.println("Select teacher");
             TeacherFind find = inputReader.readChoose(
                     Arrays.stream(TeacherFind.values()).toList(), "Choose criteria"
             );
@@ -46,7 +46,7 @@ public class TeacherFinder implements  TeacherFinderInterface {
             if (teacherOptional.isPresent()) {
                 return teacherOptional;
             } else {
-                System.out.println("Teacher not found. Try again");
+                inputReader.println("Teacher not found. Try again");
             }
         }
     }
@@ -168,12 +168,12 @@ public class TeacherFinder implements  TeacherFinderInterface {
         while (true) {
             int i = 1;
             for (TeacherForAdvancedFind find : TeacherForAdvancedFind.values()) {
-                System.out.println(i++ + " : " + find);
+                inputReader.println(i++ + " : " + find);
             }
-            System.out.println(i++ + ": Reset setting");
-            System.out.println(i++ + ": Start searching");
-            System.out.println(i + ": Cancel");
-            System.out.println("Active filters: " + finds);
+            inputReader.println(i++ + ": Reset setting");
+            inputReader.println(i++ + ": Start searching");
+            inputReader.println(i + ": Cancel");
+            inputReader.println("Active filters: " + finds);
             int choose = inputReader.readIntInRange("Choose param or start search",
                     1, i);
             if (choose <= i - 3) {

@@ -186,7 +186,7 @@ public class StudentFinder implements StudentFinderInterface {
     public Optional<Student> findAndSelect() {
         Optional<Student> studentOptional = Optional.empty();
         while (true) {
-            System.out.println("Select Student");
+            inputReader.println("Select Student");
             StudentFind find = inputReader.readChoose(
                     Arrays.stream(StudentFind.values()).toList(), "Choose criteria"
             );
@@ -235,7 +235,7 @@ public class StudentFinder implements StudentFinderInterface {
             if (studentOptional.isPresent()) {
                 return studentOptional;
             } else {
-                System.out.println("Student not found. Try again");
+                inputReader.println("Student not found. Try again");
             }
         }
     }
@@ -353,12 +353,12 @@ public class StudentFinder implements StudentFinderInterface {
         while (true) {
             int i = 1;
             for (StudentForAdvancedFind find : StudentForAdvancedFind.values()) {
-                System.out.println(i++ + " : " + find);
+                inputReader.println(i++ + " : " + find);
             }
-            System.out.println(i++ + ": Reset setting");
-            System.out.println(i++ + ": Start searching");
-            System.out.println(i + ": Cancel");
-            System.out.println("Active filters: " + finds);
+            inputReader.println(i++ + ": Reset setting");
+            inputReader.println(i++ + ": Start searching");
+            inputReader.println(i + ": Cancel");
+            inputReader.println("Active filters: " + finds);
             int choose = inputReader.readIntInRange("Choose param or start search",
                     1, i);
             if (choose <= i - 3) {

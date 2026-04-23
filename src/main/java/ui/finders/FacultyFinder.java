@@ -94,7 +94,7 @@ public class FacultyFinder implements FacultyFinderInterface {
 
     public Optional<Faculty> chooseFaculty(List<Faculty> faculties) {
         if (faculties.isEmpty()) {
-            System.out.println("No faculty found");
+            inputReader.println("No faculty found");
             return Optional.empty();
         } else {
             return Optional.ofNullable(
@@ -105,7 +105,7 @@ public class FacultyFinder implements FacultyFinderInterface {
     }
 
     public Optional<Faculty> findAndSelect() {
-        System.out.println("Choose faculty");
+        inputReader.println("Choose faculty");
         FacultyFind facultyFind;
         Optional<Faculty> result = Optional.empty();
         while (true) {
@@ -143,7 +143,7 @@ public class FacultyFinder implements FacultyFinderInterface {
             if (result.isPresent()) {
                 return result;
             } else {
-                System.out.println("No faculty found, try again");
+                inputReader.println("No faculty found, try again");
             }
         }
     }
@@ -153,12 +153,12 @@ public class FacultyFinder implements FacultyFinderInterface {
         while (true) {
             int i = 1;
             for (FacultyForAdvancedFind facultyForAdvancedFind : FacultyForAdvancedFind.values()) {
-                System.out.println(i++ + ": " + facultyForAdvancedFind);
+                inputReader.println(i++ + ": " + facultyForAdvancedFind);
             }
-            System.out.println(i++ + ": Reset setting");
-            System.out.println(i++ + ": Start searching");
-            System.out.println(i + ": Cancel");
-            System.out.println("Active filters: " + facultyForAdvancedFinds);
+            inputReader.println(i++ + ": Reset setting");
+            inputReader.println(i++ + ": Start searching");
+            inputReader.println(i + ": Cancel");
+            inputReader.println("Active filters: " + facultyForAdvancedFinds);
             int choose = inputReader.readIntInRange("Choose param or start search",
                     1, i);
             if (choose <= i - 3) {

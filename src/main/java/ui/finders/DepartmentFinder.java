@@ -61,7 +61,7 @@ public class DepartmentFinder implements DepartmentFinderInterface{
     public Optional<Department> findAndSelect() {
         Optional<Department> departmentOptional;
         while (true) {
-            System.out.println("Choose department");
+            inputReader.println("Choose department");
             DepartmentFind departmentFind = inputReader.readChoose(
                     Arrays.stream(DepartmentFind.values()).toList(), "Choose criteria"
             );
@@ -96,7 +96,7 @@ public class DepartmentFinder implements DepartmentFinderInterface{
                 }
             }
             if (departmentOptional.isEmpty()) {
-                System.out.println("try again");
+                inputReader.println("try again");
             }
             else{
                 return departmentOptional;
@@ -109,12 +109,12 @@ public class DepartmentFinder implements DepartmentFinderInterface{
             int i = 1;
 
             for (DepartmentForAdvancedFind find : DepartmentForAdvancedFind.values()) {
-                System.out.println(i++ + ": " + find);
+                inputReader.println(i++ + ": " + find);
             }
-            System.out.println(i++ + ": Reset setting");
-            System.out.println(i++ + ": Start searching");
-            System.out.println(i + ": Cancel");
-            System.out.println("Active filters: " + activeFilters);
+            inputReader.println(i++ + ": Reset setting");
+            inputReader.println(i++ + ": Start searching");
+            inputReader.println(i + ": Cancel");
+            inputReader.println("Active filters: " + activeFilters);
             int choose = inputReader.readIntInRange("Choose param or start search", 1, i);
             if (choose == i) {
                 return Collections.emptyList();
