@@ -129,7 +129,25 @@ public class StudentPage extends BasePage {
             inputReader.println("Email " + email + " already exists");
         }
     }
-
+    @Annotations(name = "Transfer student", right =  Right.EDIT, order = 3)
+    private Page transferStudent(){
+        Optional<Student> optionalStudent = studentFinder.findAndSelect();
+        if (optionalStudent.isEmpty()){
+            inputReader.println("No student selected");
+            return this;
+        }
+        Student student = optionalStudent.get();
+        Integer course = inputReader.readIntInRangeProbablyNull("Enter course(1-6), press enter to skip", 1, 6);
+        if (course == null) course = student.getCourse();
+        StudentGroup newGroup = student.getGroup();
+        Optional<StudentGroup> optionalStudentGroup = studentGroupFinder.findAndSelect();
+        if (optionalStudentGroup.isPresent()){
+            newGroup = optionalStudentGroup.get();
+        }
+        serviceStudent.transferStudent(student.getId(), newGroup, course);
+        inputReader.println("Student " + student.getFullName() + " transferred to " + newGroup.getName());
+        return this;
+    }
     @Annotations(name = "Edit student", right = Right.EDIT, order = 2)
     private Page editStudent() {
         Optional<Student> optionalStudent = studentFinder.findAndSelect();
@@ -154,7 +172,7 @@ public class StudentPage extends BasePage {
         return this;
     }
 
-    @Annotations(name = "Delete student", right = Right.DELETE, order = 3)
+    @Annotations(name = "Delete student", right = Right.DELETE, order = 4)
     private Page deleteStudent() {
         Optional<Student> studentOptional = studentFinder.findAndSelect();
         if(studentOptional.isPresent()){
@@ -168,7 +186,7 @@ public class StudentPage extends BasePage {
         return this;
     }
 
-    @Annotations(name = "Show all student", right = Right.FIND, order = 4)
+    @Annotations(name = "Show all student", right = Right.FIND, order = 6)
     private Page showAllStudents() {
         List<Student> student = serviceStudent.findAll();
         return new SortStudentPage(inputReader, student);
