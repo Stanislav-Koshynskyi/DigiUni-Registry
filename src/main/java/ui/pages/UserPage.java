@@ -59,17 +59,17 @@ view all user for admin
         try {
             authService.login(username, password);
         }catch (UserNotFoundException e){
-            System.out.println("User not found");
+            inputReader.println("User not found");
             return this;
         }catch (WrongPasswordException e){
-            System.out.println("Wrong password");
+            inputReader.println("Wrong password");
             return this;
         }
         catch (UserDeletedException e){
-            System.out.println("Current user has been deleted, try other or create a new one");
+            inputReader.println("Current user has been deleted, try other or create a new one");
             return this;
         }
-        System.out.println("Logged in successfully");
+        inputReader.println("Logged in successfully");
         return this;
     }
     @Annotations(name = "Register", right = Right.GUEST_ONLY, order = 2)
@@ -81,10 +81,10 @@ view all user for admin
             // або тут або в сервісі(краще в сервісі) додати перевірку ідентичності логіна
             serviceUser.save(user);
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            inputReader.println(e.getMessage());
             return this;
         }
-        System.out.println("User registered successfully");
+        inputReader.println("User registered successfully");
         return this;
     }
     @Annotations(name = "Logout", right = Right.LOGGED_IN, order = 3)

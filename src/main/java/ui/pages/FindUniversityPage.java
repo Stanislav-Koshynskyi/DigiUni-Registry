@@ -36,27 +36,27 @@ public class FindUniversityPage extends BasePage {
     public Page findUniversityByName() {
        Optional<University> university = universityFinder.findByFullName();
         if (university.isEmpty()){
-            System.out.println("There is no university with that name");
+            inputReader.println("There is no university with that name");
         }
         else{
-            System.out.println(university.get());
+            inputReader.println(university.get());
         }
         return this;
     }
     public Page findUniversityByShortName() {
         Optional<University> university = universityFinder.findByShortName();
         if (university.isEmpty()){
-            System.out.println("There is no university with that name");
+            inputReader.println("There is no university with that name");
         }
         else{
-            System.out.println(university.get());
+            inputReader.println(university.get());
         }
         return this;
     }
     public Page findUniversityByCity() {
         List<University> universityList = universityFinder.findByCity();
         if (universityList.isEmpty()) {
-            System.out.println("There is no university with that name");
+            inputReader.println("There is no university with that name");
             return this;
         }
         return new SortUniversityPage(inputReader, universityList);

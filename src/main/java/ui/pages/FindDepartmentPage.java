@@ -44,11 +44,11 @@ public class FindDepartmentPage extends BasePage {
     }
     private void printDepartments(List<Department> departments) {
         if (departments.isEmpty()) {
-            System.out.println("No departments found");
+            inputReader.println("No departments found");
         }
         else{
             for (Department department : departments) {
-                System.out.println(department);
+                inputReader.println(department);
             }
         }
     }

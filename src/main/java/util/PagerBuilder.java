@@ -92,4 +92,5 @@ public class PagerBuilder {
     public Page getAdminPage(InputReader reader) {
         return new AdminPage(inputReader, serviceUser);
     }
+    public AuthService getAuthService() {return authService;}
 }

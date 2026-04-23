@@ -39,7 +39,7 @@ public class FindFacultyPage extends BasePage {
     private Page findByUniqueCode() {
         List<Faculty> faculties = facultyFinder.findByUniqueCode();
         if  (faculties.isEmpty()) {
-            System.out.println("No faculties found");
+            inputReader.println("No faculties found");
             return this;
         }
         return new SortFacultyPage(inputReader, faculties);
@@ -47,7 +47,7 @@ public class FindFacultyPage extends BasePage {
     private Page findByName(){
         List<Faculty> faculties = facultyFinder.findByName();
         if(faculties.isEmpty()) {
-            System.out.println("No faculties found");
+            inputReader.println("No faculties found");
         }
         else{
             faculties.forEach(System.out::println);
@@ -57,7 +57,7 @@ public class FindFacultyPage extends BasePage {
     private Page findByShortName(){
         List<Faculty> faculties = facultyFinder.findByShortName();
         if(faculties.isEmpty()) {
-            System.out.println("No faculties found");
+            inputReader.println("No faculties found");
         }
         else{
             faculties.forEach(System.out::println);
@@ -67,27 +67,27 @@ public class FindFacultyPage extends BasePage {
     private Page findByEmail(){
         Optional<Faculty> faculty = facultyFinder.findByEmail();
         if(faculty.isEmpty()) {
-            System.out.println("No faculties found");
+            inputReader.println("No faculties found");
         }
         else{
-            System.out.println(faculty);
+            inputReader.println(faculty);
         }
         return this;
     }
     private Page findByNumber(){
         Optional<Faculty> faculty = facultyFinder.findByPhoneNumber();
         if(faculty.isEmpty()) {
-            System.out.println("No faculties found");
+            inputReader.println("No faculties found");
         }
         else{
-            System.out.println(faculty);
+            inputReader.println(faculty);
         }
         return this;
     }
     private Page findByUniversity(){
         List<Faculty> faculties = facultyFinder.findByUniversity();
         if(faculties.isEmpty()) {
-            System.out.println("No faculties found");
+            inputReader.println("No faculties found");
         }
         else{
             faculties.forEach(System.out::println);
@@ -98,7 +98,7 @@ public class FindFacultyPage extends BasePage {
         List<Faculty> faculties = new ArrayList<>();
         faculties = facultyFinder.advancedSearch();
         if(faculties.isEmpty()) {
-            System.out.println("No faculties found");
+            inputReader.println("No faculties found");
         }
         else{
             faculties.forEach(System.out::println);

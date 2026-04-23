@@ -58,13 +58,13 @@ public class DepartmentPage extends BasePage {
         String shortName = inputReader.readStringWithMaxLengthProbablyBlank("Enter short name",
                 Department.MAX_SHORT_NAME_LENGTH);
         String cabinet = inputReader.readString("Enter cabinet/location: ");
-        System.out.println("Select head of department (cancel if vacant)");
+        inputReader.println("Select head of department (cancel if vacant)");
         Optional<Teacher> head = teacherFinder.findAndSelect();
         Teacher headOfDepartment = head.orElse(null);
         Optional<Faculty> optFaculty = facultyFinder.findAndSelect();
         if (optFaculty.isEmpty()) {
-            System.out.println("Faculty not found");
-            System.out.println("Department not created");
+            inputReader.println("Faculty not found");
+            inputReader.println("Department not created");
             return this;
         }
         Faculty faculty = optFaculty.get();
@@ -74,8 +74,8 @@ public class DepartmentPage extends BasePage {
             Department department = new Department(uniqueCode, name, shortName, faculty, headOfDepartment, cabinet);
             serviceDepartment.create(department);
         }catch (IllegalArgumentException e){
-            System.out.println(e.getMessage());
-            System.out.println("Department not created");
+            inputReader.println(e.getMessage());
+            inputReader.println("Department not created");
         }
         return this;
     }
@@ -83,7 +83,7 @@ public class DepartmentPage extends BasePage {
     private Page editDepartment() {
         Optional<Department> optionalDepartment = departmentFinder.findAndSelect();
         if (optionalDepartment.isEmpty()) {
-            System.out.println("Department not found!!!");
+            inputReader.println("Department not found!!!");
             return this;
         }
 
@@ -112,9 +112,9 @@ public class DepartmentPage extends BasePage {
                 Department department = optionalDepartment.get();
                 serviceDepartment.delete(department.getId());
             }catch (IllegalArgumentException e){
-                System.out.println("Deleting error");
+                inputReader.println("Deleting error");
             }catch (EntityInUseException e){
-                System.out.println(e.getMessage());
+                inputReader.println(e.getMessage());
             }
         }
         return this;
@@ -130,7 +130,7 @@ public class DepartmentPage extends BasePage {
             String uniqueCode = inputReader.readString("Enter unique code: ");
             if (!serviceDepartment.existsByUniqueCode(uniqueCode, university))
                 return uniqueCode;
-            System.out.println("Department with " + uniqueCode + " already exists");
+            inputReader.println("Department with " + uniqueCode + " already exists");
         }
     }
 }

@@ -49,11 +49,11 @@ public class FindStudentGroupPage extends BasePage {
     }
     private void printStudentGroup(List<StudentGroup> studentGroups) {
         if (studentGroups.isEmpty()) {
-            System.out.println("No departments found");
+            inputReader.println("No departments found");
         }
         else{
             for (StudentGroup studentGroup : studentGroups) {
-                System.out.println(studentGroup);
+                inputReader.println(studentGroup);
             }
         }
     }

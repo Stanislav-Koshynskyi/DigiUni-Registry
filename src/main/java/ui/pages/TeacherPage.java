@@ -56,7 +56,7 @@ public class TeacherPage extends BasePage {
                 contact = new Contact(phone, email);
                 break;
             }catch (IllegalArgumentException e){
-                System.out.println(e.getMessage());
+                inputReader.println(e.getMessage());
             }
         }
         String uniqueCode = uniqueCode();
@@ -68,8 +68,8 @@ public class TeacherPage extends BasePage {
             Teacher teacher = new Teacher(uniqueCode, fullName, birthDate, contact, degree, rank, dateOfEmployment, salary);
             serviceTeacher.create(teacher);
         }catch (IllegalArgumentException e){
-            System.out.println(e.getMessage());
-            System.out.println("Student not created");
+            inputReader.println(e.getMessage());
+            inputReader.println("Student not created");
         }
         return this;
     }
@@ -77,7 +77,7 @@ public class TeacherPage extends BasePage {
     private Page editTeacher() {
         Optional<Teacher> optionalTeacher = teacherFinder.findAndSelect();
         if (optionalTeacher.isEmpty()) {
-            System.out.println("Teacher not found!!!");
+            inputReader.println("Teacher not found!!!");
             return this;
         }
 
@@ -111,7 +111,7 @@ public class TeacherPage extends BasePage {
             String email = inputReader.readString("Enter email: ");
             if (!serviceTeacher.existsByEmail(email))
                 return email;
-            System.out.println("Email " + email + " already exists");
+            inputReader.println("Email " + email + " already exists");
         }
     }
 
@@ -120,7 +120,7 @@ public class TeacherPage extends BasePage {
             String phone = inputReader.readString("Enter phone: ");
             if (!serviceTeacher.existsByPhone(phone))
                 return phone;
-            System.out.println("Phone " + phone + " already exists");
+            inputReader.println("Phone " + phone + " already exists");
         }
     }
 
@@ -129,7 +129,7 @@ public class TeacherPage extends BasePage {
             String uniqueCode = inputReader.readString("Enter unique code: ");
             if (!serviceTeacher.existsByUniqueCode(uniqueCode))
                 return uniqueCode;
-            System.out.println("Teacher " + uniqueCode + " already exists");
+            inputReader.println("Teacher " + uniqueCode + " already exists");
         }
     }
 }

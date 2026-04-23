@@ -39,7 +39,7 @@ public class SortUniversityPage extends BasePage {
 
     private Page showUniversity() {
         for (University university : universities)
-            System.out.println("id - " + university.getId() + ", " + university);
+            inputReader.println("id - " + university.getId() + ", " + university);
         return this;
     }
 }

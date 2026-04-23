@@ -49,7 +49,7 @@ public class SortTeacherPage extends BasePage {
 
     private Page showTeachers() {
         for (Teacher teacher : teachers)
-            System.out.println("id -" + teacher.getId() + ", " + teacher);
+            inputReader.println("id -" + teacher.getId() + ", " + teacher);
         return this;
     }
 

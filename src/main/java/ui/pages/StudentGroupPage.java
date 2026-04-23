@@ -56,8 +56,8 @@ public class StudentGroupPage extends BasePage {
 
         Optional<Department> department = departmentFinder.findAndSelect();
         if (department.isEmpty()) {
-            System.out.println("Department not found");
-            System.out.println("Group not created");
+            inputReader.println("Department not found");
+            inputReader.println("Group not created");
             return this;
         }
 
@@ -71,7 +71,7 @@ public class StudentGroupPage extends BasePage {
     private Page editStudentGroup() {
         Optional<StudentGroup> optionalGroup = studentGroupFinder.findAndSelect();
         if (optionalGroup.isEmpty()) {
-            System.out.println("Group not found!");
+            inputReader.println("Group not found!");
             return this;
         }
         StudentGroup group = optionalGroup.get();
@@ -92,9 +92,9 @@ public class StudentGroupPage extends BasePage {
                 StudentGroup group = studentGroup.get();
                 serviceStudentGroup.delete(group.getId());
             }catch (IllegalArgumentException e) {
-                System.out.println("Deleting error");
+                inputReader.println("Deleting error");
             }catch (EntityInUseException e) {
-                System.out.println(e.getMessage());
+                inputReader.println(e.getMessage());
             }
         }
         return this;
@@ -102,7 +102,7 @@ public class StudentGroupPage extends BasePage {
     @Annotations(name = "Show all student groups", right = Right.FIND, order = 4)
     private Page showStudentGroup() {
         for (StudentGroup group : serviceStudentGroup.findAll()) {
-            System.out.println("ID: " + group.getId() + ", " + group);
+            inputReader.println("ID: " + group.getId() + ", " + group);
         }
         return this;
     }

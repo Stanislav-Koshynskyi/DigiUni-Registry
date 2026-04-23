@@ -46,7 +46,7 @@ public class SortDepartmentPage extends BasePage {
 
     private Page showDepartments() {
         for (Department department : department)
-            System.out.println("id - " + department.getId() + ", " + department);
+            inputReader.println("id - " + department.getId() + ", " + department);
         return this;
     }
 }

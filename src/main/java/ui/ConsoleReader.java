@@ -294,4 +294,6 @@ public class ConsoleReader implements InputReader {
     public String readProbablyBlank(String prompt) {
         return console.readLine(prompt);
     }
+    @Override
+    public void println(String message) {System.out.println(message);}
 }

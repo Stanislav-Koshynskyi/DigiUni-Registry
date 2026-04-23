@@ -40,11 +40,11 @@ public class FindStudentPage extends BasePage {
     }
     private void printStudents(List<Student> students) {
         if  (students.isEmpty()) {
-            System.out.println("No students found");
+            inputReader.println("No students found");
         }
         else{
             for (Student student : students) {
-                System.out.println(student);
+                inputReader.println(student);
             }
         }
     }

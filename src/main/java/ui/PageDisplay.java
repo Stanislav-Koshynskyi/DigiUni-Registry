@@ -27,11 +27,11 @@ public class PageDisplay {
             Page currentPage = history.peek();
             List<MenuItem> itemToShow = MethodFilter.filterItems(currentPage,
                     authService.getCurrentUser());
-            System.out.println(Pretier.wrapInFrame(currentPage.getTitle()));
+            inputReader.println(Pretier.wrapInFrame(currentPage.getTitle()));
             for (int i = 1; i <= itemToShow.size(); i++) {
-                System.out.println(i + " - " + itemToShow.get(i - 1).getLabel());
+                inputReader.println(i + " - " + itemToShow.get(i - 1).getLabel());
             }
-            System.out.println("0 - exit");
+            inputReader.println("0 - exit");
             int choose;
             while (true) {
                 choose = inputReader.readInt("choose :");
@@ -50,6 +50,6 @@ public class PageDisplay {
             }
 
         }
-        System.out.println("Goodbye!");
+        inputReader.println("Goodbye!");
     }
 }

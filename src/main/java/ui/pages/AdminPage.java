@@ -35,7 +35,7 @@ public class AdminPage extends BasePage {
     private Page deleteUser() {
         Optional<User> userOptional = findUser();
         if (userOptional.isEmpty()) {
-            System.out.println("No user found");
+            inputReader.println("No user found");
         } else {
             User user = userOptional.get();
             UserDelete userDelete = inputReader.readChoose(
@@ -50,7 +50,7 @@ public class AdminPage extends BasePage {
                     serviceUser.update(user);
                 }
             }
-            System.out.println("User deleted successfully, deleted type: " + userDelete);
+            inputReader.println("User deleted successfully, deleted type: " + userDelete);
         }
         return this;
     }
@@ -58,13 +58,13 @@ public class AdminPage extends BasePage {
     private Page editRole() {
         Optional<User> userOptional = findUser();
         if (userOptional.isEmpty()) {
-            System.out.println("No user found");
+            inputReader.println("No user found");
         } else {
             User user = userOptional.get();
-            System.out.println("Current user role: " + user.getRole());
+            inputReader.println("Current user role: " + user.getRole());
             Role newRole = inputReader.readChoose(List.of(Role.ADMIN, Role.MODERATOR, Role.USER), "Select a new role");
             user.setRole(newRole);
-            System.out.println("Role for " + user.getLogin() + " changed successfully, new role: " + user.getRole());
+            inputReader.println("Role for " + user.getLogin() + " changed successfully, new role: " + user.getRole());
         }
         return this;
     }
@@ -91,7 +91,7 @@ public class AdminPage extends BasePage {
     private Page showAllUsers() {
         List<User> users = serviceUser.findAllUsers();
         for (User user : users) {
-            System.out.println("id - " + user.getId() + " " + user);
+            inputReader.println("id - " + user.getId() + " " + user);
         }
         return this;
     }

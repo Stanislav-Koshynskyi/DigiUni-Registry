@@ -39,11 +39,11 @@ public class FindTeacherPage extends BasePage {
     }
     private void printTeachers(List<Teacher> teachers) {
         if (teachers.isEmpty()) {
-            System.out.println("No teachers found");
+            inputReader.println("No teachers found");
         }
         else{
             for (Teacher teacher : teachers) {
-                System.out.println(teacher);
+                inputReader.println(teacher);
             }
         }
     }

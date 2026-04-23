@@ -55,8 +55,8 @@ public class StudentPage extends BasePage {
     private Page createStudent() {
         Optional<StudentGroup> optionalStudentGroup = studentGroupFinder.findAndSelect();
         if (optionalStudentGroup.isEmpty()){
-            System.out.println("No student group selected");
-            System.out.println("Student not created");
+            inputReader.println("No student group selected");
+            inputReader.println("Student not created");
             return this;
         }
         StudentGroup studentGroup = optionalStudentGroup.get();
@@ -73,7 +73,7 @@ public class StudentPage extends BasePage {
                 contact = new Contact(phone, email);
                 break;
             }catch (IllegalArgumentException e){
-                System.out.println(e.getMessage());
+                inputReader.println(e.getMessage());
             }
         }
         String uniqueCode = uniqueCode(university);
@@ -87,9 +87,9 @@ public class StudentPage extends BasePage {
             Student student = new Student(uniqueCode, recordBook, fullName, birthDate, contact, form, status, yearOfAdmission, course, studentGroup);
             serviceStudent.create(student);
         }catch (IllegalArgumentException e){
-            System.out.println("Illegal Argument");
-            System.out.println(e.getMessage());
-            System.out.println("Student not created");
+            inputReader.println("Illegal Argument");
+            inputReader.println(e.getMessage());
+            inputReader.println("Student not created");
         }
         return this;
     }
@@ -99,7 +99,7 @@ public class StudentPage extends BasePage {
             String uniqueCode = inputReader.readString("Enter unique code: ");
             if (!serviceStudent.existsByUniqueCode(uniqueCode, university))
                 return uniqueCode;
-            System.out.println("Student " + uniqueCode + " already exists");
+            inputReader.println("Student " + uniqueCode + " already exists");
         }
     }
 
@@ -108,7 +108,7 @@ public class StudentPage extends BasePage {
             String recordBookNumber = inputReader.readString("Enter record book number: ");
             if (!serviceStudent.existsByRecordBookNumber(recordBookNumber, university))
                 return recordBookNumber;
-            System.out.println("Student with record book number " + recordBookNumber + " already exists");
+            inputReader.println("Student with record book number " + recordBookNumber + " already exists");
         }
     }
 
@@ -117,7 +117,7 @@ public class StudentPage extends BasePage {
             String phone = inputReader.readString("Enter phone: ");
             if (!serviceStudent.existsByPhone(phone))
                 return phone;
-            System.out.println("Phone " + phone + " already exists");
+            inputReader.println("Phone " + phone + " already exists");
         }
     }
 
@@ -126,7 +126,7 @@ public class StudentPage extends BasePage {
             String email = inputReader.readString("Enter email: ");
             if (!serviceStudent.existsByEmail(email))
                 return email;
-            System.out.println("Email " + email + " already exists");
+            inputReader.println("Email " + email + " already exists");
         }
     }
 
@@ -134,7 +134,7 @@ public class StudentPage extends BasePage {
     private Page editStudent() {
         Optional<Student> optionalStudent = studentFinder.findAndSelect();
         if (optionalStudent.isEmpty()) {
-            System.out.println("Student not found!!!");
+            inputReader.println("Student not found!!!");
             return this;
         }
         Student student = optionalStudent.get();
@@ -162,7 +162,7 @@ public class StudentPage extends BasePage {
                 Student student = studentOptional.get();
                 serviceStudent.delete(student.getId());
             }catch (IllegalArgumentException e){
-                System.out.println("Deleting error");
+                inputReader.println("Deleting error");
             }
         }
         return this;

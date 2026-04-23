@@ -34,4 +34,6 @@ public interface InputReader {
     public <T> T readChooseProbablyNull(List<T> list, String promt, String promptForZero);
     public String readProbablyBlank(String prompt);
     public String readStringWithMaxLength(String prompt, int maxLength);
+    void println(String message);
+    default void println(Object obj) {println(obj != null ? obj.toString() : "null");}
 }

@@ -82,11 +82,11 @@ public class Main {
         PasswordCoder coder = new BCryptPasswordEncoder();
 
         ServiceUserInterface serviceUserInterface = new ServiceUser(userRepository, coder);
-        /*// dont need now?
-        serviceUserInterface.save(new User(Role.ADMIN, "admin", "admin"));
-        serviceUserInterface.save(new User(Role.USER, "user", "user"));
-        serviceUserInterface.save(new User(Role.MODERATOR, "moderator", "moderator"));
-        */
+        // dont need now?
+//        serviceUserInterface.save(new User(Role.ADMIN, "admin", "admin"));
+//        serviceUserInterface.save(new User(Role.USER, "user", "user"));
+//        serviceUserInterface.save(new User(Role.MODERATOR, "moderator", "moderator"));
+
 
         SessionInfo sessionInfo = new LocalSessionInfo();
 
@@ -113,7 +113,7 @@ public class Main {
                 universityFinderInterface,  facultyFinder, departmentFinder,
                 studentGroupFinder, studentFinder, teacherFinder);
 
-        TCPServer tcpServer = new TCPServer(31337, pagerBuilder, coder, serviceUserInterface);
+        TCPServer tcpServer = new TCPServer(31337, coder, serviceUserInterface, serviceTeacherInterface, serviceStudentInterface, serviceStudentGroupInterface, serviceDepartmentInterface, serviceFacultyInterface, serviceUniversityInterface);
         Thread serverThread = new Thread(() -> {
             try {
                 tcpServer.start();

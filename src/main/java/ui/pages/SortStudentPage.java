@@ -58,7 +58,7 @@ public class SortStudentPage extends BasePage {
 
     private Page showStudent() {
         for (Student student : student)
-            System.out.println("id - " + student.getId() + ", " + student);
+            inputReader.println("id - " + student.getId() + ", " + student);
         return this;
     }
 }

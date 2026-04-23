@@ -53,7 +53,7 @@ public class SortFacultyPage extends BasePage {
 
     private Page showFaculties() {
         for (Faculty faculty : faculties)
-            System.out.println("id - " + faculty.getId() + ", " + faculty);
+            inputReader.println("id - " + faculty.getId() + ", " + faculty);
         return this;
     }
 }

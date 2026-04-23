@@ -65,17 +65,17 @@ public class FacultyPage extends BasePage {
                 contact = new Contact(phone, email);
                 break;
             }catch (IllegalArgumentException e){
-                System.out.println(e.getMessage());
+                inputReader.println(e.getMessage());
             }
         }
-        System.out.println("Select dean (cansel if vacant)");
+        inputReader.println("Select dean (cansel if vacant)");
         Optional<Teacher> optionalTeacher = teacherFinder.findAndSelect();
         Teacher dean;
         dean = optionalTeacher.orElse(null);
 
         Optional<University> optionalUniversity = universityFinder.findAndSelect();
         if (optionalUniversity.isEmpty()){
-            System.out.println("Faculty not created!");
+            inputReader.println("Faculty not created!");
             return this;
         }
         University university = optionalUniversity.get();
@@ -84,8 +84,8 @@ public class FacultyPage extends BasePage {
             Faculty faculty = new Faculty(uniqueCode, name, shortName, dean, contact, university);
             serviceFaculty.create(faculty);
         }catch (IllegalArgumentException e){
-            System.out.println(e.getMessage());
-            System.out.println("Faculty not created");
+            inputReader.println(e.getMessage());
+            inputReader.println("Faculty not created");
         }
         return this;
     }
@@ -93,7 +93,7 @@ public class FacultyPage extends BasePage {
     private Page editFaculty() {
         Optional<Faculty> optionalFaculty = facultyFinder.findAndSelect();
         if (optionalFaculty.isEmpty()) {
-            System.out.println("Faculty not found");
+            inputReader.println("Faculty not found");
             return this;
         }
         Faculty faculty = optionalFaculty.get();
@@ -119,9 +119,9 @@ public class FacultyPage extends BasePage {
                 Faculty facultyToDelete = faculty.get();
                 serviceFaculty.delete(facultyToDelete.getId());
             }catch (IllegalArgumentException e){
-                System.out.println("Deleting error");
+                inputReader.println("Deleting error");
             }catch (EntityInUseException e) {
-                System.out.println(e.getMessage());
+                inputReader.println(e.getMessage());
             }
         }
         return this;
@@ -137,7 +137,7 @@ public class FacultyPage extends BasePage {
             String uniqueCode = inputReader.readString("Enter unique code: ");
             if (!serviceFaculty.existsByUniqueCode(uniqueCode, university))
                 return uniqueCode;
-            System.out.println("Faculty with " + uniqueCode + " already exists");
+            inputReader.println("Faculty with " + uniqueCode + " already exists");
         }
     }
 
@@ -146,7 +146,7 @@ public class FacultyPage extends BasePage {
             String email = inputReader.readString("Enter email: ");
             if (!serviceFaculty.existsByEmail(email))
                 return email;
-            System.out.println("Email " + email + " already exists");
+            inputReader.println("Email " + email + " already exists");
         }
     }
 
@@ -155,7 +155,7 @@ public class FacultyPage extends BasePage {
             String phone = inputReader.readString("Enter phone: ");
             if (!serviceFaculty.existsByPhone(phone))
                 return phone;
-            System.out.println("Phone " + phone + " already exists");
+            inputReader.println("Phone " + phone + " already exists");
         }
     }
 }

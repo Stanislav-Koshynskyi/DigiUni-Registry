@@ -50,12 +50,12 @@ public class UniversityPage extends BasePage {
         try{
             University university = universityOptional.get();
             serviceUniversity.delete(university.getId());
-            System.out.println("Deleted university with id: " + university.getId());
+            inputReader.println("Deleted university with id: " + university.getId());
         }catch (EntityInUseException e){
-            System.out.println(e.getMessage());
+            inputReader.println(e.getMessage());
         }
         catch (IllegalArgumentException e){
-            System.out.println("Error deleting university");
+            inputReader.println("Error deleting university");
         }
     }
     return this;
@@ -74,8 +74,8 @@ public class UniversityPage extends BasePage {
             University university = new University(fullName, shortName, address);
             serviceUniversity.create(university);
         }catch (IllegalArgumentException e){
-            System.out.println(e.getMessage());
-            System.out.println("University not created");
+            inputReader.println(e.getMessage());
+            inputReader.println("University not created");
         }
         return this;
     }
