@@ -49,7 +49,7 @@ public class DepartmentPage extends BasePage {
 
     @Annotations(name = "Find departments", right = Right.FIND, order = 5)
     private Page findDepartment() {
-        return pagerBuilder.getDepartmentFindPage();
+        return pagerBuilder.getDepartmentFindPage(inputReader);
     }
 
     @Annotations(name = "Create department", right = Right.ADD, order = 1)
