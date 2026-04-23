@@ -2,11 +2,12 @@ package util;
 
 import entity.*;
 import exception.LinkedException;
+import lombok.extern.slf4j.Slf4j;
 import repository.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-
+@Slf4j
 public class RepositoryLinker {
     public static void linkRepository(
             UniversityRepository universityRepository,
@@ -30,9 +31,11 @@ public class RepositoryLinker {
             try {
                 faculty.setUniversity(universityRepository.findById(faculty.getUniversityId()).get());
             }catch (NoSuchElementException e){
+                log.error("error of linking faculty with id {}", faculty.getUniversityId(), e);
                 throw new LinkedException("error of linking faculty with id " + faculty.getUniversityId(), e);
             }
         }
+        log.info("linking faculty repository");
     }
     public static void linkDepartmentRepository (
             DepartmentRepository departmentRepository,
@@ -43,9 +46,11 @@ public class RepositoryLinker {
             try{
                 department.setFaculty(facultyRepository.findById(department.getFacultyId()).get());
             }catch (NoSuchElementException e) {
+                log.error("error of linking department with id {}", department.getFacultyId(), e);
                 throw new LinkedException("error of linking departments with id " + department.getFacultyId(), e);
             }
         }
+        log.info("linking department repository");
     }
     public static void linkStudentGroupRepository (
             StudentGroupRepository studentGroupRepository,
@@ -56,9 +61,11 @@ public class RepositoryLinker {
             try{
                 studentGroup.setDepartment(departmentRepository.findById(studentGroup.getDepartmentId()).get());
             }catch (NoSuchElementException e){
+                log.error("error of linking studentGroups with id {}", studentGroup.getDepartmentId(), e);
                 throw new LinkedException("error of linking studentGroups with id " + studentGroup.getDepartmentId(), e);
             }
         }
+        log.info("linking studentGroup repository");
     }
     public static void linkStudentRepository (
             StudentRepository studentRepository,
@@ -70,8 +77,10 @@ public class RepositoryLinker {
                 student.setGroup(studentGroupRepository.findById(student.getGroupId()).get());
                 student.getGroup().addStudent(student);
             }catch (NoSuchElementException e){
-                throw new LinkedException("error of linking students with id " + student.getGroupId(), e);
+                log.error("error of linking students with id {}", student.getGroupId(), e);
+                throw new LinkedException("error of linking students with id" + student.getGroupId(), e);
             }
         }
+        log.info("linking student repository");
     }
 }
