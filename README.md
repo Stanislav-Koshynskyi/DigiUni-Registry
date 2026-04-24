@@ -32,4 +32,4 @@ UI зроблено через консольне меню з мінімаліс
 mvn clean package
 ```
 
-## [Звіт](https://docs.google.com/document/d/1kLIYcnVzLBb2oMdxMQHxR43ZMG_Xxn5N/edit?usp=drive_link&ouid=109920666727358240885&rtpof=true&sd=true)
+## [Звіт](https://docs.google.com/document/d/1kLIYcnVzLBb2oMdxMQHxR43ZMG_Xxn5N/edit?usp=sharing&ouid=109920666727358240885&rtpof=true&sd=true)
